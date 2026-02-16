@@ -1,0 +1,40 @@
+//===- OpFusion.cpp - Operator Fusion Pass ----------------------*- C++ -*-===//
+//
+// Part of the ACompiler Project
+//
+//===----------------------------------------------------------------------===//
+//
+// Fuses compatible adjacent operations to reduce memory traffic.
+// Common fusion patterns: Conv+BN+ReLU, MatMul+Add+ReLU, etc.
+//
+//===----------------------------------------------------------------------===//
+
+#include "ACompiler/Transforms/Passes.h"
+#include "ACompiler/Dialect/ACHigh/ACHighOps.h"
+#include "mlir/Pass/Pass.h"
+#include "mlir/Transforms/GreedyPatternRewriteDriver.h"
+
+using namespace mlir;
+
+namespace {
+
+struct OpFusionPass
+    : public PassWrapper<OpFusionPass, OperationPass<func::FuncOp>> {
+  StringRef getArgument() const final { return "ac-op-fusion"; }
+  StringRef getDescription() const final {
+    return "Fuse compatible adjacent operations";
+  }
+
+  void runOnOperation() override {
+    // TODO: Implement fusion patterns
+    // 1. Conv2D + ReLU → FusedConv2DReLU
+    // 2. MatMul + Add (bias) → FusedMatMulBias
+    // 3. Conv2D + BatchNorm + ReLU → FusedConvBNReLU
+  }
+};
+
+} // namespace
+
+std::unique_ptr<mlir::Pass> acompiler::createOpFusionPass() {
+  return std::make_unique<OpFusionPass>();
+}

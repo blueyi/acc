@@ -1,0 +1,6 @@
+set(LLVM_TARGET_DEFINITIONS ACHighOps.td)
+mlir_tablegen(ACHighOps.h.inc -gen-op-decls)
+mlir_tablegen(ACHighOps.cpp.inc -gen-op-defs)
+mlir_tablegen(ACHighDialect.h.inc -gen-dialect-decls)
+mlir_tablegen(ACHighDialect.cpp.inc -gen-dialect-defs)
+add_public_tablegen_target(ACHighOpsIncGen)

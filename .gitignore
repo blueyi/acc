@@ -1,3 +1,7 @@
+# Build directories
+build/
+cmake-build-*/
+
 # Prerequisites
 *.d
 
@@ -37,5 +41,26 @@
 *.out
 *.app
 
-# debug information files
+# Debug information files
 *.dwo
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# LLVM/MLIR build artifacts
+third_party/llvm-project/
+
+# TableGen generated files
+*.h.inc
+*.cpp.inc
+
+# OS specific
+.DS_Store
+Thumbs.db
+
+# Compile commands
+compile_commands.json

@@ -1,0 +1,54 @@
+#!/bin/bash
+# ==============================================================================
+# build.sh - Build ACompiler
+# ==============================================================================
+
+set -e
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
+
+# Configuration
+BUILD_DIR="${BUILD_DIR:-$PROJECT_ROOT/build}"
+BUILD_TYPE="${BUILD_TYPE:-Debug}"
+LLVM_INSTALL_DIR="${LLVM_INSTALL_DIR:-$HOME/llvm-install}"
+NUM_JOBS="${NUM_JOBS:-$(nproc)}"
+
+echo "=== ACompiler Build ==="
+echo "Project Root:  $PROJECT_ROOT"
+echo "Build Dir:     $BUILD_DIR"
+echo "Build Type:    $BUILD_TYPE"
+echo "LLVM Dir:      $LLVM_INSTALL_DIR"
+echo "Parallel Jobs: $NUM_JOBS"
+echo "========================"
+
+# Check LLVM installation
+if [ ! -d "$LLVM_INSTALL_DIR/lib/cmake/llvm" ]; then
+  echo "Error: LLVM not found at $LLVM_INSTALL_DIR"
+  echo "Please build LLVM first: ./scripts/build_llvm.sh"
+  exit 1
+fi
+
+# Configure
+mkdir -p "$BUILD_DIR"
+cd "$BUILD_DIR"
+
+cmake -G Ninja "$PROJECT_ROOT" \
+  -DCMAKE_BUILD_TYPE="$BUILD_TYPE" \
+  -DLLVM_DIR="$LLVM_INSTALL_DIR/lib/cmake/llvm" \
+  -DMLIR_DIR="$LLVM_INSTALL_DIR/lib/cmake/mlir" \
+  -DAC_ENABLE_TESTS=ON
+
+# Build
+echo "Building ACompiler..."
+ninja -j"$NUM_JOBS"
+
+echo ""
+echo "=== ACompiler build complete ==="
+echo "Binaries are in: $BUILD_DIR/bin/"
+echo ""
+echo "Available tools:"
+echo "  $BUILD_DIR/bin/acompiler      - Main compiler driver"
+echo "  $BUILD_DIR/bin/ac-opt         - MLIR optimization tool"
+echo "  $BUILD_DIR/bin/ac-translate   - IR translation tool"
+echo "  $BUILD_DIR/bin/ac-runner      - JIT execution tool"

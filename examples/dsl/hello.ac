@@ -1,0 +1,18 @@
+// ACompiler DSL - Hello World Example
+// A simple matrix multiplication model
+
+model MatMulExample {
+  input a: tensor<4, 8, f32>
+  input b: tensor<8, 16, f32>
+
+  layer result = MatMul(a, b)
+  output = result
+}
+
+compile MatMulExample -> target("cpu") {
+  optimize {
+    fuse_ops = false
+    vectorize = true
+    tiling_size = [4, 4, 4]
+  }
+}

@@ -1,0 +1,3 @@
+add_subdirectory(ACHighToACMid)
+add_subdirectory(ACMidToLinalg)
+add_subdirectory(ACMidToLLVM)

@@ -1,0 +1,36 @@
+name: Build
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake ninja-build
+
+      - name: Cache LLVM
+        uses: actions/cache@v4
+        with:
+          path: ~/llvm-install
+          key: llvm-18.1.0-${{ runner.os }}
+
+      - name: Build LLVM/MLIR
+        run: |
+          if [ ! -d ~/llvm-install/lib/cmake/llvm ]; then
+            ./scripts/build_llvm.sh
+          fi
+
+      - name: Build ACompiler
+        run: ./scripts/build.sh
+
+      - name: Run Tests
+        run: ./scripts/run_tests.sh

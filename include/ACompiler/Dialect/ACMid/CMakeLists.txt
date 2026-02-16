@@ -1,0 +1,6 @@
+set(LLVM_TARGET_DEFINITIONS ACMidOps.td)
+mlir_tablegen(ACMidOps.h.inc -gen-op-decls)
+mlir_tablegen(ACMidOps.cpp.inc -gen-op-defs)
+mlir_tablegen(ACMidDialect.h.inc -gen-dialect-decls)
+mlir_tablegen(ACMidDialect.cpp.inc -gen-dialect-defs)
+add_public_tablegen_target(ACMidOpsIncGen)
