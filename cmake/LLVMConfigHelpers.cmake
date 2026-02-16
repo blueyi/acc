@@ -1,0 +1,15 @@
+function(acompiler_try_enable_llvm out_var)
+  set(_has_llvm OFF)
+
+  if(ACOMPILER_ENABLE_LLVM)
+    find_package(LLVM CONFIG QUIET)
+    find_package(MLIR CONFIG QUIET)
+    if(LLVM_FOUND AND MLIR_FOUND)
+      set(_has_llvm ON)
+      message(STATUS "Found LLVM ${LLVM_PACKAGE_VERSION}")
+      message(STATUS "Found MLIR")
+    endif()
+  endif()
+
+  set(${out_var} ${_has_llvm} PARENT_SCOPE)
+endfunction()

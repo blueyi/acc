@@ -39,3 +39,11 @@
 
 # debug information files
 *.dwo
+
+# Build directories
+build/
+cmake-build-*/
+
+# Third-party build outputs
+third_party/llvm-project/build/
+third_party/llvm-project/install/

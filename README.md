@@ -26,3 +26,22 @@
 
 - 详细规划：[`docs/ACompiler_Project_Plan.md`](docs/ACompiler_Project_Plan.md)
 - 待办列表：[`TODO.md`](TODO.md)
+
+## 当前仓库状态（基础工程已落地）
+
+已完成基础工程配置与目录骨架，包含：
+
+- CMake 顶层构建与模块拆分（`lib/`、`runtime/`、`tools/`、`test/`、`benchmark/`）
+- Frontend/Runtime 最小可编译代码
+- CLI 工具入口（`acompiler-c`、`acompiler-opt`、`acompiler-translate`、`acompiler-run`）
+- 示例与脚本（`examples/`、`scripts/`）
+- 文档占位（MLIR 概念、Pass 开发、LLVM 后端笔记、Roadmap）
+
+## 快速开始
+
+```bash
+./scripts/configure.sh
+./scripts/build.sh
+./scripts/test.sh
+./build/tools/acompiler-run
+```

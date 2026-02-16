@@ -1,0 +1,16 @@
+function(acompiler_set_default_options)
+  if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "Build type" FORCE)
+  endif()
+
+  set(CMAKE_CXX_STANDARD 17)
+  set(CMAKE_CXX_STANDARD_REQUIRED ON)
+  set(CMAKE_CXX_EXTENSIONS OFF)
+  set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
+  if(MSVC)
+    add_compile_options(/W4 /permissive-)
+  else()
+    add_compile_options(-Wall -Wextra -Wpedantic)
+  endif()
+endfunction()

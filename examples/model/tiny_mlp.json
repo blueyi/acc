@@ -1,0 +1,8 @@
+{
+  "name": "tiny_mlp",
+  "layers": [
+    {"type": "linear", "in_features": 4, "out_features": 8},
+    {"type": "relu"},
+    {"type": "linear", "in_features": 8, "out_features": 2}
+  ]
+}
