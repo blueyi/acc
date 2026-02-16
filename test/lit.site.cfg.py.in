@@ -1,0 +1,10 @@
+@LIT_SITE_CFG_IN_HEADER@
+
+import os
+
+config.acompiler_src_root = r"@ACOMPILER_SOURCE_DIR@"
+config.acompiler_obj_root = r"@ACOMPILER_BINARY_DIR@"
+config.acompiler_tools_dir = os.path.join(config.acompiler_obj_root, "bin")
+
+lit_config.load_config(config, os.path.join(config.acompiler_src_root, "test", "lit.cfg.py"))
+

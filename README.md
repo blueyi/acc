@@ -11,6 +11,8 @@
 ## 文档
 
 - 项目规划：`docs/ACompiler_Plan.md`
+- 总览：`docs/00_overview.md`
+- 构建：`docs/01_build.md`
 
 ## 构建（需要本机已安装 LLVM/MLIR）
 
@@ -29,4 +31,5 @@ cmake --build build
 ## 工具
 
 - `acompiler-opt`：类似 `mlir-opt`，用于跑 pass 与调试 IR（后续会逐步扩展自定义 Dialect/Pass）。
+- `acompilerc`：编译器 driver（当前为占位，后续里程碑补齐端到端 CPU pipeline）。
 
