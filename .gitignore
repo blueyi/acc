@@ -39,3 +39,16 @@
 
 # debug information files
 *.dwo
+
+# Build directories
+/build/
+/cmake-build-*/
+/out/
+
+# IDE / editor
+/.vscode/
+/.idea/
+
+# Python cache (lit, scripts)
+__pycache__/
+.pytest_cache/
