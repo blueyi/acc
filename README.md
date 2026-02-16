@@ -32,10 +32,32 @@ ACompiler 采用自上而下、由浅入深的学习路径：
 
 ## 构建
 
+### 依赖
+
+需要预先构建 [LLVM + MLIR](https://github.com/llvm/llvm-project)（启用 MLIR 子项目）：
+
 ```bash
+# 在 llvm-project 根目录
 mkdir build && cd build
-cmake -G Ninja ../ -DLLVM_DIR=<path_to_llvm> -DMLIR_DIR=<path_to_mlir>
+cmake -G Ninja ../llvm -DLLVM_ENABLE_PROJECTS="mlir" -DLLVM_TARGETS_TO_BUILD=host
 ninja
+```
+
+### 构建 ACompiler
+
+```bash
+# 在 ACompiler 项目根目录
+mkdir build && cd build
+cmake -G Ninja .. \
+  -DLLVM_DIR=<path_to_llvm_build>/lib/cmake/llvm \
+  -DMLIR_DIR=<path_to_llvm_build>/lib/cmake/mlir
+ninja
+```
+
+### 运行测试
+
+```bash
+cd build && ctest --output-on-failure
 ```
 
 ## 许可证
