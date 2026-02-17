@@ -140,6 +140,8 @@ ninja check-acompiler
 
 ## 📖 学习路线
 
+完整的学习路线图请查看：[docs/LEARNING_ROADMAP.md](docs/LEARNING_ROADMAP.md)
+
 ### 第一步：MLIR基础（1-2周）
 
 学习MLIR的核心概念和自定义Dialect开发：
@@ -152,6 +154,11 @@ ninja check-acompiler
 **推荐阅读**:
 - [docs/tutorials/01_mlir_basics.md](docs/tutorials/01_mlir_basics.md)
 - [docs/tutorials/02_custom_dialect.md](docs/tutorials/02_custom_dialect.md)
+- [docs/IMPLEMENTATION_GUIDE.md](docs/IMPLEMENTATION_GUIDE.md) - 详细实施指南
+
+**实践项目**:
+- 查看[examples/mlir/](examples/mlir/)中的示例代码
+- 参考[CHECKLIST.md](docs/CHECKLIST.md)追踪学习进度
 
 ### 第二步：MLIR Pass开发（1-2周）
 
@@ -194,19 +201,31 @@ ninja check-acompiler
 
 ## 🎯 当前进度
 
-### ✅ 已完成
+### ✅ 已完成（Phase 0: 初始化）
 
-- [x] 项目规划和目录结构设计
-- [x] 基础文档框架
+- [x] 项目规划和目录结构设计（增强版）
+- [x] 完整的文档框架和学习路线图
+- [x] AI Dialect基础定义（10+算子）
+- [x] 融合Pass框架（ConvReLU等）
+- [x] MLIR示例代码（基础/ResNet/Transformer）
+- [x] 性能测试框架
+- [x] 详细的实施指南和检查清单
 
-### 🚧 进行中（第一阶段：CPU后端）
+### 🚧 进行中（第一阶段：MLIR基础）
 
+**Week 1: 项目工程搭建**
+- [ ] LLVM/MLIR 17.0+安装和配置
 - [ ] CMake构建系统配置
-- [ ] AI Dialect定义
-- [ ] 基础优化Pass实现
-- [ ] 到LLVM IR的降级
-- [ ] CPU代码生成
-- [ ] Runtime库实现
+- [ ] 单元测试框架集成
+- [ ] 首次编译成功
+
+**Week 2-4: Dialect和Pass开发**
+- [ ] 扩展AI Dialect到15+算子
+- [ ] 实现形状推导
+- [ ] 完善优化Pass
+- [ ] ONNX导入器开发
+
+详细进度请查看：[docs/CHECKLIST.md](docs/CHECKLIST.md)
 
 ### 📋 计划中
 
@@ -225,6 +244,12 @@ ninja check-acompiler
 - [ ] NPU特定优化Pass
 
 ## 🔬 示例
+
+更多示例请查看[examples/](examples/)目录：
+- **基础示例**: [examples/mlir/simple_ops.mlir](examples/mlir/simple_ops.mlir)
+- **ResNet块**: [examples/mlir/resnet_block.mlir](examples/mlir/resnet_block.mlir)
+- **Transformer块**: [examples/mlir/transformer_block.mlir](examples/mlir/transformer_block.mlir)
+- **算子融合**: [examples/mlir/fusion.mlir](examples/mlir/fusion.mlir)
 
 ### MLIR Dialect示例
 
@@ -303,11 +328,23 @@ acompiler model.onnx -o model.o -O3
 
 ## 📚 文档
 
-- [项目详细规划](PROJECT_PLAN.md) - 完整的项目规划和学习路线
-- [架构设计](docs/design/architecture.md) - 系统架构设计
-- [API参考](docs/api/) - 详细的API文档
+### 规划与路线
+- [项目详细规划](PROJECT_PLAN.md) - 完整的项目规划（增强版）
+- [学习路线图](docs/LEARNING_ROADMAP.md) - 详细的学习路径和时间规划
+- [实施指南](docs/IMPLEMENTATION_GUIDE.md) - 分阶段的详细实施步骤
+- [检查清单](docs/CHECKLIST.md) - 项目进度追踪清单
+
+### 设计与架构
+- [架构设计](docs/design/architecture.md) - 系统架构设计文档
+- [目录结构](DIRECTORY_STRUCTURE.md) - 详细的目录结构说明
+
+### 教程与学习
+- [MLIR基础](docs/tutorials/01_mlir_basics.md) - MLIR入门教程
+- [自定义Dialect](docs/tutorials/02_custom_dialect.md) - Dialect开发指南
+
+### 开发与贡献
 - [开发指南](docs/development.md) - 贡献代码指南
-- [常见问题](docs/FAQ.md) - 常见问题解答
+- [性能测试](test/performance/) - 性能基准测试框架
 
 ## 🤝 贡献
 
