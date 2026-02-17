@@ -1,8 +1,8 @@
-# ACompiler 项目规划
+# ACC 项目规划
 
 ## 一、项目概述
 
-**ACompiler** 是一个基于 LLVM/MLIR 基础设施构建的 AI 编译器核心项目。项目以"从实践中学习"为出发点，通过逐步构建一个完整的、可扩展的 AI 编译器，既作为系统学习编译器技术的实战平台，也作为未来 AI Compiler Core 的基础框架。
+**ACC** 是一个基于 LLVM/MLIR 基础设施构建的 AI 编译器核心项目。项目以"从实践中学习"为出发点，通过逐步构建一个完整的、可扩展的 AI 编译器，既作为系统学习编译器技术的实战平台，也作为未来 AI Compiler Core 的基础框架。
 
 项目采用**自上而下、由浅入深**的路线，以 MLIR 为切入点，从高层图优化逐步深入到 LLVM IR 优化、指令映射和代码生成，覆盖 AI 编译器的全链路技术栈。
 
@@ -28,7 +28,7 @@
 ### 1.3 技术路线总览
 
 ```
-AI Model (ONNX / ACompiler DSL)
+AI Model (ONNX / ACC DSL)
         │
         ▼
 ┌──────────────────────────────────────────────────────┐
@@ -76,7 +76,7 @@ AI Model (ONNX / ACompiler DSL)
 | 编号 | 任务 | 说明 | 产出 |
 |------|------|------|------|
 | 1.1.1 | LLVM/MLIR 源码编译 | 从源码编译 LLVM 17+ 和 MLIR，了解构建体系 | 可用的 LLVM/MLIR 开发环境 |
-| 1.1.2 | CMake 工程搭建 | 搭建 ACompiler 的 out-of-tree CMake 构建系统 | CMakeLists.txt 及构建脚本 |
+| 1.1.2 | CMake 工程搭建 | 搭建 ACC 的 out-of-tree CMake 构建系统 | CMakeLists.txt 及构建脚本 |
 | 1.1.3 | 项目目录结构设计 | 设计清晰的模块化目录，按 Dialect/Conversion/Transforms 等分层 | 完整的项目骨架 |
 | 1.1.4 | 单元测试框架搭建 | 集成 GoogleTest，建立 C++ 单元测试基础设施 | 可运行的测试框架 |
 | 1.1.5 | lit/FileCheck 测试搭建 | 配置 lit + FileCheck，用于 MLIR/LLVM IR 回归测试 | lit.cfg.py 及示例测试 |
@@ -103,7 +103,7 @@ cmake -G Ninja ../llvm \
   -DLLVM_ENABLE_ASSERTIONS=ON
 ninja
 
-# 2. 编译 ACompiler
+# 2. 编译 ACC
 cd /workspace && mkdir build && cd build
 cmake -G Ninja .. \
   -DLLVM_DIR=<llvm-install>/lib/cmake/llvm \
@@ -149,7 +149,7 @@ ninja
 ```tablegen
 def ACHigh_Dialect : Dialect {
   let name = "achigh";
-  let cppNamespace = "::acompiler::achigh";
+  let cppNamespace = "::acc::achigh";
   let summary = "High-level AI dialect for graph-level representation";
   let description = [{
     ACHigh Dialect 提供常见深度学习算子的高层抽象，
@@ -312,7 +312,7 @@ struct ShapeInferencePass
 | 1.4.1 | ONNX 导入器设计 | 设计 ONNX → ACHigh Dialect 的映射框架 | ONNXImporter 架构 |
 | 1.4.2 | ONNX 算子映射 | 实现 20+ ONNX 算子到 ACHigh 算子的映射 | 算子映射实现 |
 | 1.4.3 | 权重/常量处理 | 实现 ONNX initializer 到 achigh.constant 的转换 | 常量加载逻辑 |
-| 1.4.4 | DSL 词法分析器 | 实现 ACompiler DSL 的 Lexer | Lexer 模块 |
+| 1.4.4 | DSL 词法分析器 | 实现 ACC DSL 的 Lexer | Lexer 模块 |
 | 1.4.5 | DSL 语法分析器 | 实现递归下降 Parser | Parser 模块 |
 | 1.4.6 | AST 设计与构建 | 设计 DSL 的抽象语法树 | AST 模块 |
 | 1.4.7 | 语义分析 | 类型检查、符号表管理 | Sema 模块 |
@@ -349,7 +349,7 @@ class ONNXImporter {
 };
 ```
 
-**示例代码 — ACompiler DSL**:
+**示例代码 — ACC DSL**:
 
 ```
 model SimpleNet {
@@ -707,9 +707,9 @@ void ac_cpu_conv2d_im2col_f32(
 **示例代码 — Runtime C API**:
 
 ```c
-typedef struct ACompilerRuntime *ac_runtime_t;
-typedef struct ACompilerTensor  *ac_tensor_t;
-typedef struct ACompilerModel   *ac_model_t;
+typedef struct ACCRuntime *ac_runtime_t;
+typedef struct ACCTensor  *ac_tensor_t;
+typedef struct ACCModel   *ac_model_t;
 
 ac_runtime_t ac_create_runtime(const char *backend);
 ac_tensor_t  ac_alloc_tensor(ac_runtime_t rt, const int64_t *shape,
@@ -751,7 +751,7 @@ void         ac_execute(ac_model_t model,
 
 **性能目标**:
 
-| 模型 / 算子 | 输入规模 | ACompiler 目标 | ONNX Runtime 参考 | 相对性能 |
+| 模型 / 算子 | 输入规模 | ACC 目标 | ONNX Runtime 参考 | 相对性能 |
 |-------------|---------|---------------|-------------------|---------|
 | Conv2D | 1x64x56x56, k=3x3 | ≤ 2.5 ms | ~1.5 ms | 60%+ |
 | MatMul | 1024x1024x1024 | ≤ 15 ms | ~10 ms | 65%+ |
@@ -867,7 +867,7 @@ NPU 执行
 
 ### 3.2 运行时性能
 
-| 模型 | 输入规模 | ACompiler | ONNX Runtime | 相对性能 |
+| 模型 | 输入规模 | ACC | ONNX Runtime | 相对性能 |
 |------|---------|-----------|--------------|---------|
 | ResNet-18 | 1x3x224x224 | ≤ 30ms | ~20ms | 65% |
 | ResNet-50 | 1x3x224x224 | ≤ 95ms | ~60ms | 63% |
@@ -970,25 +970,398 @@ NPU 执行
 
 ---
 
+---
+
+### Phase 5: AI 框架对接 — Triton / PyTorch 集成（Week 15+）
+
+**阶段目标**: 将 ACC 对接到主流 AI 框架生态，实现 PyTorch → Triton DSL → ACC → 硬件后端的端到端编译和验证流程
+
+---
+
+#### 5.1 OpenAI Triton 前端对接（Week 15-16）
+
+| 编号 | 任务 | 说明 | 产出 |
+|------|------|------|------|
+| 5.1.1 | Triton IR 分析 | 分析 Triton IR（TTIR / TTGIR）的结构和语义 | 分析文档 |
+| 5.1.2 | Triton Dialect 定义 | 在 ACC 中定义 Triton 兼容方言，表达 Triton 核心操作 | ACTriton Dialect (.td) |
+| 5.1.3 | Triton IR → ACC MLIR | 实现 Triton IR 到 ACC MLIR（ACHigh/ACMid）的导入转换 | TritonImporter |
+| 5.1.4 | Triton 算子映射 | 映射 tl.load/tl.store/tl.dot/tl.reduce 等到 ACHigh 算子 | 算子映射表 |
+| 5.1.5 | Triton 语义保持 | 确保 Block Program 语义、掩码（mask）等 Triton 特性正确转换 | 语义验证测试 |
+| 5.1.6 | Triton → ACC → CPU | 端到端：Triton kernel → ACC 编译 → CPU 执行 | E2E Demo |
+
+**核心知识点**:
+- OpenAI Triton 的编程模型（Block-level Programming）
+- Triton IR 层级结构：Triton Dialect (TTIR) → TritonGPU Dialect (TTGIR)
+- Triton 的 tl.load / tl.store / tl.dot / tl.reduce 等核心原语
+- Triton 的 Block Pointer 和 Mask 机制
+- Triton IR 到 Linalg/SCF 的语义映射
+- MLIR Dialect 间的 Import/Conversion 策略
+
+**技术路线**:
+
+```
+Triton Python DSL (@triton.jit)
+    │
+    ▼ (Triton Compiler Frontend)
+Triton IR (TTIR)        ← Triton 的 MLIR Dialect
+    │
+    ▼ (TritonImporter)
+ACC MLIR (ACHigh/ACMid)  ← ACC 的多层 IR
+    │
+    ▼ (ACC Optimization + Lowering Pipeline)
+LLVM IR → CodeGen
+    │
+    ├──→ CPU (x86/ARM)       [Phase 1-3 已实现]
+    ├──→ NVIDIA GPU (PTX)    [TODO Phase 4]
+    └──→ Ascend NPU          [TODO Phase 4]
+```
+
+**示例代码 — Triton Kernel 定义**:
+
+```python
+import triton
+import triton.language as tl
+
+@triton.jit
+def matmul_kernel(
+    A_ptr, B_ptr, C_ptr,
+    M, N, K,
+    stride_am, stride_ak,
+    stride_bk, stride_bn,
+    stride_cm, stride_cn,
+    BLOCK_M: tl.constexpr, BLOCK_N: tl.constexpr, BLOCK_K: tl.constexpr,
+):
+    pid_m = tl.program_id(0)
+    pid_n = tl.program_id(1)
+
+    offs_m = pid_m * BLOCK_M + tl.arange(0, BLOCK_M)
+    offs_n = pid_n * BLOCK_N + tl.arange(0, BLOCK_N)
+    offs_k = tl.arange(0, BLOCK_K)
+
+    a_ptrs = A_ptr + offs_m[:, None] * stride_am + offs_k[None, :] * stride_ak
+    b_ptrs = B_ptr + offs_k[:, None] * stride_bk + offs_n[None, :] * stride_bn
+
+    acc = tl.zeros((BLOCK_M, BLOCK_N), dtype=tl.float32)
+    for k in range(0, K, BLOCK_K):
+        a = tl.load(a_ptrs, mask=offs_k[None, :] < K - k, other=0.0)
+        b = tl.load(b_ptrs, mask=offs_k[:, None] < K - k, other=0.0)
+        acc += tl.dot(a, b)
+        a_ptrs += BLOCK_K * stride_ak
+        b_ptrs += BLOCK_K * stride_bk
+
+    c_ptrs = C_ptr + offs_m[:, None] * stride_cm + offs_n[None, :] * stride_cn
+    tl.store(c_ptrs, acc, mask=(offs_m[:, None] < M) & (offs_n[None, :] < N))
+```
+
+**示例代码 — Triton IR 到 ACC MLIR 映射**:
+
+```cpp
+// lib/Frontend/TritonImporter.cpp
+class TritonImporter {
+  LogicalResult convertTritonOp(Operation *op) {
+    return llvm::TypeSwitch<Operation *, LogicalResult>(op)
+        .Case<triton::LoadOp>([&](auto loadOp) {
+          // tl.load → memref.load (with mask → scf.if guard)
+          return convertTritonLoad(loadOp);
+        })
+        .Case<triton::StoreOp>([&](auto storeOp) {
+          // tl.store → memref.store (with mask)
+          return convertTritonStore(storeOp);
+        })
+        .Case<triton::DotOp>([&](auto dotOp) {
+          // tl.dot → achigh.matmul (block-level matmul)
+          return convertTritonDot(dotOp);
+        })
+        .Case<triton::ReduceOp>([&](auto reduceOp) {
+          // tl.reduce → achigh.reduce
+          return convertTritonReduce(reduceOp);
+        })
+        .Default([](Operation *) { return failure(); });
+  }
+};
+```
+
+**验收标准**:
+- ✓ 成功解析 Triton matmul kernel 的 IR
+- ✓ 将 tl.load/tl.store/tl.dot 映射到 ACC MLIR 算子
+- ✓ Triton kernel → ACC → CPU 的端到端执行正确
+- ✓ 数值结果与 Triton 原生执行一致（rtol=1e-3）
+
+---
+
+#### 5.2 PyTorch 框架对接（Week 17-18）
+
+| 编号 | 任务 | 说明 | 产出 |
+|------|------|------|------|
+| 5.2.1 | PyTorch 导出分析 | 分析 torch.export / torch.compile 的 IR 导出格式 | 分析文档 |
+| 5.2.2 | Torch-MLIR 对接 | 通过 Torch-MLIR 将 PyTorch 模型转换到 ACC MLIR | TorchImporter |
+| 5.2.3 | ONNX 通路增强 | 增强 PyTorch → ONNX → ACC 的转换通路 | ONNX 导入增强 |
+| 5.2.4 | 自定义算子注册 | 支持 PyTorch 调用 ACC 编译的自定义算子 | torch.library 注册 |
+| 5.2.5 | Triton 算子集成 | PyTorch 中使用 Triton 编写算子，由 ACC 编译 | Triton 算子 ACC 编译 |
+| 5.2.6 | Python Binding | 提供 ACC 的 Python 绑定（pybind11） | acc Python 模块 |
+
+**核心知识点**:
+- PyTorch 2.0 编译栈（torch.compile / TorchDynamo / TorchInductor）
+- torch.export 和 ExportedProgram 格式
+- Torch-MLIR 项目架构和使用方式
+- PyTorch 自定义算子注册（torch.library）
+- pybind11 C++/Python 绑定
+- PyTorch 与自定义编译器后端的集成方式
+
+**技术路线**:
+
+```
+PyTorch Model (nn.Module)
+    │
+    ├──→ torch.export → FX Graph → Torch-MLIR → ACC MLIR  [通路1: 整图编译]
+    │
+    ├──→ torch.onnx.export → ONNX → ACC MLIR              [通路2: ONNX转换]
+    │
+    └──→ @triton.jit (Triton Kernel)                       [通路3: 算子级]
+              │
+              ▼ (TritonImporter)
+         ACC MLIR → Lowering → CodeGen → Runtime
+              │
+              ▼
+         PyTorch custom op (torch.library)
+```
+
+**示例代码 — PyTorch + Triton + ACC 端到端**:
+
+```python
+import torch
+import triton
+import triton.language as tl
+import acc  # ACC Python binding
+
+# ============================================================
+# Step 1: 定义 PyTorch 模型
+# ============================================================
+class SimpleNet(torch.nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.linear1 = torch.nn.Linear(784, 256)
+        self.linear2 = torch.nn.Linear(256, 10)
+
+    def forward(self, x):
+        x = torch.relu(self.linear1(x))
+        x = self.linear2(x)
+        return x
+
+# ============================================================
+# Step 2: 定义 Triton 自定义算子
+# ============================================================
+@triton.jit
+def fused_linear_relu_kernel(
+    X_ptr, W_ptr, B_ptr, Y_ptr,
+    M, N, K,
+    BLOCK_M: tl.constexpr, BLOCK_N: tl.constexpr, BLOCK_K: tl.constexpr,
+):
+    pid_m = tl.program_id(0)
+    pid_n = tl.program_id(1)
+    offs_m = pid_m * BLOCK_M + tl.arange(0, BLOCK_M)
+    offs_n = pid_n * BLOCK_N + tl.arange(0, BLOCK_N)
+
+    acc = tl.zeros((BLOCK_M, BLOCK_N), dtype=tl.float32)
+    for k in range(0, K, BLOCK_K):
+        offs_k = k + tl.arange(0, BLOCK_K)
+        a = tl.load(X_ptr + offs_m[:, None] * K + offs_k[None, :],
+                     mask=(offs_m[:, None] < M) & (offs_k[None, :] < K))
+        b = tl.load(W_ptr + offs_k[:, None] * N + offs_n[None, :],
+                     mask=(offs_k[:, None] < K) & (offs_n[None, :] < N))
+        acc += tl.dot(a, b)
+
+    # Fused bias add + ReLU
+    bias = tl.load(B_ptr + offs_n, mask=offs_n < N)
+    acc = acc + bias[None, :]
+    acc = tl.maximum(acc, 0.0)  # ReLU
+
+    tl.store(Y_ptr + offs_m[:, None] * N + offs_n[None, :], acc,
+             mask=(offs_m[:, None] < M) & (offs_n[None, :] < N))
+
+# ============================================================
+# Step 3: 使用 ACC 编译 Triton kernel
+# ============================================================
+compiler = acc.Compiler()
+compiled_kernel = compiler.compile_triton(
+    fused_linear_relu_kernel,
+    target="cpu",
+    opt_level=3,
+    block_config={"BLOCK_M": 32, "BLOCK_N": 32, "BLOCK_K": 32}
+)
+
+# ============================================================
+# Step 4: 在 PyTorch 中注册并使用 ACC 编译的算子
+# ============================================================
+@torch.library.custom_op("acc::fused_linear_relu", mutates_args=())
+def fused_linear_relu(x: torch.Tensor, w: torch.Tensor,
+                       b: torch.Tensor) -> torch.Tensor:
+    M, K = x.shape
+    N = w.shape[1]
+    y = torch.empty(M, N, dtype=x.dtype, device=x.device)
+    compiled_kernel.launch(x, w, b, y, M, N, K)
+    return y
+
+# ============================================================
+# Step 5: 端到端验证
+# ============================================================
+model = SimpleNet()
+x = torch.randn(32, 784)
+
+# 原始 PyTorch 执行
+y_ref = model(x)
+
+# ACC 编译执行
+y_acc = fused_linear_relu(x, model.linear1.weight.T,
+                           model.linear1.bias)
+
+# 数值对比
+print(f"Max diff: {(y_ref - y_acc).abs().max().item():.6f}")
+assert torch.allclose(y_ref, y_acc, rtol=1e-3, atol=1e-5)
+print("✓ End-to-end verification passed!")
+```
+
+**验收标准**:
+- ✓ PyTorch 模型通过 ONNX 通路成功导入 ACC
+- ✓ Triton kernel 成功编译并在 PyTorch 中调用
+- ✓ 端到端数值精度验证通过
+- ✓ Python 绑定可用
+
+---
+
+#### 5.3 端到端验证流程（Week 19-20）
+
+| 编号 | 任务 | 说明 | 产出 |
+|------|------|------|------|
+| 5.3.1 | E2E 测试框架 | 搭建 PyTorch↔ACC 的自动化端到端测试框架 | E2E 测试框架 |
+| 5.3.2 | Triton→ACC→CPU | Triton matmul/softmax kernel 的 ACC CPU 编译验证 | Triton E2E 测试 |
+| 5.3.3 | PyTorch→ACC | PyTorch 小模型（MLP/CNN）的完整编译验证 | PyTorch E2E 测试 |
+| 5.3.4 | 精度对比 | 与 PyTorch eager / Triton GPU 的数值精度对比 | 精度报告 |
+| 5.3.5 | 性能对比 | 与 PyTorch eager / TorchInductor 的性能对比 | 性能报告 |
+
+**端到端验证流程全景**:
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                     AI Framework Layer                       │
+│  ┌──────────┐    ┌──────────┐    ┌──────────────────────┐   │
+│  │ PyTorch  │    │ Triton   │    │ Custom DSL (.ac)     │   │
+│  │ nn.Module│    │ @jit     │    │ model SimpleNet{...} │   │
+│  └────┬─────┘    └────┬─────┘    └──────────┬───────────┘   │
+│       │               │                      │               │
+├───────┼───────────────┼──────────────────────┼───────────────┤
+│       │   Frontend    │   Import Layer        │               │
+│       ▼               ▼                      ▼               │
+│  ┌─────────┐   ┌──────────────┐    ┌──────────────────┐     │
+│  │ONNX     │   │Triton        │    │ACC DSL           │     │
+│  │Importer │   │Importer      │    │Frontend          │     │
+│  └────┬────┘   └──────┬───────┘    └────────┬─────────┘     │
+│       │               │                      │               │
+├───────┴───────────────┴──────────────────────┴───────────────┤
+│                    ACC MLIR Layer                             │
+│  ┌──────────────────────────────────────────────────────┐    │
+│  │  ACHigh Dialect (Graph Level)                         │    │
+│  │  算子融合 / 常量折叠 / 形状推导 / 布局变换              │    │
+│  ├──────────────────────────────────────────────────────┤    │
+│  │  ACMid Dialect (Tile/Loop Level)                      │    │
+│  │  Tiling / 循环优化 / 向量化                            │    │
+│  ├──────────────────────────────────────────────────────┤    │
+│  │  Linalg / Affine / SCF → LLVM Dialect                 │    │
+│  └──────────────────────────────────────────────────────┘    │
+│                           │                                   │
+├───────────────────────────┼───────────────────────────────────┤
+│                    LLVM Layer                                 │
+│  LLVM IR Optimization → CodeGen                              │
+│                           │                                   │
+├──────────┬────────────────┼──────────────┬────────────────────┤
+│  Backend │                │              │                    │
+│    ▼     │                ▼              │         ▼          │
+│  CPU     │           NVIDIA GPU          │    Ascend NPU     │
+│ x86/ARM  │           CUDA/PTX           │    Ascend IR      │
+│ [实现]    │           [TODO]             │    [TODO]          │
+└──────────┴────────────────┴──────────────┴────────────────────┘
+```
+
+**验收标准**:
+- ✓ PyTorch MLP 模型端到端编译和推理成功
+- ✓ Triton matmul/softmax kernel 通过 ACC 编译并执行正确
+- ✓ 所有 E2E 测试精度验证通过
+- ✓ 生成完整的精度和性能对比报告
+
+---
+
+### Phase 6: 高阶特性（Week 20+）
+
+**阶段目标**: 实现面向生产环境的高阶编译器特性，提升 ACC 作为 AI Compiler Core 的核心竞争力
+
+---
+
+#### 6.1 高阶特性规划
+
+| 编号 | 特性 | 说明 | 优先级 |
+|------|------|------|--------|
+| 6.1.1 | **Auto-Scheduling** | 基于代价模型的自动调度策略搜索（类似 TVM AutoScheduler） | 高 |
+| 6.1.2 | **Polyhedral 优化** | 基于多面体模型的循环变换（Affine Scheduling） | 高 |
+| 6.1.3 | **动态形状支持** | 支持动态 Batch Size 和可变序列长度的编译 | 高 |
+| 6.1.4 | **混合精度编译** | FP16/BF16/INT8 混合精度自动转换和优化 | 高 |
+| 6.1.5 | **图分割与子图编译** | 大模型图的智能分割和子图独立编译 | 中 |
+| 6.1.6 | **Kernel 融合引擎** | 跨算子边界的激进 Kernel 融合（类似 XLA/TorchInductor） | 中 |
+| 6.1.7 | **内存规划优化** | 编译期全局内存规划，最小化峰值内存占用 | 中 |
+| 6.1.8 | **异构调度** | CPU + GPU 异构计算的自动任务分配 | 低 |
+| 6.1.9 | **分布式编译** | 多设备/多节点的分布式模型编译支持 | 低 |
+| 6.1.10 | **Debug/Profile 集成** | 编译器级别的调试和性能分析工具 | 中 |
+
+#### 6.2 Auto-Scheduling 框架
+
+```
+搜索空间定义 → 代价模型评估 → 候选方案生成 → 编译+测量 → 最优方案
+                    ↑                                      │
+                    └──────────── 反馈学习 ─────────────────┘
+```
+
+| 编号 | 任务 | 说明 | 产出 |
+|------|------|------|------|
+| 6.2.1 | 搜索空间定义 | 定义 Tiling/Unroll/Vectorize 等可调参数空间 | SearchSpace 模块 |
+| 6.2.2 | 分析型代价模型 | 基于硬件参数的静态代价估算 | AnalyticalCostModel |
+| 6.2.3 | ML 代价模型 | 基于历史数据训练的机器学习代价模型 | MLCostModel |
+| 6.2.4 | 搜索算法 | Grid Search / Random Search / Bayesian Optimization | Searcher 模块 |
+| 6.2.5 | 自动调优集成 | 将搜索结果集成到 Pass Pipeline 中 | AutoTuner 集成 |
+
+#### 6.3 动态形状编译
+
+| 编号 | 任务 | 说明 | 产出 |
+|------|------|------|------|
+| 6.3.1 | 符号形状表示 | 在 IR 中支持符号化的动态维度 | Symbolic Shape IR |
+| 6.3.2 | Shape Guard 生成 | 生成运行时形状检查代码 | ShapeGuard Pass |
+| 6.3.3 | 特化 + 回退 | 对常见形状特化编译，动态形状回退到通用版本 | Specialization Pass |
+
+---
+
 ## 八、贡献指南
 
 - 遵循 [LLVM Coding Standards](https://llvm.org/docs/CodingStandards.html)
 - 使用 `clang-format` 格式化代码
 - 所有公共 API 都需要文档注释
 - 每个 PR 都需要对应的测试
-- 运行 `ninja check-acompiler` 确保所有测试通过
+- 运行 `ninja check-acc` 确保所有测试通过
 
 ---
 
 ## 九、变更日志
 
+### v0.4.0 (2026-02-16)
+
+- 项目重命名: ACompiler → ACC (AI Compiler Core)
+- 新增 Phase 5: Triton/PyTorch 框架对接，端到端验证流程
+- 新增 Phase 6: 高阶特性规划（Auto-Scheduling、动态形状、混合精度等）
+- 新增 Triton 前端导入层（TritonImporter）
+- 新增 PyTorch 对接层（TorchImporter）
+- 新增 PyTorch + Triton + ACC 端到端验证示例
+
 ### v0.3.0 (2026-02-16)
 
 - 重构项目规划: 以任务表格+核心知识点+代码示例+验收标准格式重写全部阶段
 - 项目定位升级: 从纯教育项目升级为 AI Compiler Core 项目
-- Phase 1-3 细化: 每个小节均有编号任务、核心知识点和验收标准
-- Phase 2 扩展: 拆分为 4 个子阶段（ACHigh→Linalg、Linalg→LLVM、LLVM Pass、SIMD）
-- Phase 3 扩展: 拆分为 CodeGen、Runtime、E2E+性能优化 3 个子阶段
 
 ### v0.2.0 (2026-02-16)
 
@@ -1002,5 +1375,5 @@ NPU 执行
 ---
 
 **最后更新**: 2026-02-16
-**文档版本**: 3.0
-**维护者**: ACompiler Team
+**文档版本**: 4.0
+**维护者**: ACC Team

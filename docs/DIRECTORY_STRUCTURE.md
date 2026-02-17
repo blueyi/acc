@@ -1,9 +1,9 @@
-# ACompiler 项目目录结构说明
+# ACC 项目目录结构说明
 
 ## 顶层目录总览
 
 ```
-ACompiler/
+ACC/
 ├── CMakeLists.txt                # 顶层 CMake 构建文件
 ├── README.md                     # 项目说明文档
 ├── LICENSE                       # 开源协议
@@ -12,7 +12,7 @@ ACompiler/
 ├── cmake/                        # CMake 模块和工具链文件
 ├── docs/                         # 项目文档
 ├── include/                      # 公开头文件（对外接口）
-│   └── ACompiler/
+│   └── ACC/
 ├── lib/                          # 核心库实现
 │   ├── Dialect/                  # MLIR 方言定义与实现
 │   ├── Conversion/               # 方言间的 Lowering/Conversion
@@ -26,7 +26,7 @@ ACompiler/
 │   ├── cuda/                     # [TODO] CUDA Runtime
 │   └── ascend/                   # [TODO] Ascend Runtime
 ├── tools/                        # 可执行工具
-│   ├── acompiler/                # 主编译器驱动
+│   ├── acc/                # 主编译器驱动
 │   ├── ac-opt/                   # MLIR 优化工具（类似 mlir-opt）
 │   ├── ac-translate/             # IR 翻译工具
 │   └── ac-runner/                # JIT 执行工具
@@ -66,7 +66,7 @@ cmake/
 ├── modules/
 │   ├── FindLLVM.cmake            # LLVM 查找模块
 │   ├── FindMLIR.cmake            # MLIR 查找模块
-│   ├── AddACompiler.cmake        # ACompiler 自定义 CMake 函数
+│   ├── AddACC.cmake        # ACC 自定义 CMake 函数
 │   └── TableGen.cmake            # TableGen 相关 CMake 规则
 └── toolchains/
     ├── x86_64-linux.cmake        # x86_64 Linux 工具链
@@ -77,10 +77,10 @@ cmake/
 
 ---
 
-### 2. `include/ACompiler/` — 公开头文件
+### 2. `include/ACC/` — 公开头文件
 
 ```
-include/ACompiler/
+include/ACC/
 ├── Dialect/
 │   ├── ACHigh/                   # 高层 AI 方言 (20+ 算子)
 │   │   ├── ACHighDialect.h       # 方言声明
@@ -244,7 +244,7 @@ runtime/
 
 ```
 tools/
-├── acompiler/                    # 主编译器驱动（类似 clang）
+├── acc/                    # 主编译器驱动（类似 clang）
 │   ├── CMakeLists.txt
 │   └── main.cpp                  # 编译器入口，串联整个编译流水线
 ├── ac-opt/                       # MLIR 优化工具（类似 mlir-opt）
@@ -357,7 +357,7 @@ examples/
 ```
 scripts/
 ├── build_llvm.sh                 # LLVM/MLIR 一键编译脚本
-├── build.sh                      # ACompiler 一键编译脚本
+├── build.sh                      # ACC 一键编译脚本
 ├── run_tests.sh                  # 运行全部测试
 ├── format.sh                     # 代码格式化（clang-format）
 └── gen_docs.sh                   # 生成 API 文档
@@ -405,7 +405,7 @@ Frontend ──→ Dialect/ACHigh ──→ Transforms ──→ Conversion/High
 ```
 build/
 ├── bin/
-│   ├── acompiler                 # 主编译器
+│   ├── acc                 # 主编译器
 │   ├── ac-opt                    # MLIR 优化工具
 │   ├── ac-translate              # 翻译工具
 │   └── ac-runner                 # JIT 执行器
