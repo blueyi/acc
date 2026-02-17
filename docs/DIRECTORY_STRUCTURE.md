@@ -82,13 +82,16 @@ cmake/
 ```
 include/ACompiler/
 ├── Dialect/
-│   ├── ACHigh/                   # 高层 AI 方言
+│   ├── ACHigh/                   # 高层 AI 方言 (20+ 算子)
 │   │   ├── ACHighDialect.h       # 方言声明
 │   │   ├── ACHighOps.h           # 算子声明
-│   │   ├── ACHighTypes.h         # 类型声明
+│   │   ├── ACHighTypes.h         # 类型声明（含量化类型）
 │   │   ├── ACHighDialect.td      # TableGen 方言定义
-│   │   ├── ACHighOps.td          # TableGen 算子定义
-│   │   └── ACHighTypes.td        # TableGen 类型定义
+│   │   ├── ACHighOps.td          # TableGen 算子定义（Conv2D/MatMul/BatchMatMul/
+│   │   │                         #   ReLU/GELU/Sigmoid/Tanh/BatchNorm/Softmax/
+│   │   │                         #   Add/Mul/MaxPool2D/AvgPool2D/Dense/Flatten/
+│   │   │                         #   Reshape/Transpose/ConvReLU/Constant）
+│   │   └── ACHighTypes.td        # TableGen 类型定义（含 QuantizedType）
 │   ├── ACMid/                    # 中层优化方言
 │   │   ├── ACMidDialect.h
 │   │   ├── ACMidOps.h
@@ -212,22 +215,28 @@ lib/
 runtime/
 ├── CMakeLists.txt
 ├── include/
-│   └── ac_runtime.h              # Runtime 公共 API
+│   └── ac_runtime.h              # Runtime 公共 C API（句柄式设计）
+│                                  #   ac_runtime_t / ac_tensor_t / ac_model_t
+│                                  #   模型加载、推理执行、内存管理
 ├── cpu/
 │   ├── CMakeLists.txt
 │   ├── cpu_runtime.h             # CPU Runtime 接口
 │   ├── cpu_runtime.cpp           # CPU Runtime 实现
 │   ├── cpu_kernels.h             # CPU 算子 Kernel 声明
-│   ├── cpu_kernels.cpp           # CPU 算子 Kernel 实现（手写高性能算子）
-│   ├── memory_manager.h          # 内存管理
+│   ├── cpu_kernels.cpp           # CPU 算子 Kernel 实现
+│   │                              #   MatMul (naive + tiled)
+│   │                              #   Conv2D (naive + im2col+GEMM)
+│   │                              #   ReLU/GELU/Sigmoid/Tanh
+│   │                              #   BatchNorm/Softmax/MaxPool/AvgPool
+│   ├── memory_manager.h          # 内存池管理（64字节对齐）
 │   └── memory_manager.cpp
 ├── cuda/                         # [TODO] CUDA Runtime
-│   └── README.md                 # CUDA 后端规划说明
+│   └── README.md
 └── ascend/                       # [TODO] Ascend Runtime
-    └── README.md                 # Ascend 后端规划说明
+    └── README.md
 ```
 
-**说明**: Runtime 库提供编译后代码在运行时所需的支持，包括内存管理、算子 Kernel 实现等。不同后端有各自的 Runtime 实现。
+**说明**: Runtime 库提供编译后代码在运行时所需的支持。API 采用句柄模式（`ac_runtime_t` / `ac_tensor_t` / `ac_model_t`），支持模型加载和批量推理执行。CPU Kernel 包含 naive 参考实现和 im2col+GEMM 优化实现。
 
 ---
 
@@ -253,7 +262,7 @@ tools/
 
 ---
 
-### 6. `test/` — FileCheck 测试
+### 6. `test/` — 测试
 
 ```
 test/
@@ -290,13 +299,21 @@ test/
 ├── CodeGen/
 │   ├── cpu-codegen.mlir          # CPU 代码生成测试
 │   └── jit-execution.mlir        # JIT 执行测试
+├── Performance/                  # 性能基准测试
+│   ├── CMakeLists.txt
+│   ├── benchmark.h               # 性能测试框架（统计分析、GFLOPS计算）
+│   ├── bench_matmul.cpp          # 矩阵乘法 benchmark
+│   └── bench_conv2d.cpp          # 卷积 benchmark
 └── E2E/
     ├── simple-matmul.mlir        # 端到端矩阵乘法测试
     ├── conv2d-relu.mlir          # 端到端 Conv+ReLU 测试
     └── simple-model.onnx         # ONNX 模型端到端测试
 ```
 
-**说明**: 使用 LLVM 的 `lit` + `FileCheck` 测试框架，通过 `.mlir` 和 `.ll` 文件直接测试 IR 变换的正确性。这是 MLIR/LLVM 社区标准的测试方式。
+**说明**: 三层测试体系:
+- **FileCheck 测试** (`lit` + `FileCheck`): MLIR/LLVM IR 变换正确性
+- **单元测试** (`unittests/`, GoogleTest): C++ 逻辑正确性
+- **性能基准** (`Performance/`): 算子和模型推理性能
 
 ---
 

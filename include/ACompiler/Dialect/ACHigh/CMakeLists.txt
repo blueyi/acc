@@ -4,3 +4,8 @@ mlir_tablegen(ACHighOps.cpp.inc -gen-op-defs)
 mlir_tablegen(ACHighDialect.h.inc -gen-dialect-decls)
 mlir_tablegen(ACHighDialect.cpp.inc -gen-dialect-defs)
 add_public_tablegen_target(ACHighOpsIncGen)
+
+set(LLVM_TARGET_DEFINITIONS ACHighTypes.td)
+mlir_tablegen(ACHighTypes.h.inc -gen-typedef-decls)
+mlir_tablegen(ACHighTypes.cpp.inc -gen-typedef-defs)
+add_public_tablegen_target(ACHighTypesIncGen)
