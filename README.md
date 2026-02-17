@@ -48,6 +48,9 @@ ACC (AI Compiler Core) is an AI compiler core framework built on LLVM/MLIR. It s
 # Build ACC
 ./scripts/build.sh
 
+# Optional: add tools to PATH so you can run acc, ac-opt, etc. from anywhere in this repo
+source scripts/acc_env.sh
+
 # Run end-to-end verification (pure Python, no build required)
 python3 examples/e2e/pytorch_triton_acc_e2e.py
 python3 examples/e2e/triton_matmul_to_acc.py
@@ -55,12 +58,57 @@ python3 examples/e2e/triton_matmul_to_acc.py
 
 ## Toolchain
 
+Binaries are under `build/bin/`. Either add them to PATH or run by path:
+
 ```bash
-acc-compiler model.onnx -o output     # Main compiler driver
-ac-opt input.mlir --ac-op-fusion      # MLIR optimization tool
-ac-translate --import-onnx model.onnx # IR translation tool
-ac-runner input.mlir                  # JIT execution tool
+# After: source scripts/acc_env.sh
+acc model.onnx -o output
+ac-opt input.mlir --ac-op-fusion
+ac-translate --import-onnx model.onnx
+ac-runner input.mlir
 ```
+
+Without sourcing, run by path (from project root):
+
+```bash
+./build/bin/acc model.onnx -o output
+./build/bin/ac-opt input.mlir --ac-op-fusion
+./build/bin/ac-translate --import-onnx model.onnx
+./build/bin/ac-runner input.mlir
+```
+
+## Testing
+
+One-click run of the full test suite (builds if needed, then runs lit tests):
+
+```bash
+./scripts/run_tests.sh
+```
+
+Options:
+
+- `./scripts/run_tests.sh --build` — build then run tests (default)
+- `./scripts/run_tests.sh --no-build` — run tests only (requires prior build)
+
+From the build directory:
+
+```bash
+cd build && ninja check-acc
+```
+
+**Note:** Tests use LLVM’s lit. If you see `llvm-lit: No such file or directory`, configure with a path to `llvm-lit` (e.g. from an LLVM build that includes MLIR):  
+`cmake -DLLVM_EXTERNAL_LIT=/path/to/llvm-install/bin/llvm-lit ...` then rebuild. Alternatively, install lit and run: `pip install lit` then `./scripts/run_tests.sh --no-build` (if your environment provides the lit.llvm config).
+
+### Test coverage
+
+| Area | Location | Description |
+|------|----------|-------------|
+| **ACHigh dialect** | `test/Dialect/ACHigh/ops.mlir` | matmul, conv2d, relu, add |
+| **ac-opt passes** | `test/Transforms/*.mlir` | ac-op-fusion, ac-constant-folding, ac-shape-inference, ac-layout-transform, ac-dead-code-elimination |
+| **Conversion** | `test/Conversion/ACHighToACMid/basic.mlir` | ACHigh → ACMid lowering |
+| **ac-translate** | `test/Tools/ac-translate-import-onnx.mlir` | `--import-onnx` option |
+| **acc driver** | `test/Tools/acc-help.mlir` | acc binary runs and prints help |
+| **ONNX add example** | `test/onnx-import-add/` | Sample `model.onnx` (add op) + expected MLIR |
 
 ## Project Phases
 

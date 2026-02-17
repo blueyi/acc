@@ -64,3 +64,6 @@ Thumbs.db
 
 # Compile commands
 compile_commands.json
+
+# Python venv for ONNX model generation
+.venv-onnx/

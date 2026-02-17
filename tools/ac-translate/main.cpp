@@ -22,6 +22,6 @@ int main(int argc, char **argv) {
   mlir::DialectRegistry registry;
   acc::registerAllDialects(registry);
 
-  return mlir::asMainReturnCode(
-      mlir::mlirTranslateMain(argc, argv, "ACC IR translator\n"));
+  auto result = mlir::mlirTranslateMain(argc, argv, "ACC IR translator\n");
+  return mlir::succeeded(result) ? 0 : 1;
 }

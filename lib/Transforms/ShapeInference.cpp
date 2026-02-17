@@ -6,7 +6,9 @@
 
 #include "ACC/Transforms/Passes.h"
 #include "ACC/Dialect/ACHigh/ACHighOps.h"
+#include "mlir/Dialect/Func/IR/FuncOps.h"
 #include "mlir/Pass/Pass.h"
+#include "mlir/Support/TypeID.h"
 
 using namespace mlir;
 
@@ -14,6 +16,8 @@ namespace {
 
 struct ShapeInferencePass
     : public PassWrapper<ShapeInferencePass, OperationPass<func::FuncOp>> {
+  MLIR_DEFINE_EXPLICIT_INTERNAL_INLINE_TYPE_ID(ShapeInferencePass)
+
   StringRef getArgument() const final { return "ac-shape-inference"; }
   StringRef getDescription() const final {
     return "Infer tensor shapes through the computation graph";

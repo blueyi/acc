@@ -11,6 +11,6 @@ add_mlir_dialect_library(ACConversionACMidToLinalg
   ACDialectACMid
   MLIRIR
   MLIRPass
-  MLIRLinalg
+  MLIRLinalgDialect
   MLIRTransformUtils
 )

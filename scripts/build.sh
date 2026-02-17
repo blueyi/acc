@@ -12,7 +12,11 @@ PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
 BUILD_DIR="${BUILD_DIR:-$PROJECT_ROOT/build}"
 BUILD_TYPE="${BUILD_TYPE:-Debug}"
 LLVM_INSTALL_DIR="${LLVM_INSTALL_DIR:-$HOME/llvm-install}"
-NUM_JOBS="${NUM_JOBS:-$(nproc)}"
+if command -v nproc >/dev/null 2>&1; then
+  NUM_JOBS="${NUM_JOBS:-$(nproc)}"
+else
+  NUM_JOBS=$(sysctl -n hw.ncpu)
+fi
 
 echo "=== ACC Build ==="
 echo "Project Root:  $PROJECT_ROOT"

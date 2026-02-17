@@ -14,7 +14,7 @@ double Timer::TimerEntry::durationMs() const {
 }
 
 void Timer::start(const std::string &phaseName) {
-  entries_.push_back({phaseName, std::chrono::steady_clock::now(), {}, 0.0});
+  entries_.push_back({phaseName, std::chrono::steady_clock::now(), {}});
   currentEntry_ = static_cast<int>(entries_.size()) - 1;
 }
 
@@ -31,10 +31,9 @@ void Timer::report() const {
   for (const auto &entry : entries_) {
     double ms = entry.durationMs();
     total += ms;
-    llvm::errs() << llvm::format("  %-30s %8.2f ms\n",
-                                  entry.name.c_str(), ms);
+    llvm::errs() << "  " << entry.name << ": " << ms << " ms\n";
   }
-  llvm::errs() << llvm::format("  %-30s %8.2f ms\n", "TOTAL", total);
+  llvm::errs() << "  TOTAL: " << total << " ms\n";
   llvm::errs() << "===========================================\n";
 }
 

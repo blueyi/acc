@@ -6,7 +6,7 @@
 
 #include "ACC/CodeGen/CPUCodeGen.h"
 #include "llvm/MC/TargetRegistry.h"
-#include "llvm/Support/Host.h"
+#include "llvm/TargetParser/Host.h"
 
 namespace acc {
 

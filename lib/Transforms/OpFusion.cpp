@@ -11,7 +11,9 @@
 
 #include "ACC/Transforms/Passes.h"
 #include "ACC/Dialect/ACHigh/ACHighOps.h"
+#include "mlir/Dialect/Func/IR/FuncOps.h"
 #include "mlir/Pass/Pass.h"
+#include "mlir/Support/TypeID.h"
 #include "mlir/Transforms/GreedyPatternRewriteDriver.h"
 
 using namespace mlir;
@@ -20,6 +22,8 @@ namespace {
 
 struct OpFusionPass
     : public PassWrapper<OpFusionPass, OperationPass<func::FuncOp>> {
+  MLIR_DEFINE_EXPLICIT_INTERNAL_INLINE_TYPE_ID(OpFusionPass)
+
   StringRef getArgument() const final { return "ac-op-fusion"; }
   StringRef getDescription() const final {
     return "Fuse compatible adjacent operations";

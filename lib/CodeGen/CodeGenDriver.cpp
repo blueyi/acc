@@ -7,6 +7,7 @@
 #include "ACC/CodeGen/CodeGenDriver.h"
 #include "llvm/MC/TargetRegistry.h"
 #include "llvm/Support/TargetSelect.h"
+#include "llvm/TargetParser/Triple.h"
 #include "llvm/Target/TargetOptions.h"
 
 namespace acc {
@@ -17,7 +18,7 @@ bool CodeGenDriver::generate(llvm::Module &module) {
   if (!initTargetMachine())
     return false;
 
-  module.setTargetTriple(config_.targetTriple);
+  module.setTargetTriple(llvm::Triple(config_.targetTriple));
   module.setDataLayout(targetMachine_->createDataLayout());
 
   if (config_.emitAssembly)

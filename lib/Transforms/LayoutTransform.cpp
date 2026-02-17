@@ -5,7 +5,9 @@
 //===----------------------------------------------------------------------===//
 
 #include "ACC/Transforms/Passes.h"
+#include "mlir/Dialect/Func/IR/FuncOps.h"
 #include "mlir/Pass/Pass.h"
+#include "mlir/Support/TypeID.h"
 
 using namespace mlir;
 
@@ -13,6 +15,8 @@ namespace {
 
 struct LayoutTransformPass
     : public PassWrapper<LayoutTransformPass, OperationPass<func::FuncOp>> {
+  MLIR_DEFINE_EXPLICIT_INTERNAL_INLINE_TYPE_ID(LayoutTransformPass)
+
   StringRef getArgument() const final { return "ac-layout-transform"; }
   StringRef getDescription() const final {
     return "Optimize data layout for target architecture";

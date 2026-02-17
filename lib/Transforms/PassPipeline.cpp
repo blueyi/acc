@@ -10,6 +10,7 @@
 
 #include "ACC/Transforms/Passes.h"
 #include "mlir/Pass/PassManager.h"
+#include "mlir/Pass/PassRegistry.h"
 #include "mlir/Transforms/Passes.h"
 
 using namespace mlir;
@@ -19,8 +20,11 @@ namespace acc {
 void registerTransformPasses() {
   // Register all ACC transform passes so they can be used via
   // command-line options in tools like ac-opt.
-  PassRegistration<>();
-  // TODO: Register individual passes using PassRegistration
+  registerPass(createShapeInferencePass);
+  registerPass(createConstantFoldingPass);
+  registerPass(createDeadCodeEliminationPass);
+  registerPass(createOpFusionPass);
+  registerPass(createLayoutTransformPass);
 }
 
 /// Build the default MLIR optimization pipeline.

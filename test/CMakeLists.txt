@@ -6,8 +6,10 @@ configure_lit_site_cfg(
 )
 
 set(ACOMPILER_TEST_DEPENDS
+  acc
   ac-opt
   ac-translate
+  ac-runner
 )
 
 add_lit_testsuite(check-acc "Running the ACC regression tests"

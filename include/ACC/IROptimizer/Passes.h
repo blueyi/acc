@@ -12,6 +12,7 @@
 #define ACC_IROPTIMIZER_PASSES_H
 
 #include "llvm/IR/PassManager.h"
+#include "llvm/Passes/PassBuilder.h"
 
 namespace acc {
 

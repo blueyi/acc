@@ -6,6 +6,8 @@ add_mlir_library(ACFrontend
   Sema.cpp
   MLIRGen.cpp
   ONNXImporter.cpp
+  TritonImporter.cpp
+  TorchImporter.cpp
 
   ADDITIONAL_HEADER_DIRS
   ${PROJECT_SOURCE_DIR}/include/ACC/Frontend

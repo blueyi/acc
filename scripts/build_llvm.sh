@@ -9,7 +9,7 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
 
 # Configuration
-LLVM_VERSION="${LLVM_VERSION:-18.1.0}"
+LLVM_VERSION="${LLVM_VERSION:-21.1.3}"
 LLVM_SRC_DIR="${LLVM_SRC_DIR:-$PROJECT_ROOT/third_party/llvm-project}"
 LLVM_BUILD_DIR="${LLVM_BUILD_DIR:-$PROJECT_ROOT/third_party/llvm-project/build}"
 LLVM_INSTALL_DIR="${LLVM_INSTALL_DIR:-$HOME/llvm-install}"
@@ -43,7 +43,7 @@ cd "$LLVM_BUILD_DIR"
 cmake -G Ninja "$LLVM_SRC_DIR/llvm" \
   -DCMAKE_BUILD_TYPE="$BUILD_TYPE" \
   -DCMAKE_INSTALL_PREFIX="$LLVM_INSTALL_DIR" \
-  -DLLVM_ENABLE_PROJECTS="mlir" \
+  -DLLVM_ENABLE_PROJECTS="mlir;llvm;lld" \
   -DLLVM_TARGETS_TO_BUILD="X86;AArch64" \
   -DLLVM_ENABLE_ASSERTIONS=ON \
   -DLLVM_INSTALL_UTILS=ON \

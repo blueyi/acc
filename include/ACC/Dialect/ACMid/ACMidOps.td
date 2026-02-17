@@ -15,6 +15,9 @@ include "ACC/Dialect/ACMid/ACMidDialect.td"
 include "mlir/Interfaces/SideEffectInterfaces.td"
 include "mlir/IR/OpBase.td"
 
+// Compatibility alias: some MLIR versions don't provide this predefined union.
+def AnyMemRefOrRankedTensor : AnyTypeOf<[AnyMemRef, AnyRankedTensor]>;
+
 //===----------------------------------------------------------------------===//
 // TiledMatMul Operation
 //===----------------------------------------------------------------------===//

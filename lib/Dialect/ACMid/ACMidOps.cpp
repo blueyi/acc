@@ -6,6 +6,7 @@
 
 #include "ACC/Dialect/ACMid/ACMidOps.h"
 #include "ACC/Dialect/ACMid/ACMidDialect.h"
+#include "mlir/IR/Builders.h"
 
 using namespace mlir;
 using namespace acc::acmid;
