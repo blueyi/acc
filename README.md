@@ -1,13 +1,13 @@
-# ACompiler — AI Compiler based on LLVM/MLIR
+# ACompiler — AI Compiler Core based on LLVM/MLIR
 
-ACompiler 是一个基于 LLVM/MLIR 基础设施实现的 AI 编译器教育项目，通过实例驱动的方式系统学习现代编译器技术。项目采用**自上而下、由浅入深**的渐进式学习路线，从 MLIR 高层抽象开始，逐步深入到 LLVM IR 优化和机器码生成。
+ACompiler 是一个基于 LLVM/MLIR 基础设施构建的 AI 编译器核心项目。项目以实例驱动的方式系统学习现代编译器技术，同时作为未来 AI Compiler Core 的基础框架，采用**自上而下、由浅入深**的渐进式路线，从 MLIR 高层抽象逐步深入到 LLVM IR 优化和目标代码生成。
 
 ## 项目特性
 
-- **渐进式学习**: 从简单到复杂，逐步掌握编译技术
-- **实例驱动**: 每个概念都有完整的代码示例和教程
-- **多后端架构**: CPU (实现中) + CUDA (规划) + Ascend (规划)
-- **完整文档**: 详细的教程、API 文档和实践指南
+- **渐进式学习**: 从简单到复杂，每个阶段都有可运行的代码和测试
+- **实例驱动**: 每个编译器概念都有完整的代码示例和实践练习
+- **生产级架构**: 模块化设计，为 AI Compiler Core 奠定基础
+- **多后端支持**: CPU（实现中）+ CUDA（规划）+ Ascend NPU（规划）
 - **测试完备**: FileCheck 集成测试 + GoogleTest 单元测试 + 性能基准测试
 
 ## 编译流水线
@@ -82,14 +82,14 @@ Executable + Runtime (im2col+GEMM, SIMD, 多线程)
 
 详细目录结构请参阅 [docs/DIRECTORY_STRUCTURE.md](docs/DIRECTORY_STRUCTURE.md)。
 
-## 学习路线（4 阶段）
+## 项目阶段（4 Phase）
 
-| 阶段 | 主题 | 周期 | 教程 |
-|------|------|------|------|
-| **Phase 1** | MLIR 基础 + Dialect + Pass + 前端 | Week 1-4 | [编译LLVM](examples/tutorials/01-build-llvm/) / [方言](examples/tutorials/02-first-dialect/) / [算子](examples/tutorials/03-define-ops/) / [Pass](examples/tutorials/04-write-pass/) |
-| **Phase 2** | Lowering + LLVM IR 优化 + SIMD | Week 5-7 | [Lowering](examples/tutorials/05-lowering/) / [LLVM IR](examples/tutorials/06-llvm-ir-opt/) |
-| **Phase 3** | CodeGen + Runtime + 性能优化 | Week 8-11 | [CodeGen](examples/tutorials/07-codegen/) / [E2E](examples/tutorials/08-e2e-pipeline/) |
-| **Phase 4** | 多后端: CUDA + Ascend (TODO) | Week 12+ | — |
+| 阶段 | 主题 | 周期 | 核心产出 |
+|------|------|------|----------|
+| **Phase 1** | 基础架构 + MLIR 入门 | Week 1-4 | ACHigh 20+ 算子, 5 个优化 Pass, ONNX 导入, DSL 前端 |
+| **Phase 2** | Lowering + LLVM IR 优化 | Week 5-8 | 完整降级链路, LLVM 优化 Pipeline, SIMD 映射 |
+| **Phase 3** | CodeGen + Runtime + E2E | Week 9-12 | CPU 后端, im2col+GEMM Runtime, ResNet-18 推理 |
+| **Phase 4** | 高级特性 + 多后端 (TODO) | Week 13+ | 量化/AutoTuning, CUDA 后端, Ascend NPU 后端 |
 
 ## 多后端支持
 
@@ -117,7 +117,7 @@ Executable + Runtime (im2col+GEMM, SIMD, 多线程)
 
 ## 文档
 
-- [项目详细规划](docs/PROJECT_PLAN.md)（4 阶段, 含代码示例和验收标准）
+- [项目详细规划](docs/PROJECT_PLAN.md)（4 阶段, 含任务表格 + 核心知识点 + 代码示例 + 验收标准）
 - [目录结构说明](docs/DIRECTORY_STRUCTURE.md)
 
 ## License
