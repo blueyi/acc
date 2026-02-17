@@ -2,7 +2,7 @@ add_mlir_dialect_library(ACConversionACMidToLLVM
   ACMidToLLVM.cpp
 
   ADDITIONAL_HEADER_DIRS
-  ${PROJECT_SOURCE_DIR}/include/ACompiler/Conversion/ACMidToLLVM
+  ${PROJECT_SOURCE_DIR}/include/ACC/Conversion/ACMidToLLVM
 
   DEPENDS
   ACMidOpsIncGen

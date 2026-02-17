@@ -1,6 +1,6 @@
 //===- CustomLoopOpt.cpp - Custom LLVM IR Loop Optimization -----*- C++ -*-===//
 //
-// Part of the ACompiler Project
+// Part of the ACC Project
 //
 //===----------------------------------------------------------------------===//
 //
@@ -9,13 +9,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "ACompiler/IROptimizer/Passes.h"
+#include "ACC/IROptimizer/Passes.h"
 #include "llvm/Analysis/LoopInfo.h"
 #include "llvm/IR/Function.h"
 
 using namespace llvm;
 
-namespace acompiler {
+namespace acc {
 
 PreservedAnalyses CustomLoopOptPass::run(Function &F,
                                           FunctionAnalysisManager &AM) {
@@ -28,4 +28,4 @@ PreservedAnalyses CustomLoopOptPass::run(Function &F,
   return PreservedAnalyses::all();
 }
 
-} // namespace acompiler
+} // namespace acc

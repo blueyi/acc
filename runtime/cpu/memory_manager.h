@@ -1,6 +1,6 @@
 //===- memory_manager.h - CPU Memory Management ----------------*- C++ -*-===//
 //
-// Part of the ACompiler Project
+// Part of the ACC Project
 //
 //===----------------------------------------------------------------------===//
 
@@ -10,7 +10,7 @@
 #include <cstddef>
 #include <cstdint>
 
-namespace acompiler {
+namespace acc {
 namespace runtime {
 
 /// Simple memory pool for tensor allocations on CPU.
@@ -33,6 +33,6 @@ private:
 };
 
 } // namespace runtime
-} // namespace acompiler
+} // namespace acc
 
 #endif // AC_RUNTIME_CPU_MEMORY_MANAGER_H

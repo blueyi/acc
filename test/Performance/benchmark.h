@@ -1,6 +1,6 @@
-//===- benchmark.h - ACompiler Performance Benchmark Framework --*- C++ -*-===//
+//===- benchmark.h - ACC Performance Benchmark Framework --*- C++ -*-===//
 //
-// Part of the ACompiler Project
+// Part of the ACC Project
 //
 //===----------------------------------------------------------------------===//
 //
@@ -21,7 +21,7 @@
 #include <string>
 #include <vector>
 
-namespace acompiler {
+namespace acc {
 namespace benchmark {
 
 struct BenchmarkResult {
@@ -96,11 +96,11 @@ public:
     printf("\n");
   }
 
-  /// Print comparison between ACompiler and a reference.
+  /// Print comparison between ACC and a reference.
   static void printComparison(const BenchmarkResult &ac,
                                const BenchmarkResult &ref) {
     printf("\n=== %s Performance Comparison ===\n", ac.name.c_str());
-    printf("  ACompiler:  %8.3f ms", ac.avgTimeMs);
+    printf("  ACC:  %8.3f ms", ac.avgTimeMs);
     if (ac.gflops > 0) printf("  (%.2f GFLOPS)", ac.gflops);
     printf("\n");
     printf("  Reference:  %8.3f ms", ref.avgTimeMs);
@@ -125,6 +125,6 @@ inline double conv2dFlops(int64_t N, int64_t C, int64_t K,
 }
 
 } // namespace benchmark
-} // namespace acompiler
+} // namespace acc
 
 #endif // AC_TEST_PERFORMANCE_BENCHMARK_H

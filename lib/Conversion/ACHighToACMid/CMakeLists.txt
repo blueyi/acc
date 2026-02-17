@@ -2,7 +2,7 @@ add_mlir_dialect_library(ACConversionACHighToACMid
   ACHighToACMid.cpp
 
   ADDITIONAL_HEADER_DIRS
-  ${PROJECT_SOURCE_DIR}/include/ACompiler/Conversion/ACHighToACMid
+  ${PROJECT_SOURCE_DIR}/include/ACC/Conversion/ACHighToACMid
 
   DEPENDS
   ACHighOpsIncGen

@@ -1,6 +1,6 @@
 #!/bin/bash
 # ==============================================================================
-# build.sh - Build ACompiler
+# build.sh - Build ACC
 # ==============================================================================
 
 set -e
@@ -14,7 +14,7 @@ BUILD_TYPE="${BUILD_TYPE:-Debug}"
 LLVM_INSTALL_DIR="${LLVM_INSTALL_DIR:-$HOME/llvm-install}"
 NUM_JOBS="${NUM_JOBS:-$(nproc)}"
 
-echo "=== ACompiler Build ==="
+echo "=== ACC Build ==="
 echo "Project Root:  $PROJECT_ROOT"
 echo "Build Dir:     $BUILD_DIR"
 echo "Build Type:    $BUILD_TYPE"
@@ -40,15 +40,15 @@ cmake -G Ninja "$PROJECT_ROOT" \
   -DAC_ENABLE_TESTS=ON
 
 # Build
-echo "Building ACompiler..."
+echo "Building ACC..."
 ninja -j"$NUM_JOBS"
 
 echo ""
-echo "=== ACompiler build complete ==="
+echo "=== ACC build complete ==="
 echo "Binaries are in: $BUILD_DIR/bin/"
 echo ""
 echo "Available tools:"
-echo "  $BUILD_DIR/bin/acompiler      - Main compiler driver"
+echo "  $BUILD_DIR/bin/acc      - Main compiler driver"
 echo "  $BUILD_DIR/bin/ac-opt         - MLIR optimization tool"
 echo "  $BUILD_DIR/bin/ac-translate   - IR translation tool"
 echo "  $BUILD_DIR/bin/ac-runner      - JIT execution tool"

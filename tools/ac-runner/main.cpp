@@ -1,6 +1,6 @@
-//===- main.cpp - ACompiler JIT Runner -------------------------*- C++ -*-===//
+//===- main.cpp - ACC JIT Runner -------------------------*- C++ -*-===//
 //
-// Part of the ACompiler Project
+// Part of the ACC Project
 //
 //===----------------------------------------------------------------------===//
 //
@@ -14,8 +14,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "ACompiler/InitAllDialects.h"
-#include "ACompiler/Support/Logger.h"
+#include "ACC/InitAllDialects.h"
+#include "ACC/Support/Logger.h"
 #include "llvm/Support/CommandLine.h"
 #include "llvm/Support/InitLLVM.h"
 
@@ -31,7 +31,7 @@ static cl::opt<std::string> entryPoint("entry-point",
 
 int main(int argc, char **argv) {
   llvm::InitLLVM initLLVM(argc, argv);
-  cl::ParseCommandLineOptions(argc, argv, "ACompiler JIT Runner\n");
+  cl::ParseCommandLineOptions(argc, argv, "ACC JIT Runner\n");
 
   // TODO: Implement JIT execution pipeline
   // 1. Parse input MLIR file
@@ -40,6 +40,6 @@ int main(int argc, char **argv) {
   // 4. Create JIT engine
   // 5. Execute the entry point function
 
-  acompiler::Logger::instance().info("JIT runner not yet implemented");
+  acc::Logger::instance().info("JIT runner not yet implemented");
   return 0;
 }

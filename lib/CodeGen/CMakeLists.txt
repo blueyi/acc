@@ -4,7 +4,7 @@ add_llvm_library(ACCodeGen
   JITEngine.cpp
 
   ADDITIONAL_HEADER_DIRS
-  ${PROJECT_SOURCE_DIR}/include/ACompiler/CodeGen
+  ${PROJECT_SOURCE_DIR}/include/ACC/CodeGen
 
   LINK_LIBS
   LLVMCore

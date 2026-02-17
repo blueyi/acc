@@ -1,6 +1,6 @@
 #!/bin/bash
 # ==============================================================================
-# build_llvm.sh - Build LLVM/MLIR from source for ACompiler development
+# build_llvm.sh - Build LLVM/MLIR from source for ACC development
 # ==============================================================================
 
 set -e
@@ -20,7 +20,7 @@ else
   NUM_JOBS=$(sysctl -n hw.ncpu)
 fi
 
-echo "=== ACompiler: Building LLVM/MLIR ==="
+echo "=== ACC: Building LLVM/MLIR ==="
 echo "LLVM Version:  $LLVM_VERSION"
 echo "Source Dir:    $LLVM_SRC_DIR"
 echo "Build Dir:     $LLVM_BUILD_DIR"
@@ -63,5 +63,5 @@ echo ""
 echo "=== LLVM/MLIR build complete ==="
 echo "Installed to: $LLVM_INSTALL_DIR"
 echo ""
-echo "To build ACompiler, run:"
+echo "To build ACC, run:"
 echo "  cd $PROJECT_ROOT && ./scripts/build.sh"

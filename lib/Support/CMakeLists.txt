@@ -4,7 +4,7 @@ add_llvm_library(ACSupport
   ErrorHandling.cpp
 
   ADDITIONAL_HEADER_DIRS
-  ${PROJECT_SOURCE_DIR}/include/ACompiler/Support
+  ${PROJECT_SOURCE_DIR}/include/ACC/Support
 
   LINK_LIBS
   LLVMSupport

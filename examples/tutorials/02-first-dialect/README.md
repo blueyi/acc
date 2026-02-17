@@ -24,7 +24,7 @@ MLIR 中的方言是一组相关操作、类型和属性的集合。每个方言
 
 ## 学习路径
 
-1. 阅读 `include/ACompiler/Dialect/ACHigh/ACHighDialect.td`
+1. 阅读 `include/ACC/Dialect/ACHigh/ACHighDialect.td`
 2. 理解 ODS 语法中各字段的含义
 3. 查看 TableGen 生成的 C++ 代码
 4. 尝试添加一个新的操作（例如 `achigh.sigmoid`）

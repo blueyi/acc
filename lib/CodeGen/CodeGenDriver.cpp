@@ -1,15 +1,15 @@
 //===- CodeGenDriver.cpp - Code Generation Driver ---------------*- C++ -*-===//
 //
-// Part of the ACompiler Project
+// Part of the ACC Project
 //
 //===----------------------------------------------------------------------===//
 
-#include "ACompiler/CodeGen/CodeGenDriver.h"
+#include "ACC/CodeGen/CodeGenDriver.h"
 #include "llvm/MC/TargetRegistry.h"
 #include "llvm/Support/TargetSelect.h"
 #include "llvm/Target/TargetOptions.h"
 
-namespace acompiler {
+namespace acc {
 
 CodeGenDriver::CodeGenDriver(const CodeGenConfig &config) : config_(config) {}
 
@@ -43,4 +43,4 @@ bool CodeGenDriver::emitAssembly(llvm::Module &module) {
   return false;
 }
 
-} // namespace acompiler
+} // namespace acc

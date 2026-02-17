@@ -1,6 +1,6 @@
 //===- OpFusion.cpp - Operator Fusion Pass ----------------------*- C++ -*-===//
 //
-// Part of the ACompiler Project
+// Part of the ACC Project
 //
 //===----------------------------------------------------------------------===//
 //
@@ -9,8 +9,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "ACompiler/Transforms/Passes.h"
-#include "ACompiler/Dialect/ACHigh/ACHighOps.h"
+#include "ACC/Transforms/Passes.h"
+#include "ACC/Dialect/ACHigh/ACHighOps.h"
 #include "mlir/Pass/Pass.h"
 #include "mlir/Transforms/GreedyPatternRewriteDriver.h"
 
@@ -35,6 +35,6 @@ struct OpFusionPass
 
 } // namespace
 
-std::unique_ptr<mlir::Pass> acompiler::createOpFusionPass() {
+std::unique_ptr<mlir::Pass> acc::createOpFusionPass() {
   return std::make_unique<OpFusionPass>();
 }

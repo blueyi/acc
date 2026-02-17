@@ -1,12 +1,12 @@
 //===- ACMidToLinalg.cpp - ACMid to Linalg Lowering -------------*- C++ -*-===//
 //
-// Part of the ACompiler Project
+// Part of the ACC Project
 //
 //===----------------------------------------------------------------------===//
 
-#include "ACompiler/Conversion/ACMidToLinalg/ACMidToLinalg.h"
-#include "ACompiler/Dialect/ACMid/ACMidDialect.h"
-#include "ACompiler/Dialect/ACMid/ACMidOps.h"
+#include "ACC/Conversion/ACMidToLinalg/ACMidToLinalg.h"
+#include "ACC/Dialect/ACMid/ACMidDialect.h"
+#include "ACC/Dialect/ACMid/ACMidOps.h"
 #include "mlir/Dialect/Linalg/IR/Linalg.h"
 #include "mlir/Pass/Pass.h"
 #include "mlir/Transforms/DialectConversion.h"
@@ -32,6 +32,6 @@ struct ACMidToLinalgPass
 
 } // namespace
 
-std::unique_ptr<mlir::Pass> acompiler::createACMidToLinalgPass() {
+std::unique_ptr<mlir::Pass> acc::createACMidToLinalgPass() {
   return std::make_unique<ACMidToLinalgPass>();
 }

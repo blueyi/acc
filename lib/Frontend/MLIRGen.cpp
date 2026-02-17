@@ -1,16 +1,16 @@
 //===- MLIRGen.cpp - AST to MLIR Generation --------------------*- C++ -*-===//
 //
-// Part of the ACompiler Project
+// Part of the ACC Project
 //
 //===----------------------------------------------------------------------===//
 
-#include "ACompiler/Frontend/MLIRGen.h"
-#include "ACompiler/Dialect/ACHigh/ACHighDialect.h"
-#include "ACompiler/Dialect/ACHigh/ACHighOps.h"
+#include "ACC/Frontend/MLIRGen.h"
+#include "ACC/Dialect/ACHigh/ACHighDialect.h"
+#include "ACC/Dialect/ACHigh/ACHighOps.h"
 #include "mlir/IR/Builders.h"
 #include "mlir/IR/BuiltinOps.h"
 
-namespace acompiler {
+namespace acc {
 
 mlir::OwningOpRef<mlir::ModuleOp> mlirGen(mlir::MLIRContext &context,
                                            ModuleAST &moduleAST) {
@@ -26,4 +26,4 @@ mlir::OwningOpRef<mlir::ModuleOp> mlirGen(mlir::MLIRContext &context,
   return module;
 }
 
-} // namespace acompiler
+} // namespace acc

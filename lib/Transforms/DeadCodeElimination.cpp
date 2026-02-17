@@ -1,10 +1,10 @@
 //===- DeadCodeElimination.cpp - Dead Code Elimination Pass -----*- C++ -*-===//
 //
-// Part of the ACompiler Project
+// Part of the ACC Project
 //
 //===----------------------------------------------------------------------===//
 
-#include "ACompiler/Transforms/Passes.h"
+#include "ACC/Transforms/Passes.h"
 #include "mlir/Pass/Pass.h"
 
 using namespace mlir;
@@ -29,6 +29,6 @@ struct DeadCodeEliminationPass
 
 } // namespace
 
-std::unique_ptr<mlir::Pass> acompiler::createDeadCodeEliminationPass() {
+std::unique_ptr<mlir::Pass> acc::createDeadCodeEliminationPass() {
   return std::make_unique<DeadCodeEliminationPass>();
 }

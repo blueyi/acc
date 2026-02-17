@@ -1,13 +1,13 @@
-//===- Timer.cpp - ACompiler Compilation Timer ------------------*- C++ -*-===//
+//===- Timer.cpp - ACC Compilation Timer ------------------*- C++ -*-===//
 //
-// Part of the ACompiler Project
+// Part of the ACC Project
 //
 //===----------------------------------------------------------------------===//
 
-#include "ACompiler/Support/Timer.h"
+#include "ACC/Support/Timer.h"
 #include "llvm/Support/raw_ostream.h"
 
-namespace acompiler {
+namespace acc {
 
 double Timer::TimerEntry::durationMs() const {
   return std::chrono::duration<double, std::milli>(end - start).count();
@@ -26,7 +26,7 @@ void Timer::stop() {
 }
 
 void Timer::report() const {
-  llvm::errs() << "\n=== ACompiler Compilation Timing Report ===\n";
+  llvm::errs() << "\n=== ACC Compilation Timing Report ===\n";
   double total = 0.0;
   for (const auto &entry : entries_) {
     double ms = entry.durationMs();
@@ -38,4 +38,4 @@ void Timer::report() const {
   llvm::errs() << "===========================================\n";
 }
 
-} // namespace acompiler
+} // namespace acc

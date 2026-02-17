@@ -1,11 +1,11 @@
 //===- ShapeInference.cpp - Shape Inference Pass ----------------*- C++ -*-===//
 //
-// Part of the ACompiler Project
+// Part of the ACC Project
 //
 //===----------------------------------------------------------------------===//
 
-#include "ACompiler/Transforms/Passes.h"
-#include "ACompiler/Dialect/ACHigh/ACHighOps.h"
+#include "ACC/Transforms/Passes.h"
+#include "ACC/Dialect/ACHigh/ACHighOps.h"
 #include "mlir/Pass/Pass.h"
 
 using namespace mlir;
@@ -30,6 +30,6 @@ struct ShapeInferencePass
 
 } // namespace
 
-std::unique_ptr<mlir::Pass> acompiler::createShapeInferencePass() {
+std::unique_ptr<mlir::Pass> acc::createShapeInferencePass() {
   return std::make_unique<ShapeInferencePass>();
 }

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-project(ACompiler
+project(ACC
   VERSION 0.1.0
   DESCRIPTION "An AI Compiler based on LLVM/MLIR for learning and practice"
   LANGUAGES CXX C
@@ -44,9 +44,9 @@ link_directories(${LLVM_BUILD_LIBRARY_DIR})
 add_definitions(${LLVM_DEFINITIONS})
 
 # ==============================================================================
-# ACompiler sub-directories
+# ACC sub-directories
 # ==============================================================================
-add_subdirectory(include/ACompiler)
+add_subdirectory(include/ACC)
 add_subdirectory(lib)
 add_subdirectory(runtime)
 add_subdirectory(tools)

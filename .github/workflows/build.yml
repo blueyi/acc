@@ -29,7 +29,7 @@ jobs:
             ./scripts/build_llvm.sh
           fi
 
-      - name: Build ACompiler
+      - name: Build ACC
         run: ./scripts/build.sh
 
       - name: Run Tests

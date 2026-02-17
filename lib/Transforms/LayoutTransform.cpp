@@ -1,10 +1,10 @@
 //===- LayoutTransform.cpp - Data Layout Transform Pass ---------*- C++ -*-===//
 //
-// Part of the ACompiler Project
+// Part of the ACC Project
 //
 //===----------------------------------------------------------------------===//
 
-#include "ACompiler/Transforms/Passes.h"
+#include "ACC/Transforms/Passes.h"
 #include "mlir/Pass/Pass.h"
 
 using namespace mlir;
@@ -28,6 +28,6 @@ struct LayoutTransformPass
 
 } // namespace
 
-std::unique_ptr<mlir::Pass> acompiler::createLayoutTransformPass() {
+std::unique_ptr<mlir::Pass> acc::createLayoutTransformPass() {
   return std::make_unique<LayoutTransformPass>();
 }

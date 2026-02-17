@@ -1,10 +1,10 @@
-//===- ac_runtime.h - ACompiler Runtime Public API --------------*- C++ -*-===//
+//===- ac_runtime.h - ACC Runtime Public API --------------*- C++ -*-===//
 //
-// Part of the ACompiler Project
+// Part of the ACC Project
 //
 //===----------------------------------------------------------------------===//
 //
-// Public C API for the ACompiler runtime library. This API is called by
+// Public C API for the ACC runtime library. This API is called by
 // generated code at inference time, and can also be used directly by
 // applications for model loading and execution.
 //
@@ -27,13 +27,13 @@ extern "C" {
 // ===========================================================================
 
 /// Runtime instance handle (one per backend).
-typedef struct ACompilerRuntime *ac_runtime_t;
+typedef struct ACCRuntime *ac_runtime_t;
 
 /// Tensor handle (managed by runtime).
-typedef struct ACompilerTensor *ac_tensor_t;
+typedef struct ACCTensor *ac_tensor_t;
 
 /// Compiled model handle.
-typedef struct ACompilerModel *ac_model_t;
+typedef struct ACCModel *ac_model_t;
 
 // ===========================================================================
 // Data Type Enumeration

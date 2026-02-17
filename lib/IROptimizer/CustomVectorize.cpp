@@ -1,6 +1,6 @@
 //===- CustomVectorize.cpp - Custom LLVM IR Vectorization -------*- C++ -*-===//
 //
-// Part of the ACompiler Project
+// Part of the ACC Project
 //
 //===----------------------------------------------------------------------===//
 //
@@ -9,12 +9,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "ACompiler/IROptimizer/Passes.h"
+#include "ACC/IROptimizer/Passes.h"
 #include "llvm/IR/Function.h"
 
 using namespace llvm;
 
-namespace acompiler {
+namespace acc {
 
 PreservedAnalyses CustomVectorizePass::run(Function &F,
                                             FunctionAnalysisManager &AM) {
@@ -27,4 +27,4 @@ PreservedAnalyses CustomVectorizePass::run(Function &F,
   return PreservedAnalyses::all();
 }
 
-} // namespace acompiler
+} // namespace acc

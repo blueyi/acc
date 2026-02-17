@@ -1,6 +1,6 @@
 //===- memory_manager.cpp - CPU Memory Management Implementation -*- C++ -*-===//
 //
-// Part of the ACompiler Project
+// Part of the ACC Project
 //
 //===----------------------------------------------------------------------===//
 
@@ -9,7 +9,7 @@
 #include <cstdlib>
 #include <cstring>
 
-namespace acompiler {
+namespace acc {
 namespace runtime {
 
 CPUMemoryManager &CPUMemoryManager::instance() {
@@ -46,4 +46,4 @@ void CPUMemoryManager::reportStats() const {
 }
 
 } // namespace runtime
-} // namespace acompiler
+} // namespace acc

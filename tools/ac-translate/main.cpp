@@ -1,6 +1,6 @@
-//===- main.cpp - ACompiler IR Translation Tool -----------------*- C++ -*-===//
+//===- main.cpp - ACC IR Translation Tool -----------------*- C++ -*-===//
 //
-// Part of the ACompiler Project
+// Part of the ACC Project
 //
 //===----------------------------------------------------------------------===//
 //
@@ -14,14 +14,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "ACompiler/InitAllDialects.h"
+#include "ACC/InitAllDialects.h"
 #include "mlir/IR/DialectRegistry.h"
 #include "mlir/Tools/mlir-translate/MlirTranslateMain.h"
 
 int main(int argc, char **argv) {
   mlir::DialectRegistry registry;
-  acompiler::registerAllDialects(registry);
+  acc::registerAllDialects(registry);
 
   return mlir::asMainReturnCode(
-      mlir::mlirTranslateMain(argc, argv, "ACompiler IR translator\n"));
+      mlir::mlirTranslateMain(argc, argv, "ACC IR translator\n"));
 }

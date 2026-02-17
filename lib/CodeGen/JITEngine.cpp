@@ -1,14 +1,14 @@
 //===- JITEngine.cpp - JIT Compilation Engine -------------------*- C++ -*-===//
 //
-// Part of the ACompiler Project
+// Part of the ACC Project
 //
 //===----------------------------------------------------------------------===//
 
-#include "ACompiler/CodeGen/JITEngine.h"
+#include "ACC/CodeGen/JITEngine.h"
 #include "llvm/ExecutionEngine/Orc/LLJIT.h"
 #include "llvm/Support/Error.h"
 
-namespace acompiler {
+namespace acc {
 
 std::unique_ptr<JITEngine> JITEngine::create() {
   auto jitEngine = std::unique_ptr<JITEngine>(new JITEngine());
@@ -35,4 +35,4 @@ bool JITEngine::execute(const std::string &funcName) {
   return false;
 }
 
-} // namespace acompiler
+} // namespace acc

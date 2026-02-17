@@ -1,6 +1,6 @@
 //===- bench_matmul.cpp - MatMul Performance Benchmark ---------*- C++ -*-===//
 //
-// Part of the ACompiler Project
+// Part of the ACC Project
 //
 //===----------------------------------------------------------------------===//
 
@@ -10,7 +10,7 @@
 #include <cstring>
 #include <vector>
 
-using namespace acompiler::benchmark;
+using namespace acc::benchmark;
 
 void benchmarkMatMul(int64_t M, int64_t N, int64_t K) {
   std::vector<float> A(M * K);
@@ -44,7 +44,7 @@ void benchmarkMatMul(int64_t M, int64_t N, int64_t K) {
 }
 
 int main() {
-  printf("=== ACompiler MatMul Benchmark ===\n\n");
+  printf("=== ACC MatMul Benchmark ===\n\n");
 
   benchmarkMatMul(128, 128, 128);
   benchmarkMatMul(512, 512, 512);

@@ -1,12 +1,12 @@
-//===- Sema.cpp - ACompiler Semantic Analysis -------------------*- C++ -*-===//
+//===- Sema.cpp - ACC Semantic Analysis -------------------*- C++ -*-===//
 //
-// Part of the ACompiler Project
+// Part of the ACC Project
 //
 //===----------------------------------------------------------------------===//
 
-#include "ACompiler/Frontend/Sema.h"
+#include "ACC/Frontend/Sema.h"
 
-namespace acompiler {
+namespace acc {
 
 bool Sema::analyze(ModuleAST &module) {
   // TODO: Implement semantic analysis
@@ -32,4 +32,4 @@ bool Sema::checkTypes(const TensorType &expected, const TensorType &actual) {
   return true;
 }
 
-} // namespace acompiler
+} // namespace acc

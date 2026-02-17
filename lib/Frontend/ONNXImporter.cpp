@@ -1,16 +1,16 @@
 //===- ONNXImporter.cpp - ONNX Model Import --------------------*- C++ -*-===//
 //
-// Part of the ACompiler Project
+// Part of the ACC Project
 //
 //===----------------------------------------------------------------------===//
 
-#include "ACompiler/Frontend/ONNXImporter.h"
-#include "ACompiler/Dialect/ACHigh/ACHighDialect.h"
-#include "ACompiler/Dialect/ACHigh/ACHighOps.h"
+#include "ACC/Frontend/ONNXImporter.h"
+#include "ACC/Dialect/ACHigh/ACHighDialect.h"
+#include "ACC/Dialect/ACHigh/ACHighOps.h"
 #include "mlir/IR/Builders.h"
 #include "mlir/IR/BuiltinOps.h"
 
-namespace acompiler {
+namespace acc {
 
 mlir::OwningOpRef<mlir::ModuleOp> importONNXModel(mlir::MLIRContext &context,
                                                     const std::string &path) {
@@ -30,4 +30,4 @@ mlir::OwningOpRef<mlir::ModuleOp> importONNXModel(mlir::MLIRContext &context,
   return nullptr;
 }
 
-} // namespace acompiler
+} // namespace acc

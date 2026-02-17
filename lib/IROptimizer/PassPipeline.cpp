@@ -1,13 +1,13 @@
 //===- PassPipeline.cpp - LLVM IR Optimization Pipeline ---------*- C++ -*-===//
 //
-// Part of the ACompiler Project
+// Part of the ACC Project
 //
 //===----------------------------------------------------------------------===//
 
-#include "ACompiler/IROptimizer/Passes.h"
+#include "ACC/IROptimizer/Passes.h"
 #include "llvm/Passes/PassBuilder.h"
 
-namespace acompiler {
+namespace acc {
 
 void registerLLVMIRPasses(llvm::PassBuilder &PB) {
   // Register custom passes with the PassBuilder so they can be used
@@ -26,4 +26,4 @@ void buildACOptimizationPipeline(llvm::ModulePassManager &MPM,
   // 4. Final cleanup passes
 }
 
-} // namespace acompiler
+} // namespace acc

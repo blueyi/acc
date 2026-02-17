@@ -1,12 +1,12 @@
-//===- Token.cpp - ACompiler Token Utilities --------------------*- C++ -*-===//
+//===- Token.cpp - ACC Token Utilities --------------------*- C++ -*-===//
 //
-// Part of the ACompiler Project
+// Part of the ACC Project
 //
 //===----------------------------------------------------------------------===//
 
-#include "ACompiler/Frontend/Token.h"
+#include "ACC/Frontend/Token.h"
 
-namespace acompiler {
+namespace acc {
 
 const char *tokenKindToString(TokenKind kind) {
   switch (kind) {
@@ -41,4 +41,4 @@ const char *tokenKindToString(TokenKind kind) {
   return "UNKNOWN";
 }
 
-} // namespace acompiler
+} // namespace acc

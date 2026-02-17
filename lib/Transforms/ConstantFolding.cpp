@@ -1,6 +1,6 @@
 //===- ConstantFolding.cpp - Constant Folding Pass --------------*- C++ -*-===//
 //
-// Part of the ACompiler Project
+// Part of the ACC Project
 //
 //===----------------------------------------------------------------------===//
 //
@@ -8,8 +8,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "ACompiler/Transforms/Passes.h"
-#include "ACompiler/Dialect/ACHigh/ACHighOps.h"
+#include "ACC/Transforms/Passes.h"
+#include "ACC/Dialect/ACHigh/ACHighOps.h"
 #include "mlir/Pass/Pass.h"
 #include "mlir/Transforms/GreedyPatternRewriteDriver.h"
 
@@ -34,6 +34,6 @@ struct ConstantFoldingPass
 
 } // namespace
 
-std::unique_ptr<mlir::Pass> acompiler::createConstantFoldingPass() {
+std::unique_ptr<mlir::Pass> acc::createConstantFoldingPass() {
   return std::make_unique<ConstantFoldingPass>();
 }

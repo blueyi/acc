@@ -1,12 +1,12 @@
-//===- Parser.cpp - ACompiler DSL Parser Implementation ---------*- C++ -*-===//
+//===- Parser.cpp - ACC DSL Parser Implementation ---------*- C++ -*-===//
 //
-// Part of the ACompiler Project
+// Part of the ACC Project
 //
 //===----------------------------------------------------------------------===//
 
-#include "ACompiler/Frontend/Parser.h"
+#include "ACC/Frontend/Parser.h"
 
-namespace acompiler {
+namespace acc {
 
 Parser::Parser(Lexer &lexer) : lexer_(lexer) { advance(); }
 
@@ -51,4 +51,4 @@ std::unique_ptr<CompileDeclAST> Parser::parseCompileDecl() {
   return nullptr;
 }
 
-} // namespace acompiler
+} // namespace acc

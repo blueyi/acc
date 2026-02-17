@@ -1,13 +1,13 @@
-//===- Logger.cpp - ACompiler Logging System --------------------*- C++ -*-===//
+//===- Logger.cpp - ACC Logging System --------------------*- C++ -*-===//
 //
-// Part of the ACompiler Project
+// Part of the ACC Project
 //
 //===----------------------------------------------------------------------===//
 
-#include "ACompiler/Support/Logger.h"
+#include "ACC/Support/Logger.h"
 #include "llvm/Support/raw_ostream.h"
 
-namespace acompiler {
+namespace acc {
 
 Logger &Logger::instance() {
   static Logger logger;
@@ -29,4 +29,4 @@ void Logger::log(LogLevel level, const std::string &message) {
   llvm::errs() << prefix << message << "\n";
 }
 
-} // namespace acompiler
+} // namespace acc

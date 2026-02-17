@@ -3,7 +3,7 @@ add_mlir_dialect_library(ACDialectACHigh
   ACHighOps.cpp
 
   ADDITIONAL_HEADER_DIRS
-  ${PROJECT_SOURCE_DIR}/include/ACompiler/Dialect/ACHigh
+  ${PROJECT_SOURCE_DIR}/include/ACC/Dialect/ACHigh
 
   DEPENDS
   ACHighOpsIncGen

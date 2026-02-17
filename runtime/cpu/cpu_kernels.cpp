@@ -1,6 +1,6 @@
 //===- cpu_kernels.cpp - CPU Kernel Implementations ------------*- C++ -*-===//
 //
-// Part of the ACompiler Project
+// Part of the ACC Project
 //
 //===----------------------------------------------------------------------===//
 

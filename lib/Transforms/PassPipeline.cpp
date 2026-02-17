@@ -1,23 +1,23 @@
 //===- PassPipeline.cpp - MLIR Pass Pipeline Configuration ------*- C++ -*-===//
 //
-// Part of the ACompiler Project
+// Part of the ACC Project
 //
 //===----------------------------------------------------------------------===//
 //
-// Defines the default MLIR optimization pass pipeline for ACompiler.
+// Defines the default MLIR optimization pass pipeline for ACC.
 //
 //===----------------------------------------------------------------------===//
 
-#include "ACompiler/Transforms/Passes.h"
+#include "ACC/Transforms/Passes.h"
 #include "mlir/Pass/PassManager.h"
 #include "mlir/Transforms/Passes.h"
 
 using namespace mlir;
 
-namespace acompiler {
+namespace acc {
 
 void registerTransformPasses() {
-  // Register all ACompiler transform passes so they can be used via
+  // Register all ACC transform passes so they can be used via
   // command-line options in tools like ac-opt.
   PassRegistration<>();
   // TODO: Register individual passes using PassRegistration
@@ -40,4 +40,4 @@ void buildDefaultMLIRPipeline(OpPassManager &pm) {
   // pm.addPass(createLayoutTransformPass());
 }
 
-} // namespace acompiler
+} // namespace acc

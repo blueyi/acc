@@ -7,7 +7,7 @@ add_mlir_dialect_library(ACTransforms
   PassPipeline.cpp
 
   ADDITIONAL_HEADER_DIRS
-  ${PROJECT_SOURCE_DIR}/include/ACompiler/Transforms
+  ${PROJECT_SOURCE_DIR}/include/ACC/Transforms
 
   DEPENDS
   ACHighOpsIncGen

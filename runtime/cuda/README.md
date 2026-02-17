@@ -2,7 +2,7 @@
 
 ## 概述
 
-此模块将实现 NVIDIA GPU 的 CUDA Runtime 支持，用于在 GPU 上执行 ACompiler 编译后的代码。
+此模块将实现 NVIDIA GPU 的 CUDA Runtime 支持，用于在 GPU 上执行 ACC 编译后的代码。
 
 ## 计划包含
 

@@ -1,17 +1,17 @@
 //===- ACHighOps.cpp - ACHigh Dialect Operations Implementation --*- C++ -*-===//
 //
-// Part of the ACompiler Project
+// Part of the ACC Project
 //
 //===----------------------------------------------------------------------===//
 
-#include "ACompiler/Dialect/ACHigh/ACHighOps.h"
-#include "ACompiler/Dialect/ACHigh/ACHighDialect.h"
+#include "ACC/Dialect/ACHigh/ACHighOps.h"
+#include "ACC/Dialect/ACHigh/ACHighDialect.h"
 
 using namespace mlir;
-using namespace acompiler::achigh;
+using namespace acc::achigh;
 
 #define GET_OP_CLASSES
-#include "ACompiler/Dialect/ACHigh/ACHighOps.cpp.inc"
+#include "ACC/Dialect/ACHigh/ACHighOps.cpp.inc"
 
 //===----------------------------------------------------------------------===//
 // ConstantOp - Fold

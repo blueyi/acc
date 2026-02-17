@@ -1,12 +1,12 @@
-//===- Lexer.cpp - ACompiler DSL Lexer Implementation -----------*- C++ -*-===//
+//===- Lexer.cpp - ACC DSL Lexer Implementation -----------*- C++ -*-===//
 //
-// Part of the ACompiler Project
+// Part of the ACC Project
 //
 //===----------------------------------------------------------------------===//
 
-#include "ACompiler/Frontend/Lexer.h"
+#include "ACC/Frontend/Lexer.h"
 
-namespace acompiler {
+namespace acc {
 
 Lexer::Lexer(std::string source) : source_(std::move(source)) {}
 
@@ -88,4 +88,4 @@ Token Lexer::readString() {
   return Token(TokenKind::Error, "", line_, col_);
 }
 
-} // namespace acompiler
+} // namespace acc

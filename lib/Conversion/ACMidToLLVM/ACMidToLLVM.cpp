@@ -1,10 +1,10 @@
 //===- ACMidToLLVM.cpp - ACMid to LLVM Dialect Lowering ----------*- C++ -*-===//
 //
-// Part of the ACompiler Project
+// Part of the ACC Project
 //
 //===----------------------------------------------------------------------===//
 
-#include "ACompiler/Conversion/ACMidToLLVM/ACMidToLLVM.h"
+#include "ACC/Conversion/ACMidToLLVM/ACMidToLLVM.h"
 #include "mlir/Conversion/LLVMCommon/ConversionTarget.h"
 #include "mlir/Conversion/LLVMCommon/TypeConverter.h"
 #include "mlir/Dialect/LLVMIR/LLVMDialect.h"
@@ -34,6 +34,6 @@ struct ACMidToLLVMPass
 
 } // namespace
 
-std::unique_ptr<mlir::Pass> acompiler::createACMidToLLVMPass() {
+std::unique_ptr<mlir::Pass> acc::createACMidToLLVMPass() {
   return std::make_unique<ACMidToLLVMPass>();
 }

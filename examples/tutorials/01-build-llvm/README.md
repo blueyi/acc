@@ -2,7 +2,7 @@
 
 ## 目标
 
-学习如何从源码编译 LLVM 和 MLIR，搭建 ACompiler 项目的开发环境。
+学习如何从源码编译 LLVM 和 MLIR，搭建 ACC 项目的开发环境。
 
 ## 前置条件
 
@@ -39,10 +39,10 @@ ninja -j$(nproc)
 ninja install
 ```
 
-### 3. 编译 ACompiler
+### 3. 编译 ACC
 
 ```bash
-cd /path/to/ACompiler
+cd /path/to/ACC
 mkdir build && cd build
 cmake -G Ninja .. \
   -DCMAKE_BUILD_TYPE=Debug \

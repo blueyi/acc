@@ -8,7 +8,7 @@ add_mlir_library(ACFrontend
   ONNXImporter.cpp
 
   ADDITIONAL_HEADER_DIRS
-  ${PROJECT_SOURCE_DIR}/include/ACompiler/Frontend
+  ${PROJECT_SOURCE_DIR}/include/ACC/Frontend
 
   LINK_LIBS PUBLIC
   ACDialectACHigh

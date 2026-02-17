@@ -2,7 +2,7 @@
 
 ## 概述
 
-此模块将实现华为 Ascend NPU 的 Runtime 支持，用于在昇腾 AI 处理器上执行 ACompiler 编译后的代码。
+此模块将实现华为 Ascend NPU 的 Runtime 支持，用于在昇腾 AI 处理器上执行 ACC 编译后的代码。
 
 ## 计划包含
 

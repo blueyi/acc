@@ -4,7 +4,7 @@ add_llvm_library(ACIROptimizer
   PassPipeline.cpp
 
   ADDITIONAL_HEADER_DIRS
-  ${PROJECT_SOURCE_DIR}/include/ACompiler/IROptimizer
+  ${PROJECT_SOURCE_DIR}/include/ACC/IROptimizer
 
   LINK_LIBS
   LLVMCore

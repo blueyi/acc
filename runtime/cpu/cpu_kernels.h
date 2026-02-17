@@ -1,6 +1,6 @@
 //===- cpu_kernels.h - CPU Kernel Declarations -----------------*- C++ -*-===//
 //
-// Part of the ACompiler Project
+// Part of the ACC Project
 //
 //===----------------------------------------------------------------------===//
 //

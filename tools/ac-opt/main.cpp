@@ -1,6 +1,6 @@
-//===- main.cpp - ACompiler MLIR Optimizer Tool -----------------*- C++ -*-===//
+//===- main.cpp - ACC MLIR Optimizer Tool -----------------*- C++ -*-===//
 //
-// Part of the ACompiler Project
+// Part of the ACC Project
 //
 //===----------------------------------------------------------------------===//
 //
@@ -15,7 +15,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "ACompiler/InitAllDialects.h"
+#include "ACC/InitAllDialects.h"
 #include "mlir/IR/DialectRegistry.h"
 #include "mlir/IR/MLIRContext.h"
 #include "mlir/Tools/mlir-opt/MlirOptMain.h"
@@ -23,12 +23,12 @@
 int main(int argc, char **argv) {
   mlir::DialectRegistry registry;
 
-  // Register all ACompiler dialects
-  acompiler::registerAllDialects(registry);
+  // Register all ACC dialects
+  acc::registerAllDialects(registry);
 
   // Register standard MLIR dialects needed for lowering
   // TODO: Register func, linalg, affine, scf, arith, memref, llvm dialects
 
   return mlir::asMainReturnCode(
-      mlir::MlirOptMain(argc, argv, "ACompiler MLIR optimizer\n", registry));
+      mlir::MlirOptMain(argc, argv, "ACC MLIR optimizer\n", registry));
 }

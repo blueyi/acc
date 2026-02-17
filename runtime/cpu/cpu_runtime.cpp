@@ -1,6 +1,6 @@
 //===- cpu_runtime.cpp - CPU Runtime Implementation ------------*- C++ -*-===//
 //
-// Part of the ACompiler Project
+// Part of the ACC Project
 //
 //===----------------------------------------------------------------------===//
 

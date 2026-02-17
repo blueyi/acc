@@ -1,6 +1,6 @@
 //===- ACHighToACMid.cpp - ACHigh to ACMid Lowering --------------*- C++ -*-===//
 //
-// Part of the ACompiler Project
+// Part of the ACC Project
 //
 //===----------------------------------------------------------------------===//
 //
@@ -9,11 +9,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "ACompiler/Conversion/ACHighToACMid/ACHighToACMid.h"
-#include "ACompiler/Dialect/ACHigh/ACHighDialect.h"
-#include "ACompiler/Dialect/ACHigh/ACHighOps.h"
-#include "ACompiler/Dialect/ACMid/ACMidDialect.h"
-#include "ACompiler/Dialect/ACMid/ACMidOps.h"
+#include "ACC/Conversion/ACHighToACMid/ACHighToACMid.h"
+#include "ACC/Dialect/ACHigh/ACHighDialect.h"
+#include "ACC/Dialect/ACHigh/ACHighOps.h"
+#include "ACC/Dialect/ACMid/ACMidDialect.h"
+#include "ACC/Dialect/ACMid/ACMidOps.h"
 #include "mlir/Pass/Pass.h"
 #include "mlir/Transforms/DialectConversion.h"
 
@@ -38,6 +38,6 @@ struct ACHighToACMidPass
 
 } // namespace
 
-std::unique_ptr<mlir::Pass> acompiler::createACHighToACMidPass() {
+std::unique_ptr<mlir::Pass> acc::createACHighToACMidPass() {
   return std::make_unique<ACHighToACMidPass>();
 }

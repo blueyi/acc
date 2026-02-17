@@ -1,6 +1,6 @@
 //===- bench_conv2d.cpp - Conv2D Performance Benchmark ---------*- C++ -*-===//
 //
-// Part of the ACompiler Project
+// Part of the ACC Project
 //
 //===----------------------------------------------------------------------===//
 
@@ -9,7 +9,7 @@
 #include <cstdlib>
 #include <vector>
 
-using namespace acompiler::benchmark;
+using namespace acc::benchmark;
 
 void benchmarkConv2D(int64_t N, int64_t C, int64_t H, int64_t W,
                      int64_t K, int64_t R, int64_t S,
@@ -54,7 +54,7 @@ void benchmarkConv2D(int64_t N, int64_t C, int64_t H, int64_t W,
 }
 
 int main() {
-  printf("=== ACompiler Conv2D Benchmark ===\n\n");
+  printf("=== ACC Conv2D Benchmark ===\n\n");
 
   // Small conv
   benchmarkConv2D(1, 3, 32, 32, 64, 3, 3, 1, 1);

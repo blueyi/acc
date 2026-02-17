@@ -1,14 +1,14 @@
 //===- CPUCodeGen.cpp - CPU Backend Code Generation -------------*- C++ -*-===//
 //
-// Part of the ACompiler Project
+// Part of the ACC Project
 //
 //===----------------------------------------------------------------------===//
 
-#include "ACompiler/CodeGen/CPUCodeGen.h"
+#include "ACC/CodeGen/CPUCodeGen.h"
 #include "llvm/MC/TargetRegistry.h"
 #include "llvm/Support/Host.h"
 
-namespace acompiler {
+namespace acc {
 
 CodeGenConfig createHostCPUConfig() {
   CodeGenConfig config;
@@ -30,4 +30,4 @@ CodeGenConfig createCPUConfig(const std::string &triple,
   return config;
 }
 
-} // namespace acompiler
+} // namespace acc
