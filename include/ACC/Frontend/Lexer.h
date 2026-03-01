@@ -9,6 +9,9 @@
 //
 //===----------------------------------------------------------------------===//
 
+/** \file
+ * \brief Lexical analyzer for the ACC DSL. */
+
 #ifndef ACC_FRONTEND_LEXER_H
 #define ACC_FRONTEND_LEXER_H
 
@@ -18,17 +21,22 @@
 
 namespace acc {
 
+/// Lexical analyzer: converts source text into a stream of tokens.
 class Lexer {
 public:
+  /// \param source Full source code string.
   explicit Lexer(std::string source);
 
   /// Tokenize the entire source and return the token stream.
+  /// \return Vector of tokens (including Eof at the end).
   std::vector<Token> tokenize();
 
   /// Get the next token from the source.
+  /// \return The next token.
   Token nextToken();
 
   /// Peek at the next token without consuming it.
+  /// \return The next token (unchanged stream position).
   Token peekToken();
 
 private:

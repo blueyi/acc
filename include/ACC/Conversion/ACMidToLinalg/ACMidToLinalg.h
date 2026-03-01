@@ -4,6 +4,9 @@
 //
 //===----------------------------------------------------------------------===//
 
+/** \file
+ * \brief ACMid to Linalg lowering pass. */
+
 #ifndef ACC_CONVERSION_ACMIDTOLINALG_H
 #define ACC_CONVERSION_ACMIDTOLINALG_H
 
@@ -16,7 +19,8 @@ class Pass;
 namespace acc {
 
 /// Create a pass to lower ACMid dialect to MLIR Linalg dialect.
-/// This converts tile-level operations to Linalg generic operations.
+/// Converts tile-level operations to Linalg generic operations.
+/// \return A new ACMidToLinalg pass.
 std::unique_ptr<mlir::Pass> createACMidToLinalgPass();
 
 } // namespace acc

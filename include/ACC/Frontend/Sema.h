@@ -4,6 +4,9 @@
 //
 //===----------------------------------------------------------------------===//
 
+/** \file
+ * \brief Semantic analysis (type checking, validation) for the ACC DSL. */
+
 #ifndef ACC_FRONTEND_SEMA_H
 #define ACC_FRONTEND_SEMA_H
 
@@ -15,7 +18,8 @@ namespace acc {
 class Sema {
 public:
   /// Analyze and validate a parsed module AST.
-  /// Returns true if the module is semantically valid.
+  /// \param module The parsed module to analyze.
+  /// \return true if the module is semantically valid, false otherwise.
   bool analyze(ModuleAST &module);
 
 private:

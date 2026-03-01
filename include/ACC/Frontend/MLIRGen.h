@@ -8,6 +8,9 @@
 //
 //===----------------------------------------------------------------------===//
 
+/** \file
+ * \brief AST to MLIR (ACHigh Dialect) generation. */
+
 #ifndef ACC_FRONTEND_MLIRGEN_H
 #define ACC_FRONTEND_MLIRGEN_H
 
@@ -22,6 +25,9 @@ class ModuleOp;
 namespace acc {
 
 /// Generate MLIR (in ACHigh Dialect) from the AST.
+/// \param context MLIR context for creating operations.
+/// \param moduleAST Parsed and validated module AST.
+/// \return Owning reference to the generated MLIR module, or null on failure.
 mlir::OwningOpRef<mlir::ModuleOp> mlirGen(mlir::MLIRContext &context,
                                            ModuleAST &moduleAST);
 

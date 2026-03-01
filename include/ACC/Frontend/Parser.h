@@ -9,6 +9,9 @@
 //
 //===----------------------------------------------------------------------===//
 
+/** \file
+ * \brief Recursive descent parser for the ACC DSL. */
+
 #ifndef ACC_FRONTEND_PARSER_H
 #define ACC_FRONTEND_PARSER_H
 
@@ -18,11 +21,14 @@
 
 namespace acc {
 
+/// Recursive descent parser: converts a token stream into an AST.
 class Parser {
 public:
+  /// \param lexer Lexer that provides the token stream.
   explicit Parser(Lexer &lexer);
 
   /// Parse the complete source into a module AST node.
+  /// \return The root ModuleAST, or nullptr on parse error.
   std::unique_ptr<ModuleAST> parseModule();
 
 private:

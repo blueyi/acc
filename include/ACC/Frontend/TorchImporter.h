@@ -14,6 +14,9 @@
 //
 //===----------------------------------------------------------------------===//
 
+/** \file
+ * \brief PyTorch / Torch-MLIR to ACC MLIR importer. */
+
 #ifndef ACC_FRONTEND_TORCHIMPORTER_H
 #define ACC_FRONTEND_TORCHIMPORTER_H
 
@@ -29,34 +32,37 @@ namespace acc {
 
 /// Configuration for PyTorch model import.
 struct TorchImportConfig {
-  /// Import pathway: "torch-mlir" or "onnx"
-  std::string pathway = "onnx";
-  /// Whether to run torch-mlir canonicalization before conversion.
-  bool canonicalize = true;
-  /// Whether to decompose complex torch ops into simpler ones.
-  bool decompose = true;
+  std::string pathway = "onnx";  ///< Import pathway: "torch-mlir" or "onnx".
+  bool canonicalize = true;       ///< Run torch-mlir canonicalization before conversion.
+  bool decompose = true;         ///< Decompose complex torch ops into simpler ones.
 };
 
-/// Imports PyTorch models into ACC MLIR.
+/// Imports PyTorch models into ACC MLIR (Torch-MLIR or ONNX pathway).
 class TorchImporter {
 public:
+  /// \param context MLIR context for creating ACC operations.
   explicit TorchImporter(mlir::MLIRContext &context);
 
   /// Import a PyTorch ExportedProgram (serialized) to ACC MLIR.
-  /// @param path  Path to the serialized ExportedProgram (.pt2).
-  /// @param config  Import configuration.
-  /// @return ACC MLIR module, or nullptr on failure.
+  /// \param path Path to the serialized ExportedProgram (.pt2).
+  /// \param config Import configuration.
+  /// \return ACC MLIR module, or nullptr on failure.
   mlir::OwningOpRef<mlir::ModuleOp>
   importExportedProgram(const std::string &path,
                         const TorchImportConfig &config);
 
   /// Import a Torch-MLIR module (in-memory) and convert to ACC MLIR.
   /// Converts torch.aten.* operations to achigh.* operations.
+  /// \param torchModule Source Torch-MLIR module.
+  /// \param config Import configuration.
+  /// \return ACC MLIR module, or nullptr on failure.
   mlir::OwningOpRef<mlir::ModuleOp>
   importFromTorchMLIR(mlir::ModuleOp torchModule,
                       const TorchImportConfig &config);
 
   /// Import via ONNX pathway (delegates to ONNXImporter).
+  /// \param onnxPath Path to the ONNX model file.
+  /// \return ACC MLIR module, or nullptr on failure.
   mlir::OwningOpRef<mlir::ModuleOp>
   importFromONNX(const std::string &onnxPath);
 

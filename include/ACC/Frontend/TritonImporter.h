@@ -18,6 +18,9 @@
 //
 //===----------------------------------------------------------------------===//
 
+/** \file
+ * \brief Triton IR (TTIR) to ACC MLIR importer. */
+
 #ifndef ACC_FRONTEND_TRITONIMPORTER_H
 #define ACC_FRONTEND_TRITONIMPORTER_H
 
@@ -51,19 +54,20 @@ struct TritonImportConfig {
 /// 2. From Triton MLIR module (in-memory, for Python binding)
 class TritonImporter {
 public:
+  /// \param context MLIR context for creating ACC operations.
   explicit TritonImporter(mlir::MLIRContext &context);
 
   /// Import a Triton IR file (.ttir) and convert to ACC MLIR.
-  /// @param path  Path to the serialized Triton IR file.
-  /// @param config  Block size and other constexpr parameters.
-  /// @return ACC MLIR module, or nullptr on failure.
+  /// \param path Path to the serialized Triton IR file.
+  /// \param config Block size and other constexpr parameters.
+  /// \return ACC MLIR module, or nullptr on failure.
   mlir::OwningOpRef<mlir::ModuleOp>
   importFromFile(const std::string &path, const TritonImportConfig &config);
 
   /// Import a Triton MLIR module (in-memory) and convert to ACC MLIR.
-  /// @param tritonModule  The source Triton MLIR module.
-  /// @param config  Block size and other constexpr parameters.
-  /// @return ACC MLIR module, or nullptr on failure.
+  /// \param tritonModule The source Triton MLIR module.
+  /// \param config Block size and other constexpr parameters.
+  /// \return ACC MLIR module, or nullptr on failure.
   mlir::OwningOpRef<mlir::ModuleOp>
   importFromModule(mlir::ModuleOp tritonModule,
                    const TritonImportConfig &config);

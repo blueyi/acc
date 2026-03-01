@@ -9,6 +9,9 @@
 //
 //===----------------------------------------------------------------------===//
 
+/** \file
+ * \brief Registration of all ACC MLIR dialects. */
+
 #ifndef ACC_INITALLDIALECTS_H
 #define ACC_INITALLDIALECTS_H
 
@@ -18,7 +21,8 @@
 
 namespace acc {
 
-/// Register all ACC dialects with the given registry.
+/// Register all ACC dialects (ACHigh, ACMid) with the given registry.
+/// \param registry Dialect registry to extend.
 inline void registerAllDialects(mlir::DialectRegistry &registry) {
   registry.insert<achigh::ACHighDialect>();
   registry.insert<acmid::ACMidDialect>();

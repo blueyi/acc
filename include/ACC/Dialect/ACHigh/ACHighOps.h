@@ -4,6 +4,9 @@
 //
 //===----------------------------------------------------------------------===//
 
+/** \file
+ * \brief ACHigh dialect operations (TableGen). */
+
 #ifndef ACC_DIALECT_ACHIGH_ACHIGHOPS_H
 #define ACC_DIALECT_ACHIGH_ACHIGHOPS_H
 

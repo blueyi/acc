@@ -4,6 +4,9 @@
 //
 //===----------------------------------------------------------------------===//
 
+/** \file
+ * \brief ACMid dialect declaration (tile/loop-level ops). */
+
 #ifndef ACC_DIALECT_ACMID_ACMIDDIALECT_H
 #define ACC_DIALECT_ACMID_ACMIDDIALECT_H
 

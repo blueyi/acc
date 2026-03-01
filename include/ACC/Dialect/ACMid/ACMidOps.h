@@ -4,6 +4,9 @@
 //
 //===----------------------------------------------------------------------===//
 
+/** \file
+ * \brief ACMid dialect operations (TableGen). */
+
 #ifndef ACC_DIALECT_ACMID_ACMIDOPS_H
 #define ACC_DIALECT_ACMID_ACMIDOPS_H
 
