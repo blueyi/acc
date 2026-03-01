@@ -9,6 +9,7 @@
 #include "ACC/Dialect/ACMid/ACMidOps.h"
 #include "mlir/Dialect/Linalg/IR/Linalg.h"
 #include "mlir/Pass/Pass.h"
+#include "mlir/Support/TypeID.h"
 #include "mlir/Transforms/DialectConversion.h"
 
 using namespace mlir;
@@ -17,6 +18,8 @@ namespace {
 
 struct ACMidToLinalgPass
     : public PassWrapper<ACMidToLinalgPass, OperationPass<ModuleOp>> {
+  MLIR_DEFINE_EXPLICIT_INTERNAL_INLINE_TYPE_ID(ACMidToLinalgPass)
+
   StringRef getArgument() const final { return "ac-mid-to-linalg"; }
   StringRef getDescription() const final {
     return "Lower ACMid dialect to MLIR Linalg dialect";

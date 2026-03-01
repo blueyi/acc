@@ -1,3 +1,6 @@
+.cache/
+.python-version
+
 # Build directories
 build/
 cmake-build-*/

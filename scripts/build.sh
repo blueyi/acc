@@ -26,11 +26,12 @@ echo "LLVM Dir:      $LLVM_INSTALL_DIR"
 echo "Parallel Jobs: $NUM_JOBS"
 echo "========================"
 
-# Check LLVM installation
+# Check LLVM installation; build if missing
 if [ ! -d "$LLVM_INSTALL_DIR/lib/cmake/llvm" ]; then
-  echo "Error: LLVM not found at $LLVM_INSTALL_DIR"
-  echo "Please build LLVM first: ./scripts/build_llvm.sh"
-  exit 1
+  echo "LLVM not found at $LLVM_INSTALL_DIR"
+  echo "Building LLVM/MLIR via build_llvm.sh..."
+  "$SCRIPT_DIR/build_llvm.sh"
+  echo "LLVM build finished. Continuing ACC build..."
 fi
 
 # Configure
