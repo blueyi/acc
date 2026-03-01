@@ -35,10 +35,7 @@ base_exclude = [
 # ---------------------------------------------------------------------------
 _docs_dir = os.path.dirname(os.path.abspath(__file__))
 _base_exclude_set = set(base_exclude)
-# On RtD, sphinx is often run with sourcedir=repo root and -c docs/conf.py, so docnames are docs/XXX
-_doc_prefix = ""
-if os.environ.get("READTHEDOCS") == "True" and os.path.basename(_docs_dir) == "docs":
-    _doc_prefix = "docs/"
+# RtD runs sphinx with sourcedir = config dir (docs/), so docnames have no prefix.
 
 def _scan_md():
     """Return (has_en, has_zh). has_en = set of base names with X.md; has_zh = set with X_zh.md."""
@@ -73,14 +70,14 @@ def _toctree_list(use_zh_prefer_zh):
         else:
             name = x if x in _has_en else (x + "_zh") if x in _has_zh else None
         if name and str(name).strip():
-            out.append(_doc_prefix + name)
+            out.append(name)
     for x in sorted((_has_en | _has_zh) - set(_main_doc_order)):
         if use_zh_prefer_zh:
             name = (x + "_zh") if x in _has_zh else (x if x in _has_en else None)
         else:
             name = x if x in _has_en else (x + "_zh") if x in _has_zh else None
         if name and str(name).strip():
-            out.append(_doc_prefix + name)
+            out.append(name)
     return out
 
 # Detect Chinese build: READTHEDOCS_LANGUAGE=zh-cn, or on RtD when index.rst was overwritten by index_zh
@@ -97,26 +94,23 @@ if not _is_zh and os.environ.get("READTHEDOCS") == "True":
         except Exception:
             pass
 
-_common_excludes = (
-    [_doc_prefix + "index_zh.rst", _doc_prefix + "index_zh.md"]
-    + ([_doc_prefix + "_build"] if _doc_prefix else [])
-)
+_common_excludes = ["index_zh.rst", "index_zh.md"]
 if _is_zh:
     language = "zh_CN"
-    master_doc = _doc_prefix + "index"
+    master_doc = "index"
     exclude_patterns = (
         base_exclude
         + _common_excludes
-        + [_doc_prefix + x + ".md" for x in _both]
+        + [x + ".md" for x in _both]
     )
     i18n_main_toctree = _toctree_list(use_zh_prefer_zh=True)
 else:
     language = "en"
-    master_doc = _doc_prefix + "index"
+    master_doc = "index"
     exclude_patterns = (
         base_exclude
         + _common_excludes
-        + [_doc_prefix + x + "_zh.md" for x in _both]
+        + [x + "_zh.md" for x in _both]
     )
     i18n_main_toctree = _toctree_list(use_zh_prefer_zh=False)
 
@@ -131,12 +125,10 @@ html_show_sourcelink = True
 # Language switcher only for local preview; RtD provides its own flyout
 html_js_files = [] if os.environ.get("READTHEDOCS") == "True" else ["language-switcher.js"]
 
-# When srcdir is repo root, API index docname is docs/api/index
-api_index_doc = _doc_prefix + "api/index"
+api_index_doc = "api/index"
 
 # Breathe: C++ API from Doxygen XML (generate XML first: doxygen docs/Doxyfile)
-# When srcdir is repo root, Doxygen output is under docs/doxygen
-breathe_projects = {"acc": _doc_prefix + "doxygen/xml"}
+breathe_projects = {"acc": "doxygen/xml"}
 breathe_default_project = "acc"
 breathe_default_members = ("members", "undoc-members", "protected-members")
 
@@ -172,7 +164,8 @@ def _setup_i18n_toctree(app):
             except ValueError:
                 maxdepth = 2
             node = toctree_node()
-            node["entries"] = [(e, "") for e in entries]
+            # toctree entries are (title, docname); "" title = use document title
+            node["entries"] = [("", e) for e in entries]
             node["includefiles"] = list(entries)
             node["caption"] = caption
             node["maxdepth"] = maxdepth
@@ -204,7 +197,8 @@ def _setup_i18n_toctree(app):
             except ValueError:
                 maxdepth = 2
             node = toctree_node()
-            node["entries"] = [(api_doc, "")]
+            # toctree entries are (title, docname)
+            node["entries"] = [("", api_doc)]
             node["includefiles"] = [api_doc]
             node["caption"] = caption
             node["maxdepth"] = maxdepth
