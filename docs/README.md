@@ -1,48 +1,47 @@
-# ACC 文档 / ACC Documentation
+# ACC Documentation
 
-本目录为 ACC 项目的文档工程（Sphinx + Read the Docs），说明文档方案、构建方式与本地预览方法。  
-This directory is the ACC documentation project (Sphinx + RtD). It describes the doc scheme, how to build, and how to preview locally.
-
----
-
-## Read the Docs 部署地址 / RtD Deployment
-
-文档在线地址（在 Read the Docs 导入本仓库并构建成功后可用）：
-
-**https://acc-docs.readthedocs.io/en/latest/**（英文）  
-**https://acc-docs.readthedocs.io/zh_CN/latest/**（中文）
-
-（若 RtD 项目 slug 不同，以项目设置中的 URL 为准。导入与语言切换见下文。）
+This directory is the ACC documentation project (Sphinx + Read the Docs). It describes the doc scheme, how to build, and how to preview locally.
 
 ---
 
-## 文档方案 / Documentation Scheme
+## Read the Docs deployment
 
-本项目采用 **Sphinx + Read the Docs**：
+Documentation URLs (after importing this repo and building on Read the Docs):
 
-| 组件 | 作用 |
-|------|------|
-| **Sphinx** | 文档站点：RST + Markdown（MyST），统一导航与主题（Read the Docs 主题） |
-| **Doxygen** | 从 `include/ACC` 头文件中的注释生成 **XML** |
-| **Breathe** | 在 Sphinx 中引用 Doxygen XML，渲染 C++ API 文档 |
-| **Read the Docs** | 在线托管、多版本、搜索、可选 PDF |
+**https://acc-docs.readthedocs.io/en/latest/** (English)  
+**https://acc-docs.readthedocs.io/zh_CN/latest/** (Chinese)
 
-接口文档生成链路：
+If your RtD project slug differs, use the URL shown in the project settings. See below for import and language switching.
+
+---
+
+## Documentation scheme
+
+This project uses **Sphinx + Read the Docs**:
+
+| Component | Role |
+|-----------|------|
+| **Sphinx** | Doc site: RST + Markdown (MyST), unified nav and theme (Read the Docs theme) |
+| **Doxygen** | Generates **XML** from comments in `include/ACC` headers |
+| **Breathe** | Pulls Doxygen XML into Sphinx and renders C++ API docs |
+| **Read the Docs** | Hosting, versions, search, optional PDF |
+
+API doc pipeline:
 
 ```
-include/ACC/*.h (/// Doxygen 注释) → Doxygen (XML) → Breathe → Sphinx (HTML/PDF)
+include/ACC/*.h (/// Doxygen comments) → Doxygen (XML) → Breathe → Sphinx (HTML/PDF)
 ```
 
-用户文档（入门、TODO、目录结构、项目计划等）使用本目录下已有的 `*.md`，由 Sphinx 通过 MyST 解析并纳入侧栏。
+User docs (getting started, project plan, etc.) are the `*.md` files in this directory, parsed by Sphinx via MyST and included in the sidebar.
 
 ---
 
-## 构建方式 / How to Build
+## How to build
 
-### 环境准备
+### Prerequisites
 
-- **Python 3**（建议 3.10+）
-- **Doxygen**、**Graphviz**（用于 C++ API；可选用于关系图）
+- **Python 3** (3.10+ recommended)
+- **Doxygen**, **Graphviz** (for C++ API; optional for diagrams)
 
 ```bash
 # macOS
@@ -51,99 +50,99 @@ brew install doxygen graphviz
 # Ubuntu / Debian
 sudo apt-get install doxygen graphviz
 
-# Python 依赖（在仓库根目录）
+# Python deps (from repo root)
 pip install -r docs/requirements.txt
 ```
 
-### 一键构建 HTML
+### Build HTML
 
-在 **仓库根目录** 执行：
+From the **repository root**:
 
 ```bash
 make -C docs html
 ```
 
-或手动两步：
+Or manually:
 
 ```bash
 doxygen docs/Doxyfile
 sphinx-build -b html docs docs/_build/html
 ```
 
-构建产物在 **docs/_build/html/**。
+Output is under **docs/_build/html/**.
 
 ---
 
-## 本地预览静态文档 / Local Preview
+## Local preview
 
-构建完成后，在浏览器中打开生成的静态 HTML 即可本地预览：
+Open the generated HTML in a browser:
 
 ```bash
-# 方式一：直接打开 index（从仓库根目录）
+# Option 1: open index (from repo root)
 open docs/_build/html/index.html
-# 或
+# or
 xdg-open docs/_build/html/index.html   # Linux
 
-# 方式二：用本地 HTTP 服务（避免部分链接/资源问题）
+# Option 2: local HTTP server (avoids some link/asset issues)
 cd docs/_build/html && python3 -m http.server 8080
-# 浏览器访问 http://localhost:8080
+# Then open http://localhost:8080
 ```
 
-推荐使用方式二，更接近 RtD 在线效果。若已执行 `make -C docs html-all`，则英文站在 http://localhost:8080/ ，中文站在 http://localhost:8080/zh_CN/ ；**侧栏顶部会显示「English | 中文」链接**，可在此切换语言。
+Option 2 is recommended and closest to RtD. After `make -C docs html-all`, the English site is at http://localhost:8080/ and the Chinese site at http://localhost:8080/zh_CN/; **the sidebar shows an "English | 中文" link** to switch languages.
 
 ---
 
-## 在 Read the Docs 上部署 / Deploy on RtD
+## Deploy on Read the Docs
 
-1. 打开 [Read the Docs](https://readthedocs.org/) 并登录，**Import a Project**，选择本仓库（如 GitHub 上的 `acc`）。
-2. 仓库根目录已有 **.readthedocs.yaml**，RtD 会据此安装 doxygen/graphviz、在 pre_build 中运行 `doxygen docs/Doxyfile`、再用 Sphinx 构建。
-3. 构建成功后，文档发布到 **https://acc-docs.readthedocs.io/en/latest/**（或你在 RtD 中配置的地址）。需中文时另建翻译项目并关联，见「中英文与 RtD 语言切换」。
+1. Go to [Read the Docs](https://readthedocs.org/), sign in, **Import a Project**, and select this repository (e.g. `acc` on GitHub).
+2. The repo root has **.readthedocs.yaml**; RtD will install doxygen/graphviz, run `doxygen docs/Doxyfile` in pre_build, then build with Sphinx.
+3. After a successful build, docs are published at **https://acc-docs.readthedocs.io/en/latest/** (or your configured URL). For Chinese, add a translation project and link it; see "i18n and language switcher" below.
 
 ---
 
-## 中英文与 RtD 语言切换 / i18n and language switcher
+## i18n and language switcher
 
-项目支持**中英文双语文档**（无 gettext）：**默认 .md 为英文**，中文为 **`*_zh.md`** 成对文件；**API 文档仅英文**，中英文站共用同一 API 页。
+The project supports **English and Chinese** via dual source files (no gettext): **default `.md` files are English**; Chinese uses **`*_zh.md`** pairs. **API docs are English only** and shared by both sites.
 
-- **英文**：父项目（如 `acc-docs`），使用 `index.rst` + 各 `.md`，URL 如 `/en/latest/`。
-- **中文**：翻译项目（如 `acc-docs-zh`），同一仓库，Language 设为 Chinese (Simplified)；构建时使用 `index_zh.rst` + 各 `*_zh.md`，URL 如 `/zh_CN/latest/`。
-- 在父项目 **Admin → Translations** 中关联中文项目后，站点飞出菜单可切换 English / 中文。
+- **English**: Parent project (e.g. `acc-docs`), uses `index.rst` and English `.md` files; URL like `/en/latest/`.
+- **Chinese**: Translation project (e.g. `acc-docs-zh`), same repo, Language set to Chinese (Simplified); build uses `index_zh.rst` and `*_zh.md`; URL like `/zh_CN/latest/`.
+- Link the Chinese project under the parent’s **Admin → Translations** so the flyout menu offers English / 中文.
 
-**本地命令：**
+**Local commands:**
 
 ```bash
-make -C docs html      # 仅英文
-make -C docs html-zh   # 仅中文
-make -C docs html-all  # 英文 + 中文
+make -C docs html      # English only
+make -C docs html-zh   # Chinese only
+make -C docs html-all  # Both
 ```
 
 ---
 
-## 中英文文档约定 / i18n conventions
+## i18n conventions
 
-| 项目 | 约定 |
-|------|------|
-| **英文** | `docs/` 下所有 `.md` 默认为英文（如 `GETTING_STARTED.md`、`README.md`）。 |
-| **中文** | 需翻译的文档对应 **`_zh.md`** 文件（如 `GETTING_STARTED_zh.md`、`README_zh.md`）。 |
-| **API 文档** | 仅英文，由 Doxygen 生成；`api/index.rst` 中英文站共用。 |
-| **Read the Docs** | 父项目（英文）+ 翻译项目（中文）同一仓库，在 Admin → Translations 关联后飞出菜单可切换语言。 |
+| Item | Convention |
+|------|------------|
+| **English** | All `.md` files in `docs/` are English by default (e.g. `GETTING_STARTED.md`, `README.md`). |
+| **Chinese** | Documents with a Chinese version have a **`*_zh.md`** file (e.g. `GETTING_STARTED_zh.md`, `README_zh.md`). |
+| **API docs** | English only, from Doxygen; `api/index.rst` is shared by both sites. |
+| **Read the Docs** | Parent (en) + translation (zh) project, same repo; link in Admin → Translations for the language switcher. |
 
-**新增一篇可翻译文档时：**
+**Adding a new translatable document:**
 
-1. 新增英文文件，如 `docs/NewDoc.md`，并加入 `index.rst` 的 toctree。
-2. 新增中文文件 `docs/NewDoc_zh.md`，并加入 `index_zh.rst` 的 toctree。
-3. 在 `conf.py` 的 `english_docs_with_zh` 列表中追加 `"NewDoc.md"`。
+1. Add the English file, e.g. `docs/NewDoc.md`, and add it to the toctree in `index.rst`.
+2. Add the Chinese file `docs/NewDoc_zh.md` and add it to the toctree in `index_zh.rst`.
+3. Append `"NewDoc.md"` to the `english_docs_with_zh` list in `conf.py`.
 
 ---
 
-## 目录结构速览 / Doc Layout
+## Doc layout
 
-| 路径 | 说明 |
-|------|------|
-| **conf.py** | Sphinx 配置、Breathe；按 READTHEDOCS_LANGUAGE 选择 index / index_zh 与 exclude |
-| **index.rst** / **index_zh.rst** | 英文 / 中文首页与 toctree |
-| **\*.md** / **\*_zh.md** | 英文文档 / 中文文档（成对） |
-| **api/index.rst** | C++ API（仅英文，中英文站共用） |
-| **Doxyfile** | Doxygen 配置，输出到 `docs/doxygen/` |
+| Path | Description |
+|------|-------------|
+| **conf.py** | Sphinx config, Breathe; selects index / index_zh and exclude via READTHEDOCS_LANGUAGE |
+| **index.rst** / **index_zh.rst** | English / Chinese home and toctree |
+| **\*.md** / **\*_zh.md** | English docs / Chinese docs (pairs) |
+| **api/index.rst** | C++ API (English only, shared) |
+| **Doxyfile** | Doxygen config, output under `docs/doxygen/` |
 | **requirements.txt** | sphinx, sphinx-rtd-theme, breathe, myst-parser |
 | **Makefile** | `html` / `html-zh` / `html-all` / `clean` |
