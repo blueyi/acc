@@ -34,14 +34,15 @@ base_exclude = [
 build_lang = (os.environ.get("READTHEDOCS_LANGUAGE") or "en").strip().lower().replace("_", "-")
 if build_lang in ("zh-cn", "zh") or build_lang.startswith("zh-"):
     language = "zh_CN"
-    master_doc = "index_zh"
-    # Exclude English-only .md that have a _zh counterpart (so only _zh.md + api are used)
+    # Use master_doc = "index" so Sphinx outputs index.html (required by Read the Docs). index.rst is filled by pre_build copy of index_zh.rst when READTHEDOCS_LANGUAGE=zh-cn.
+    master_doc = "index"
+    # Exclude English-only .md and index_zh.rst (content is in index.rst after pre_build copy)
     english_docs_with_zh = [
         "GETTING_STARTED.md",
         "PROJECT_PLAN.md",
         "README.md",
     ]
-    exclude_patterns = base_exclude + ["index.rst"] + english_docs_with_zh
+    exclude_patterns = base_exclude + ["index_zh.rst", "index_zh.md"] + english_docs_with_zh
 else:
     language = "en"
     master_doc = "index"
@@ -55,8 +56,8 @@ source_suffix = {
 html_theme = "sphinx_rtd_theme"
 html_static_path = ["_static"]
 html_show_sourcelink = True
-# Local preview: show "English | 中文" in sidebar (RtD shows its own switcher on readthedocs.io)
-html_js_files = ["language-switcher.js"]
+# Language switcher only for local preview; RtD provides its own flyout
+html_js_files = [] if os.environ.get("READTHEDOCS") == "True" else ["language-switcher.js"]
 
 # Breathe: C++ API from Doxygen XML (generate XML first: doxygen docs/Doxyfile)
 breathe_projects = {"acc": "doxygen/xml"}

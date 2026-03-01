@@ -13,6 +13,11 @@ build:
   jobs:
     pre_build:
       - doxygen docs/Doxyfile
+      # RtD requires index.html at root; Sphinx outputs master_doc + .html. For zh-cn we copy index_zh.rst -> index.rst so the build uses master_doc=index and produces index.html.
+      - |
+        if [ "${READTHEDOCS_LANGUAGE:-}" = "zh-cn" ]; then
+          cp docs/index_zh.rst docs/index.rst
+        fi
 
 python:
   install:

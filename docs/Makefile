@@ -16,16 +16,16 @@ html:
 	$(SPHINXBUILD) -b html $(SPHINXOPTS) $(SOURCEDIR) $(BUILDDIR)/html
 	@echo "Open $(BUILDDIR)/html/index.html"
 
-# Build HTML in Chinese (uses *_zh.md + index_zh.rst; READTHEDOCS_LANGUAGE=zh_CN for conf.py)
-# Cleans _build/html/zh_CN before building so output is always up to date.
+# Build HTML in Chinese (uses *_zh.md; conf.py uses master_doc=index, so we copy index_zh.rst -> index.rst like RtD)
+# Cleans _build/html/zh_CN before building. Restores index.rst after build.
 html-zh:
 	@rm -rf $(BUILDDIR)/html/zh_CN
 	@python -c "import breathe" 2>/dev/null || { echo "Error: missing 'breathe'. Run: pip install -r docs/requirements.txt"; exit 1; }
 	@echo "Running Doxygen (from repo root)..."
 	cd .. && doxygen docs/$(DOXYFILE)
-	READTHEDOCS_LANGUAGE=zh_CN $(SPHINXBUILD) -b html -D language=zh_CN $(SPHINXOPTS) $(SOURCEDIR) $(BUILDDIR)/html/zh_CN
-	@echo '<!DOCTYPE html><html><head><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=index_zh.html"><title>Redirect</title></head><body><p><a href="index_zh.html">ACC 文档（中文）</a></p></body></html>' > $(BUILDDIR)/html/zh_CN/index.html
-	@echo "Open $(BUILDDIR)/html/zh_CN/index_zh.html or .../zh_CN/index.html"
+	cp index_zh.rst index.rst && \
+	( READTHEDOCS_LANGUAGE=zh_CN $(SPHINXBUILD) -b html -D language=zh_CN $(SPHINXOPTS) $(SOURCEDIR) $(BUILDDIR)/html/zh_CN; r=$$?; git checkout -- index.rst; exit $$r )
+	@echo "Open $(BUILDDIR)/html/zh_CN/index.html"
 
 # Build both English and Chinese (for local preview of both languages)
 html-all: html html-zh
