@@ -5,13 +5,9 @@ ACC 文档（中文）
 
 **基于 LLVM/MLIR 的 AI 编译器，用于学习与实践。**
 
-.. toctree::
+.. i18n-toctree::
    :maxdepth: 2
    :caption: 用户与开发者
-
-   GETTING_STARTED_zh
-   PROJECT_PLAN_zh
-   README_zh
 
 .. toctree::
    :maxdepth: 2

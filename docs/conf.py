@@ -1,5 +1,5 @@
 # ACC documentation - Sphinx + Breathe (C++ API from Doxygen XML)
-# i18n: English = default (.md); Chinese = *_zh.md. Two builds via READTHEDOCS_LANGUAGE.
+# i18n: English = default (.md); Chinese = *_zh.md when present, else fallback to .md. Two builds via READTHEDOCS_LANGUAGE.
 
 import os
 
@@ -29,20 +29,47 @@ base_exclude = [
     "capability-radar-roadmap.md",
 ]
 
-# Dual-file i18n: English .md + Chinese _zh.md. RtD sets READTHEDOCS_LANGUAGE for zh project.
-# RtD uses lowercase with hyphen (e.g. zh-cn); accept zh-cn, zh_CN, zh.
+# ---------------------------------------------------------------------------
+# i18n: auto-scan for *_zh.md; Chinese build uses _zh when present else falls back to .md
+# ---------------------------------------------------------------------------
+_docs_dir = os.path.dirname(os.path.abspath(__file__))
+_base_exclude_set = set(base_exclude)
+
+def _scan_md_and_zh():
+    """Return (docs_with_zh, main_doc_order). docs_with_zh = set of base names that have a _zh.md."""
+    docs_with_zh = set()
+    for f in os.listdir(_docs_dir):
+        if not f.endswith(".md") or f in _base_exclude_set:
+            continue
+        if f.endswith("_zh.md"):
+            base = f[:-6]  # strip _zh.md
+            docs_with_zh.add(base)
+    # Canonical order of main user docs (must match index.rst first toctree; add new docs here)
+    main_doc_order = ["GETTING_STARTED", "PROJECT_PLAN", "README"]
+    return docs_with_zh, main_doc_order
+
+_docs_with_zh, _main_doc_order = _scan_md_and_zh()
+
+# Chinese toctree: prefer X_zh if exists, else X (fallback to English .md)
+i18n_main_toctree = [
+    (x + "_zh") if x in _docs_with_zh else x for x in _main_doc_order
+]
+# Append any _zh-only doc not in main order (optional)
+for x in sorted(_docs_with_zh):
+    if x not in _main_doc_order:
+        i18n_main_toctree.append(x + "_zh")
+
 build_lang = (os.environ.get("READTHEDOCS_LANGUAGE") or "en").strip().lower().replace("_", "-")
 if build_lang in ("zh-cn", "zh") or build_lang.startswith("zh-"):
     language = "zh_CN"
-    # Use master_doc = "index" so Sphinx outputs index.html (required by Read the Docs). index.rst is filled by pre_build copy of index_zh.rst when READTHEDOCS_LANGUAGE=zh-cn.
     master_doc = "index"
-    # Exclude English-only .md and index_zh.rst (content is in index.rst after pre_build copy)
-    english_docs_with_zh = [
-        "GETTING_STARTED.md",
-        "PROJECT_PLAN.md",
-        "README.md",
-    ]
-    exclude_patterns = base_exclude + ["index_zh.rst", "index_zh.md"] + english_docs_with_zh
+    # Exclude only English .md that have a _zh counterpart; keep .md without _zh as fallback
+    exclude_en_with_zh = [x + ".md" for x in _docs_with_zh]
+    exclude_patterns = (
+        base_exclude
+        + ["index_zh.rst", "index_zh.md"]
+        + exclude_en_with_zh
+    )
 else:
     language = "en"
     master_doc = "index"
@@ -66,3 +93,50 @@ breathe_default_members = ("members", "undoc-members", "protected-members")
 
 # MyST
 myst_enable_extensions = ["deflist", "tasklist"]
+
+
+# ---------------------------------------------------------------------------
+# Custom directive: i18n-toctree (for index_zh.rst) uses i18n_main_toctree
+# ---------------------------------------------------------------------------
+def _setup_i18n_toctree(app):
+    from docutils.parsers.rst import Directive
+    from docutils.parsers.rst import directives
+    from sphinx.addnodes import toctree as toctree_node
+
+    class I18nToctreeDirective(Directive):
+        has_content = False
+        optional_arguments = 0
+        required_arguments = 0
+        option_spec = {
+            "caption": directives.unchanged,
+            "maxdepth": directives.unchanged,
+        }
+
+        def run(self):
+            env = self.state.document.settings.env
+            raw = getattr(env.config, "i18n_main_toctree", [])
+            entries = [e for e in raw if e]
+            caption = self.options.get("caption", "")
+            maxdepth_str = self.options.get("maxdepth", "2")
+            try:
+                maxdepth = int(maxdepth_str)
+            except ValueError:
+                maxdepth = 2
+            node = toctree_node()
+            node["entries"] = [(e, "") for e in entries]
+            node["includefiles"] = list(entries)
+            node["caption"] = caption
+            node["maxdepth"] = maxdepth
+            node["hidden"] = False
+            node["includehidden"] = False
+            node["titlesonly"] = False
+            node["glob"] = None
+            node["numbered"] = 0
+            return [node]
+
+    app.add_directive("i18n-toctree", I18nToctreeDirective)
+
+
+def setup(app):
+    app.add_config_value("i18n_main_toctree", i18n_main_toctree, "env")
+    _setup_i18n_toctree(app)
