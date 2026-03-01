@@ -97,7 +97,7 @@ cd docs/_build/html && python3 -m http.server 8080
 
 1. 打开 [Read the Docs](https://readthedocs.org/) 并登录，**Import a Project**，选择本仓库（如 GitHub 上的 `acc`）。
 2. 仓库根目录已有 **.readthedocs.yaml**，RtD 会据此安装 doxygen/graphviz、在 pre_build 中运行 `doxygen docs/Doxyfile`、再用 Sphinx 构建。
-3. 构建成功后，文档发布到 **https://acc-docs.readthedocs.io/en/latest/**（或你在 RtD 中配置的地址）。需中文时另建翻译项目并关联，见「中英文与 RtD 语言切换」。
+3. 构建成功后，文档发布到 **https://acc-docs.readthedocs.io/en/latest/**（或你在 RtD 中配置的地址）。若点击「中文」出现 404，需在 RtD 新建**翻译项目**并关联（见「中英文与 RtD 语言切换」）；切换链接使用 `/zh_CN/latest/`，仅在该翻译项目构建后才存在。
 
 ---
 

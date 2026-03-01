@@ -30,8 +30,9 @@ base_exclude = [
 ]
 
 # Dual-file i18n: English .md + Chinese _zh.md. RtD sets READTHEDOCS_LANGUAGE for zh project.
-build_lang = os.environ.get("READTHEDOCS_LANGUAGE", "en")
-if build_lang in ("zh_CN", "zh"):
+# RtD uses lowercase with hyphen (e.g. zh-cn); accept zh-cn, zh_CN, zh.
+build_lang = (os.environ.get("READTHEDOCS_LANGUAGE") or "en").strip().lower().replace("_", "-")
+if build_lang in ("zh-cn", "zh") or build_lang.startswith("zh-"):
     language = "zh_CN"
     master_doc = "index_zh"
     # Exclude English-only .md that have a _zh counterpart (so only _zh.md + api are used)
