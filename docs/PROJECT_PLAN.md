@@ -61,9 +61,122 @@ AI Model (ONNX / ACC DSL)
 
 ---
 
-## 二、项目分期规划
+## 二、项目目录结构
+
+### 顶层目录总览
+
+```
+ACC/
+├── CMakeLists.txt                # 顶层 CMake 构建文件
+├── README.md                     # 项目说明文档
+├── LICENSE                       # 开源协议
+├── .gitignore                    # Git 忽略规则
+├── .github/                      # GitHub CI/CD 配置
+├── cmake/                        # CMake 模块和工具链文件
+├── docs/                         # 项目文档
+├── include/                      # 公开头文件（对外接口）
+│   └── ACC/
+├── lib/                          # 核心库实现
+│   ├── Dialect/                  # MLIR 方言定义与实现
+│   ├── Conversion/               # 方言间的 Lowering/Conversion
+│   ├── Transforms/               # MLIR 通用变换 Pass
+│   ├── Frontend/                 # 语言前端（Lexer/Parser/AST/Sema）
+│   ├── IROptimizer/              # LLVM IR 层优化 Pass
+│   ├── CodeGen/                  # 目标代码生成
+│   └── Support/                  # 公共工具和辅助函数
+├── runtime/                      # 运行时支持库
+│   ├── cpu/                      # CPU Runtime
+│   ├── cuda/                     # [TODO] CUDA Runtime
+│   └── ascend/                   # [TODO] Ascend Runtime
+├── tools/                        # 可执行工具
+│   ├── acc/                # 主编译器驱动
+│   ├── ac-opt/                   # MLIR 优化工具（类似 mlir-opt）
+│   ├── ac-translate/             # IR 翻译工具
+│   └── ac-runner/                # JIT 执行工具
+├── test/                         # 测试用例
+│   ├── lit.cfg.py                # lit 测试配置
+│   ├── Dialect/                  # 方言测试
+│   ├── Conversion/               # Lowering 测试
+│   ├── Transforms/               # 变换 Pass 测试
+│   ├── Frontend/                 # 前端测试
+│   ├── IROptimizer/              # LLVM IR 优化测试
+│   ├── CodeGen/                  # 代码生成测试
+│   └── E2E/                      # 端到端测试
+├── unittests/                    # C++ 单元测试（GoogleTest）
+│   ├── Dialect/
+│   ├── Frontend/
+│   └── Support/
+├── examples/                     # 示例代码
+│   ├── models/                   # 示例 AI 模型
+│   ├── dsl/                      # DSL 示例
+│   └── tutorials/                # 学习教程示例
+├── scripts/                      # 辅助脚本
+│   ├── build_llvm.sh             # LLVM 编译脚本
+│   ├── build.sh                  # 项目编译脚本
+│   └── run_tests.sh              # 测试运行脚本
+└── third_party/                  # 第三方依赖
+    └── onnx/                     # ONNX protobuf 定义
+```
+
+### 详细目录说明
+
+#### 1. `cmake/` — CMake 构建模块
+
+包含 CMake 构建所需的模块文件和交叉编译工具链配置，封装 LLVM/MLIR 查找与 TableGen 规则（FindLLVM.cmake、FindMLIR.cmake、AddACC.cmake、TableGen.cmake 等）。
+
+#### 2. `include/ACC/` — 公开头文件
+
+按功能模块组织：Dialect（ACHigh、ACMid、ACGPU）、Conversion、Transforms、Frontend、IROptimizer、CodeGen、Support；`.td` 与 `.h` 同目录，对应 `lib/` 实现。
+
+#### 3. `lib/` — 核心库实现
+
+与 `include/ACC` 一一对应的 C++ 实现，每子目录为独立 CMake 库目标（Dialect、Conversion、Transforms、Frontend、IROptimizer、CodeGen、Support）。
+
+#### 4. `runtime/` — 运行时支持库
+
+`ac_runtime.h` 公共 C API（句柄式）；`cpu/` 为 CPU Runtime 与 Kernels（im2col+GEMM 等）；`cuda/`、`ascend/` 为规划中后端。
+
+#### 5. `tools/` — 可执行工具
+
+`acc` 主编译器驱动、`ac-opt`（MLIR 优化）、`ac-translate`（IR 翻译）、`ac-runner`（JIT 执行）。
+
+#### 6. `test/` 与 `unittests/`
+
+`test/`：lit + FileCheck（Dialect、Conversion、Transforms、Frontend、IROptimizer、CodeGen、Performance、E2E）；`unittests/`：GoogleTest 单元测试。
+
+#### 7. `examples/` — 示例与教程
+
+`models/` 示例 ONNX、`dsl/` DSL 示例、`tutorials/` 学习教程（01-build-llvm 至 08-e2e-pipeline）。
+
+#### 8. `scripts/` 与 `.github/`
+
+`build_llvm.sh`、`build.sh`、`run_tests.sh`、`format.sh` 等；`.github/workflows` 为 CI/CD。
+
+### 核心模块依赖关系
+
+```
+Frontend ──→ Dialect/ACHigh ──→ Transforms ──→ Conversion/HighToMid
+                                                      │
+                                               Dialect/ACMid
+                                                      │
+                                            Conversion/MidToLinalg
+                                                      │
+                                            Conversion/MidToLLVM
+                                                      │
+                                               IROptimizer
+                                                      │
+                                                  CodeGen
+                                                      │
+                                                  Runtime
+```
+
+### 构建产物
+
+编译产物在 `build/`：`build/bin/`（acc、ac-opt、ac-translate、ac-runner）、`build/lib/`（各静态库及 libACRuntime.so）、`build/test/`。
 
 ---
+
+## 三、项目分期规划
 
 ### Phase 1: 基础架构与 MLIR 入门（Week 1-4）
 
@@ -146,7 +259,7 @@ ninja
 
 **示例代码 — Dialect 定义**:
 
-```tablegen
+```text
 def ACHigh_Dialect : Dialect {
   let name = "achigh";
   let cppNamespace = "::acc::achigh";
@@ -201,7 +314,7 @@ LogicalResult Conv2DOp::verify() {
 
 **示例代码 — MLIR IR**:
 
-```mlir
+```text
 func.func @simple_model(%input: tensor<1x3x224x224xf32>) -> tensor<1x1000xf32> {
   %w_conv = achigh.constant dense<...> : tensor<64x3x7x7xf32>
   %conv = achigh.conv2d %input, %w_conv {strides = [2, 2], padding = [3, 3]}
@@ -439,7 +552,7 @@ struct ConvOpLowering : public OpConversionPattern<achigh::Conv2DOp> {
 
 **降级后 MLIR 示意**:
 
-```mlir
+```text
 // ACHigh → Linalg Lowering 结果
 %result = linalg.conv_2d_nchw_fchw
   ins(%input, %weight : tensor<1x3x224x224xf32>, tensor<64x3x3x3xf32>)
@@ -854,9 +967,9 @@ NPU 执行
 
 ---
 
-## 三、性能评估标准
+## 四、性能评估标准
 
-### 3.1 编译时性能
+### 4.1 编译时性能
 
 | 指标 | 目标值 | 测量方法 |
 |-----|-------|---------|
@@ -865,7 +978,7 @@ NPU 执行
 | 单 Pass 执行时间 | < 1s | 任意单个 Pass |
 | 编译内存峰值 | < 2GB | 编译过程监控 |
 
-### 3.2 运行时性能
+### 4.2 运行时性能
 
 | 模型 | 输入规模 | ACC | ONNX Runtime | 相对性能 |
 |------|---------|-----------|--------------|---------|
@@ -874,7 +987,7 @@ NPU 执行
 | MobileNetV2 | 1x3x224x224 | ≤ 20ms | ~15ms | 75% |
 | BERT-Base | seq=128 | ≤ 150ms | ~100ms | 65% |
 
-### 3.3 代码质量
+### 4.3 代码质量
 
 | 指标 | 目标值 |
 |-----|-------|
@@ -885,7 +998,7 @@ NPU 执行
 
 ---
 
-## 四、关键技术栈
+## 五、关键技术栈
 
 | 技术领域 | 技术/工具 | 用途 |
 |----------|-----------|------|
@@ -903,7 +1016,7 @@ NPU 执行
 
 ---
 
-## 五、里程碑定义
+## 六、里程碑定义
 
 | 里程碑 | 时间 | 目标 | 验收标准 |
 |--------|------|------|----------|
@@ -918,9 +1031,9 @@ NPU 执行
 
 ---
 
-## 六、测试策略
+## 七、测试策略
 
-### 6.1 三层测试体系
+### 7.1 三层测试体系
 
 | 层级 | 框架 | 用途 | 位置 |
 |------|------|------|------|
@@ -929,7 +1042,7 @@ NPU 执行
 | **性能测试** | 自研 Benchmark | 算子和模型性能 | test/Performance/ |
 | **端到端测试** | Python + ONNX Runtime | 数值精度对比 | test/E2E/ |
 
-### 6.2 测试覆盖要求
+### 7.2 测试覆盖要求
 
 - **Phase 1**: 测试覆盖率 > 70%
 - **Phase 2**: 测试覆盖率 > 75%
@@ -939,7 +1052,7 @@ NPU 执行
 
 ---
 
-## 七、学习资源
+## 八、学习资源
 
 ### 必读论文
 
@@ -967,8 +1080,6 @@ NPU 执行
 2. [Torch-MLIR](https://github.com/llvm/torch-mlir) — PyTorch → MLIR
 3. [ONNX-MLIR](https://github.com/onnx/onnx-mlir) — ONNX → MLIR
 4. [TVM](https://github.com/apache/tvm) — Apache AI 编译器
-
----
 
 ---
 
@@ -1337,7 +1448,7 @@ print("✓ End-to-end verification passed!")
 
 ---
 
-## 八、贡献指南
+## 九、贡献指南
 
 - 遵循 [LLVM Coding Standards](https://llvm.org/docs/CodingStandards.html)
 - 使用 `clang-format` 格式化代码
@@ -1347,7 +1458,7 @@ print("✓ End-to-end verification passed!")
 
 ---
 
-## 九、变更日志
+## 十、变更日志
 
 ### v0.4.0 (2026-02-16)
 

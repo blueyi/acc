@@ -1,13 +1,13 @@
 # ACC 项目入门指南 / ACC Getting Started Guide
 
-> 结合 [docs/TODO.md](TODO.md) 一步步开始本项目，并了解项目结构与代码。  
+> 结合下文「项目进度与任务清单」一步步开始本项目，并了解项目结构与代码。  
 > Step-by-step guide to start the ACC project and understand its structure.
 
 ---
 
 ## 一、当前进度与建议起点 / Current Progress & Where to Start
 
-根据 **TODO.md**：
+根据 **项目进度与任务清单**（见第八节）：
 
 - **Phase 1** 进行中（约 0% 进度条）
 - **1.1 项目工程搭建**：1.1.1–1.1.3、1.1.5–1.1.6 已完成；**待做**：1.1.4 单元测试框架（GoogleTest）、验收（无警告编译、`ac-opt --version`、测试与 CI）
@@ -99,7 +99,7 @@ acc/
 └── docs/                       # TODO.md, PROJECT_PLAN, DIRECTORY_STRUCTURE 等
 ```
 
-更细的目录说明见 [docs/DIRECTORY_STRUCTURE.md](DIRECTORY_STRUCTURE.md)。
+更细的目录说明见 [PROJECT_PLAN](PROJECT_PLAN) 中「二、项目目录结构」。
 
 ---
 
@@ -173,8 +173,102 @@ python3 examples/e2e/pytorch_triton_acc_e2e.py
 4. **1.4 前端**  
    - ONNX 导入与 DSL 前端（Lexer/Parser/AST → MLIR）。
 
-文档与进度以 [docs/TODO.md](TODO.md) 为准，本文仅作入门与索引。
+文档与进度以本文第八节「项目进度与任务清单」为准，本文兼作入门与索引。
 
 ---
 
-**最后更新**: 2026-02-18
+## 八、项目进度与任务清单 / Progress & TODO
+
+> 完成任务后将 `[ ]` 改为 `[x]`，并在备注中记录完成日期或相关 PR。  
+> 进度概览：Phase 1 → Phase 2 → Phase 3 → Phase 4 → Phase 5 → Phase 6。
+
+### 总体进度
+
+| 阶段 | 状态 | 进度 | 周期 |
+|------|------|------|------|
+| Phase 1: 基础架构与 MLIR 入门 | 🚧 进行中 | ░░░░░░░░░░ 0% | Week 1-4 |
+| Phase 2: MLIR Lowering 与 LLVM IR 优化 | ⏳ 未开始 | ░░░░░░░░░░ 0% | Week 5-8 |
+| Phase 3: CodeGen、Runtime 与 E2E | ⏳ 未开始 | ░░░░░░░░░░ 0% | Week 9-12 |
+| Phase 4: 高级特性与多后端扩展 | ⏳ 未开始 | ░░░░░░░░░░ 0% | Week 13-14 |
+| Phase 5: Triton / PyTorch 框架对接 | ⏳ 未开始 | ░░░░░░░░░░ 0% | Week 15-20 |
+| Phase 6: 高阶特性 | ⏳ 未开始 | ░░░░░░░░░░ 0% | Week 20+ |
+
+### Phase 1: 基础架构与 MLIR 入门（Week 1-4）
+
+**1.1 项目工程搭建（Week 1）**
+
+- [x] **1.1.1** LLVM/MLIR 源码编译
+- [x] **1.1.2** CMake 工程搭建
+- [x] **1.1.3** 项目目录结构设计
+- [ ] **1.1.4** 单元测试框架搭建 — 集成 GoogleTest
+- [x] **1.1.5** lit/FileCheck 测试搭建
+- [x] **1.1.6** CI/CD 配置
+
+**验收**：无警告编译、`ac-opt --version` 正常、GoogleTest 与 lit 可运行、CI 成功。
+
+**1.2 MLIR 基础（Week 2）**
+
+- [ ] **1.2.1** MLIR 核心概念学习
+- [x] **1.2.2** ACHigh Dialect 定义
+- [x] **1.2.3** 基本 AI 算子定义
+- [x] **1.2.4** 增强算子定义
+- [x] **1.2.5** Type System 设计
+- [x] **1.2.6** 量化类型支持
+- [ ] **1.2.7** 算子验证逻辑 verify()
+- [ ] **1.2.8** 形状推导接口 InferTypeOpInterface
+- [x] **1.2.9** ACMid Dialect 定义
+- [ ] **1.2.10** 方言测试
+
+**1.3 MLIR Pass 开发（Week 3）**
+
+- [ ] **1.3.1** Pass 管理框架学习
+- [ ] **1.3.2** 常量折叠 Pass
+- [ ] **1.3.3** 算子融合 Pass
+- [ ] **1.3.4** 形状推导 Pass
+- [ ] **1.3.5** 布局变换 Pass
+- [ ] **1.3.6** 死代码消除 Pass
+- [ ] **1.3.7** DRR 模式匹配
+- [ ] **1.3.8** Pass Pipeline 管理
+- [ ] **1.3.9** Pass 测试
+
+**1.4 前端支持（Week 4）**
+
+- [ ] **1.4.1** ONNX 导入器设计
+- [ ] **1.4.2** ONNX 算子映射（20+）
+- [ ] **1.4.3** 权重/常量处理
+- [ ] **1.4.4** DSL Lexer
+- [ ] **1.4.5** DSL Parser
+- [ ] **1.4.6** AST 设计与构建
+- [ ] **1.4.7** 语义分析
+- [ ] **1.4.8** AST → MLIR 生成
+- [ ] **1.4.9** 前端测试
+
+### Phase 2–6 任务概要
+
+- **Phase 2**（Week 5-8）：ACHigh → ACMid → Linalg → LLVM Dialect Lowering，LLVM IR 优化 Pass，指令选择与 SIMD。
+- **Phase 3**（Week 9-12）：CPU CodeGen，Runtime 库，端到端执行与性能优化。
+- **Phase 4**（Week 13-14）：高级特性，CUDA/Ascend 后端规划。
+- **Phase 5**（Week 15-20）：Triton/PyTorch 对接，E2E 验证。
+- **Phase 6**（Week 20+）：Auto-Scheduling、动态形状、高阶特性。
+
+完整任务列表与验收标准见 [PROJECT_PLAN](PROJECT_PLAN) 中「三、项目分期规划」。
+
+### 里程碑与测试覆盖
+
+| 里程碑 | 目标时间 | 目标 | 状态 |
+|--------|---------|------|------|
+| M1 | Week 1 末 | 环境就绪，项目骨架完成 | 🚧 进行中 |
+| M2 | Week 2 末 | ACHigh 20+ 算子定义完成 | ⏳ 未开始 |
+| M3 | Week 3 末 | 5 个优化 Pass 实现 | ⏳ 未开始 |
+| M4 | Week 4 末 | ONNX 20+ 算子导入 + DSL 前端 | ⏳ 未开始 |
+| M5–M8 | Week 6–12 末 | Lowering、LLVM 优化、Runtime、ResNet-18 推理 | ⏳ 未开始 |
+
+| 阶段 | 目标覆盖率 | 状态 |
+|------|-----------|------|
+| Phase 1 | > 70% | ⏳ |
+| Phase 2 | > 75% | ⏳ |
+| Phase 3 | > 80% | ⏳ |
+
+---
+
+**最后更新**: 2026-03-01
