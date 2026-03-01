@@ -59,8 +59,20 @@ for x in sorted(_docs_with_zh):
     if x not in _main_doc_order:
         i18n_main_toctree.append(x + "_zh")
 
+# Detect Chinese build: READTHEDOCS_LANGUAGE=zh-cn, or on RtD when pre_build already replaced index.rst with index_zh content
 build_lang = (os.environ.get("READTHEDOCS_LANGUAGE") or "en").strip().lower().replace("_", "-")
-if build_lang in ("zh-cn", "zh") or build_lang.startswith("zh-"):
+_is_zh = build_lang in ("zh-cn", "zh") or build_lang.startswith("zh-")
+if not _is_zh and os.environ.get("READTHEDOCS") == "True":
+    _index_path = os.path.join(_docs_dir, "index.rst")
+    if os.path.isfile(_index_path):
+        try:
+            with open(_index_path, "r", encoding="utf-8") as _f:
+                _head = _f.read(300)
+            if "i18n-toctree" in _head or "ACC 中文" in _head or "用户与开发者" in _head:
+                _is_zh = True
+        except Exception:
+            pass
+if _is_zh:
     language = "zh_CN"
     master_doc = "index"
     # Exclude only English .md that have a _zh counterpart; keep .md without _zh as fallback
