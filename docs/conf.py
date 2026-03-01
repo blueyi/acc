@@ -1,5 +1,5 @@
 # ACC documentation - Sphinx + Breathe (C++ API from Doxygen XML)
-# i18n: English = default (.md); Chinese = *_zh.md when present, else fallback to .md. Two builds via READTHEDOCS_LANGUAGE.
+# i18n: XXX.md = English doc, XXX_zh.md = Chinese doc. Only one → both builds use it; both exist → en uses XXX.md, zh uses XXX_zh.md.
 
 import os
 
@@ -30,62 +30,83 @@ base_exclude = [
 ]
 
 # ---------------------------------------------------------------------------
-# i18n: auto-scan for *_zh.md; Chinese build uses _zh when present else falls back to .md
+# i18n: scan .md — has_en = bases with XXX.md, has_zh = bases with XXX_zh.md.
+# Only XXX.md → both builds use it. Only XXX_zh.md → both use it. Both → en=XXX.md, zh=XXX_zh.md.
 # ---------------------------------------------------------------------------
 _docs_dir = os.path.dirname(os.path.abspath(__file__))
 _base_exclude_set = set(base_exclude)
 
-def _scan_md_and_zh():
-    """Return (docs_with_zh, main_doc_order). docs_with_zh = set of base names that have a _zh.md."""
-    docs_with_zh = set()
+def _scan_md():
+    """Return (has_en, has_zh). has_en = set of base names with X.md; has_zh = set with X_zh.md."""
+    has_en = set()
+    has_zh = set()
     for f in os.listdir(_docs_dir):
         if not f.endswith(".md") or f in _base_exclude_set:
             continue
         if f.endswith("_zh.md"):
-            base = f[:-6]  # strip _zh.md
-            docs_with_zh.add(base)
-    # Canonical order of main user docs (must match index.rst first toctree; add new docs here)
-    main_doc_order = ["GETTING_STARTED", "PROJECT_PLAN", "README"]
-    return docs_with_zh, main_doc_order
+            has_zh.add(f[:-6])
+        else:
+            has_en.add(f[:-3])
+    return has_en, has_zh
 
-_docs_with_zh, _main_doc_order = _scan_md_and_zh()
+_has_en, _has_zh = _scan_md()
+_both = _has_en & _has_zh
+# Canonical order (add new docs here and in index.rst toctree)
+_main_doc_order = ["GETTING_STARTED", "PROJECT_PLAN", "README"]
 
-# Chinese toctree: prefer X_zh if exists, else X (fallback to English .md)
-i18n_main_toctree = [
-    (x + "_zh") if x in _docs_with_zh else x for x in _main_doc_order
-]
-# Append any _zh-only doc not in main order (optional)
-for x in sorted(_docs_with_zh):
-    if x not in _main_doc_order:
-        i18n_main_toctree.append(x + "_zh")
+def _toctree_list(use_zh_prefer_zh):
+    """use_zh_prefer_zh: True for Chinese build (prefer X_zh), False for English (prefer X)."""
+    out = []
+    for x in _main_doc_order:
+        if use_zh_prefer_zh:
+            name = (x + "_zh") if x in _has_zh else (x if x in _has_en else None)
+        else:
+            name = x if x in _has_en else (x + "_zh") if x in _has_zh else None
+        if name:
+            out.append(name)
+    for x in sorted((_has_en | _has_zh) - set(_main_doc_order)):
+        if use_zh_prefer_zh:
+            name = (x + "_zh") if x in _has_zh else (x if x in _has_en else None)
+        else:
+            name = x if x in _has_en else (x + "_zh") if x in _has_zh else None
+        if name:
+            out.append(name)
+    return out
 
-# Detect Chinese build: READTHEDOCS_LANGUAGE=zh-cn, or on RtD when pre_build already replaced index.rst with index_zh content
-build_lang = (os.environ.get("READTHEDOCS_LANGUAGE") or "en").strip().lower().replace("_", "-")
-_is_zh = build_lang in ("zh-cn", "zh") or build_lang.startswith("zh-")
+# Detect Chinese build: READTHEDOCS_LANGUAGE=zh-cn, or on RtD when index.rst was overwritten by index_zh
+_build_lang = (os.environ.get("READTHEDOCS_LANGUAGE") or "en").strip().lower().replace("_", "-")
+_is_zh = _build_lang in ("zh-cn", "zh") or _build_lang.startswith("zh-")
 if not _is_zh and os.environ.get("READTHEDOCS") == "True":
-    _index_path = os.path.join(_docs_dir, "index.rst")
-    if os.path.isfile(_index_path):
+    _idx = os.path.join(_docs_dir, "index.rst")
+    if os.path.isfile(_idx):
         try:
-            with open(_index_path, "r", encoding="utf-8") as _f:
+            with open(_idx, "r", encoding="utf-8") as _f:
                 _head = _f.read(300)
             if "i18n-toctree" in _head or "ACC 中文" in _head or "用户与开发者" in _head:
                 _is_zh = True
         except Exception:
             pass
+
 if _is_zh:
     language = "zh_CN"
     master_doc = "index"
-    # Exclude only English .md that have a _zh counterpart; keep .md without _zh as fallback
-    exclude_en_with_zh = [x + ".md" for x in _docs_with_zh]
+    # Exclude X.md only when both X.md and X_zh.md exist (then we use X_zh.md for zh)
     exclude_patterns = (
         base_exclude
         + ["index_zh.rst", "index_zh.md"]
-        + exclude_en_with_zh
+        + [x + ".md" for x in _both]
     )
+    i18n_main_toctree = _toctree_list(use_zh_prefer_zh=True)
 else:
     language = "en"
     master_doc = "index"
-    exclude_patterns = base_exclude + ["*_zh.md", "index_zh.rst", "index_zh.md"]
+    # Exclude X_zh.md only when both exist (then we use X.md for en)
+    exclude_patterns = (
+        base_exclude
+        + ["index_zh.rst", "index_zh.md"]
+        + [x + "_zh.md" for x in _both]
+    )
+    i18n_main_toctree = _toctree_list(use_zh_prefer_zh=False)
 
 source_suffix = {
     ".rst": "restructuredtext",
