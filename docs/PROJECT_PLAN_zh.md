@@ -1,31 +1,31 @@
-# ACC Project Plan
+# ACC 项目规划
 
-## 一、Project Overview
+## 一、项目概述
 
-**ACC** is an AI compiler core project built on LLVM/MLIR infrastructure。The project takes a "learn by practice" approach，通过逐步构建一个完整的、可扩展的 AI 编译器，既作为系统学习编译器技术的实战平台，也作为未来 AI Compiler Core 的基础Framework。
+**ACC** 是一个基于 LLVM/MLIR 基础设施构建的 AI 编译器核心项目。项目以"从实践中学习"为出发点，通过逐步构建一个完整的、可扩展的 AI 编译器，既作为系统学习编译器技术的实战平台，也作为未来 AI Compiler Core 的基础框架。
 
-项目采用**自上而下、由浅入深**的路线，以 MLIR 为切入点，从高层图优化逐步深入到 LLVM IR 优化、指令映射和Code Generation，覆盖 AI 编译器的全链路技术栈。
+项目采用**自上而下、由浅入深**的路线，以 MLIR 为切入点，从高层图优化逐步深入到 LLVM IR 优化、指令映射和代码生成，覆盖 AI 编译器的全链路技术栈。
 
-### 1.1 Project Goals
+### 1.1 项目目标
 
-| Goal Type | Specific Goal | Acceptance Criteria |
+| 目标类型 | 具体目标 | 验收标准 |
 |---------|---------|---------|
-| **Learning** | 系统掌握 LLVM/MLIR 编译器Framework | 能独立实现自定义 Dialect、Pass 和 Lowering |
-| **Technical** | 实现可扩展的多后端 AI 编译器 | 成功编译并运行 ResNet-18 模型 |
-| **Engineering** | 建立生产级工程体系 | 代码覆盖率 >80%，API Documentation完整 |
-| **Performance Targets** | CPU 后端达到可用性能水平 | 达到 ONNX Runtime 性能的 60%+ |
-| **Extensibility** | 支撑未来多后端和多Framework接入 | 架构可扩展至 GPU/NPU 后端 |
+| **学习目标** | 系统掌握 LLVM/MLIR 编译器框架 | 能独立实现自定义 Dialect、Pass 和 Lowering |
+| **技术目标** | 实现可扩展的多后端 AI 编译器 | 成功编译并运行 ResNet-18 模型 |
+| **工程目标** | 建立生产级工程体系 | 代码覆盖率 >80%，API 文档完整 |
+| **性能目标** | CPU 后端达到可用性能水平 | 达到 ONNX Runtime 性能的 60%+ |
+| **扩展目标** | 支撑未来多后端和多框架接入 | 架构可扩展至 GPU/NPU 后端 |
 
-### 1.2 Core Features
+### 1.2 核心特性
 
 - **渐进式学习**: 从简单到复杂，每个阶段都有可运行的代码和测试
 - **实例驱动**: 每个编译器概念都有完整的代码示例和实践练习
 - **生产级架构**: 模块化设计，为 AI Compiler Core 奠定基础
 - **多后端支持**: CPU（实现）+ CUDA（规划）+ Ascend NPU（规划）
-- **完整Documentation**: 设计Documentation、API Documentation、教程和学习笔记
-- **测试完备**: Unit Tests + FileCheck 集成测试 + 性能基准测试
+- **完整文档**: 设计文档、API 文档、教程和学习笔记
+- **测试完备**: 单元测试 + FileCheck 集成测试 + 性能基准测试
 
-### 1.3 Technical Roadmap
+### 1.3 技术路线总览
 
 ```
 AI Model (ONNX / ACC DSL)
@@ -61,35 +61,148 @@ AI Model (ONNX / ACC DSL)
 
 ---
 
-## 二、Phased Project Plan
+## 二、项目目录结构
+
+### 顶层目录总览
+
+```
+ACC/
+├── CMakeLists.txt                # 顶层 CMake 构建文件
+├── README.md                     # 项目说明文档
+├── LICENSE                       # 开源协议
+├── .gitignore                    # Git 忽略规则
+├── .github/                      # GitHub CI/CD 配置
+├── cmake/                        # CMake 模块和工具链文件
+├── docs/                         # 项目文档
+├── include/                      # 公开头文件（对外接口）
+│   └── ACC/
+├── lib/                          # 核心库实现
+│   ├── Dialect/                  # MLIR 方言定义与实现
+│   ├── Conversion/               # 方言间的 Lowering/Conversion
+│   ├── Transforms/               # MLIR 通用变换 Pass
+│   ├── Frontend/                 # 语言前端（Lexer/Parser/AST/Sema）
+│   ├── IROptimizer/              # LLVM IR 层优化 Pass
+│   ├── CodeGen/                  # 目标代码生成
+│   └── Support/                  # 公共工具和辅助函数
+├── runtime/                      # 运行时支持库
+│   ├── cpu/                      # CPU Runtime
+│   ├── cuda/                     # [TODO] CUDA Runtime
+│   └── ascend/                   # [TODO] Ascend Runtime
+├── tools/                        # 可执行工具
+│   ├── acc/                # 主编译器驱动
+│   ├── ac-opt/                   # MLIR 优化工具（类似 mlir-opt）
+│   ├── ac-translate/             # IR 翻译工具
+│   └── ac-runner/                # JIT 执行工具
+├── test/                         # 测试用例
+│   ├── lit.cfg.py                # lit 测试配置
+│   ├── Dialect/                  # 方言测试
+│   ├── Conversion/               # Lowering 测试
+│   ├── Transforms/               # 变换 Pass 测试
+│   ├── Frontend/                 # 前端测试
+│   ├── IROptimizer/              # LLVM IR 优化测试
+│   ├── CodeGen/                  # 代码生成测试
+│   └── E2E/                      # 端到端测试
+├── unittests/                    # C++ 单元测试（GoogleTest）
+│   ├── Dialect/
+│   ├── Frontend/
+│   └── Support/
+├── examples/                     # 示例代码
+│   ├── models/                   # 示例 AI 模型
+│   ├── dsl/                      # DSL 示例
+│   └── tutorials/                # 学习教程示例
+├── scripts/                      # 辅助脚本
+│   ├── build_llvm.sh             # LLVM 编译脚本
+│   ├── build.sh                  # 项目编译脚本
+│   └── run_tests.sh              # 测试运行脚本
+└── third_party/                  # 第三方依赖
+    └── onnx/                     # ONNX protobuf 定义
+```
+
+### 详细目录说明
+
+#### 1. `cmake/` — CMake 构建模块
+
+包含 CMake 构建所需的模块文件和交叉编译工具链配置，封装 LLVM/MLIR 查找与 TableGen 规则（FindLLVM.cmake、FindMLIR.cmake、AddACC.cmake、TableGen.cmake 等）。
+
+#### 2. `include/ACC/` — 公开头文件
+
+按功能模块组织：Dialect（ACHigh、ACMid、ACGPU）、Conversion、Transforms、Frontend、IROptimizer、CodeGen、Support；`.td` 与 `.h` 同目录，对应 `lib/` 实现。
+
+#### 3. `lib/` — 核心库实现
+
+与 `include/ACC` 一一对应的 C++ 实现，每子目录为独立 CMake 库目标（Dialect、Conversion、Transforms、Frontend、IROptimizer、CodeGen、Support）。
+
+#### 4. `runtime/` — 运行时支持库
+
+`ac_runtime.h` 公共 C API（句柄式）；`cpu/` 为 CPU Runtime 与 Kernels（im2col+GEMM 等）；`cuda/`、`ascend/` 为规划中后端。
+
+#### 5. `tools/` — 可执行工具
+
+`acc` 主编译器驱动、`ac-opt`（MLIR 优化）、`ac-translate`（IR 翻译）、`ac-runner`（JIT 执行）。
+
+#### 6. `test/` 与 `unittests/`
+
+`test/`：lit + FileCheck（Dialect、Conversion、Transforms、Frontend、IROptimizer、CodeGen、Performance、E2E）；`unittests/`：GoogleTest 单元测试。
+
+#### 7. `examples/` — 示例与教程
+
+`models/` 示例 ONNX、`dsl/` DSL 示例、`tutorials/` 学习教程（01-build-llvm 至 08-e2e-pipeline）。
+
+#### 8. `scripts/` 与 `.github/`
+
+`build_llvm.sh`、`build.sh`、`run_tests.sh`、`format.sh` 等；`.github/workflows` 为 CI/CD。
+
+### 核心模块依赖关系
+
+```
+Frontend ──→ Dialect/ACHigh ──→ Transforms ──→ Conversion/HighToMid
+                                                      │
+                                               Dialect/ACMid
+                                                      │
+                                            Conversion/MidToLinalg
+                                                      │
+                                            Conversion/MidToLLVM
+                                                      │
+                                               IROptimizer
+                                                      │
+                                                  CodeGen
+                                                      │
+                                                  Runtime
+```
+
+### 构建产物
+
+编译产物在 `build/`：`build/bin/`（acc、ac-opt、ac-translate、ac-runner）、`build/lib/`（各静态库及 libACRuntime.so）、`build/test/`。
 
 ---
 
-### Phase 1: Infrastructure & MLIR Basics（Week 1-4）
+## 三、项目分期规划
 
-**Phase Goal**: Set up the project, master MLIR core concepts，define AI dialects (20+ ops)，implement basic optimization passes，complete frontend import
+### Phase 1: 基础架构与 MLIR 入门（Week 1-4）
+
+**阶段目标**: 搭建项目工程，掌握 MLIR 核心概念，定义 AI 方言（20+ 算子），实现基础优化 Pass，完成前端导入
 
 ---
 
-#### 1.1 Project Setup（Week 1）
+#### 1.1 项目工程搭建（Week 1）
 
-| ID | Task | Description | Deliverable |
+| 编号 | 任务 | 说明 | 产出 |
 |------|------|------|------|
 | 1.1.1 | LLVM/MLIR 源码编译 | 从源码编译 LLVM 17+ 和 MLIR，了解构建体系 | 可用的 LLVM/MLIR 开发环境 |
-| 1.1.2 | CMake 工程搭建 | 搭建 ACC 的 out-of-tree CMake Build System | CMakeLists.txt 及构建脚本 |
+| 1.1.2 | CMake 工程搭建 | 搭建 ACC 的 out-of-tree CMake 构建系统 | CMakeLists.txt 及构建脚本 |
 | 1.1.3 | 项目目录结构设计 | 设计清晰的模块化目录，按 Dialect/Conversion/Transforms 等分层 | 完整的项目骨架 |
-| 1.1.4 | Unit TestsFramework搭建 | 集成 GoogleTest，建立 C++ Unit Tests基础设施 | 可运行的测试Framework |
+| 1.1.4 | 单元测试框架搭建 | 集成 GoogleTest，建立 C++ 单元测试基础设施 | 可运行的测试框架 |
 | 1.1.5 | lit/FileCheck 测试搭建 | 配置 lit + FileCheck，用于 MLIR/LLVM IR 回归测试 | lit.cfg.py 及示例测试 |
 | 1.1.6 | CI/CD 配置 | 配置 GitHub Actions 自动化构建和测试 | .github/workflows 配置 |
 
-**Key Concepts**:
+**核心知识点**:
 - LLVM 项目的 CMake 构建体系（CMake + Ninja）
 - LLVM/MLIR out-of-tree 项目的搭建方式
-- TableGen 基础 — LLVM 的领域特定Code Generation工具
-- ODS（Operation Definition Specification）Framework概念
+- TableGen 基础 — LLVM 的领域特定代码生成工具
+- ODS（Operation Definition Specification）框架概念
 - lit + FileCheck 测试方法论
 
-**Implementation Steps**:
+**实施步骤**:
 
 ```bash
 # 1. 编译 LLVM/MLIR
@@ -111,17 +224,17 @@ cmake -G Ninja .. \
 ninja
 ```
 
-**Acceptance Criteria**:
+**验收标准**:
 - ✓ 项目能成功编译，无警告
 - ✓ `ac-opt --version` 正常输出
-- ✓ GoogleTest 和 lit 测试Framework均可运行
+- ✓ GoogleTest 和 lit 测试框架均可运行
 - ✓ CI 自动构建成功
 
 ---
 
-#### 1.2 MLIR Basics — Custom Dialects & Operations（Week 2）
+#### 1.2 MLIR 基础概念实践 — 自定义方言与算子（Week 2）
 
-| ID | Task | Description | Deliverable |
+| 编号 | 任务 | 说明 | 产出 |
 |------|------|------|------|
 | 1.2.1 | MLIR 核心概念学习 | 学习 Dialect、Operation、Type、Attribute、Region、Block | 学习笔记 |
 | 1.2.2 | ACHigh Dialect 定义 | 使用 ODS/TableGen 定义高层 AI 方言 | ACHighDialect.td 及生成的 C++ |
@@ -134,9 +247,9 @@ ninja
 | 1.2.9 | ACMid Dialect 定义 | 定义中层方言，表达 Tile/Loop 级别的计算 | ACMidDialect.td + ACMidOps.td |
 | 1.2.10 | 方言测试 | 编写 FileCheck 测试验证方言正确性 | test/Dialect/ 下的 .mlir 测试 |
 
-**Key Concepts**:
+**核心知识点**:
 - MLIR Dialect 的定义与注册机制
-- TableGen / ODS 语法及Code Generation原理
+- TableGen / ODS 语法及代码生成原理
 - MLIR Operation 的 Traits 机制（Pure、Commutative、SameOperandsAndResultType 等）
 - MLIR Interfaces 机制（InferTypeOpInterface、SideEffectInterfaces）
 - MLIR 的 Region 和 Block 结构
@@ -144,9 +257,9 @@ ninja
 - Assembly Format 声明式 IR 打印/解析
 - MLIR 自定义 Type 和 Attribute 系统
 
-**Example Code — Dialect 定义**:
+**示例代码 — Dialect 定义**:
 
-```tablegen
+```text
 def ACHigh_Dialect : Dialect {
   let name = "achigh";
   let cppNamespace = "::acc::achigh";
@@ -160,7 +273,7 @@ def ACHigh_Dialect : Dialect {
 }
 ```
 
-**Example Code — 算子定义（增强版 Conv2D）**:
+**示例代码 — 算子定义（增强版 Conv2D）**:
 
 ```tablegen
 def ACHigh_Conv2DOp : ACHigh_Op<"conv2d",
@@ -181,7 +294,7 @@ def ACHigh_Conv2DOp : ACHigh_Op<"conv2d",
 }
 ```
 
-**Example Code — 验证逻辑**:
+**示例代码 — 验证逻辑**:
 
 ```cpp
 LogicalResult Conv2DOp::verify() {
@@ -199,9 +312,9 @@ LogicalResult Conv2DOp::verify() {
 }
 ```
 
-**Example Code — MLIR IR**:
+**示例代码 — MLIR IR**:
 
-```mlir
+```text
 func.func @simple_model(%input: tensor<1x3x224x224xf32>) -> tensor<1x1000xf32> {
   %w_conv = achigh.constant dense<...> : tensor<64x3x7x7xf32>
   %conv = achigh.conv2d %input, %w_conv {strides = [2, 2], padding = [3, 3]}
@@ -212,20 +325,20 @@ func.func @simple_model(%input: tensor<1x3x224x224xf32>) -> tensor<1x1000xf32> {
 }
 ```
 
-**Acceptance Criteria**:
+**验收标准**:
 - ✓ 成功定义 20+ AI 算子（Conv2D, MatMul, BatchMatMul, ReLU, GELU, Sigmoid, Tanh, Add, Mul, Softmax, MaxPool2D, AvgPool2D, BatchNorm, Dense, Flatten, Reshape, Transpose, ConvReLU, Constant 等）
 - ✓ 所有算子都有 verify() 实现
 - ✓ Conv2D 实现 InferTypeOpInterface 自动形状推导
 - ✓ 通过 MLIR 的 `--verify-diagnostics` 测试
-- ✓ ACMid Dialect 基本Framework就绪
+- ✓ ACMid Dialect 基本框架就绪
 
 ---
 
-#### 1.3 MLIR Pass Development（Week 3）
+#### 1.3 MLIR Pass 开发（Week 3）
 
-| ID | Task | Description | Deliverable |
+| 编号 | 任务 | 说明 | 产出 |
 |------|------|------|------|
-| 1.3.1 | Pass 管理Framework学习 | 理解 PassManager、OpPassManager、Pass 注册机制 | 学习笔记 |
+| 1.3.1 | Pass 管理框架学习 | 理解 PassManager、OpPassManager、Pass 注册机制 | 学习笔记 |
 | 1.3.2 | 常量折叠 Pass | 实现编译期常量计算优化 | ConstantFoldingPass |
 | 1.3.3 | 算子融合 Pass | 实现 Conv+BN+ReLU、Conv+ReLU 等经典融合模式 | OpFusionPass |
 | 1.3.4 | 形状推导 Pass | 实现 Tensor 形状的前向自动推导 | ShapeInferencePass |
@@ -235,17 +348,17 @@ func.func @simple_model(%input: tensor<1x3x224x224xf32>) -> tensor<1x1000xf32> {
 | 1.3.8 | Pass Pipeline 管理 | 组合多个 Pass 形成优化流水线 | PassPipeline 配置 |
 | 1.3.9 | Pass 测试 | 为每个 Pass 编写 FileCheck 测试 | test/Transforms/ 下的测试 |
 
-**Key Concepts**:
-- MLIR Pass 管理Framework（PassManager / OpPassManager）
+**核心知识点**:
+- MLIR Pass 管理框架（PassManager / OpPassManager）
 - FunctionPass vs. OperationPass 的区别
 - MLIR Pattern Rewriting 机制（RewritePattern / matchAndRewrite）
 - Greedy Pattern Rewriting Driver
 - Declarative Rewrite Rules (DRR) — TableGen 声明式模式替换
 - Canonicalization 机制
-- MLIR DialectConversion Framework — Greedy Rewrite vs. Dialect Conversion 的选择
+- MLIR DialectConversion 框架 — Greedy Rewrite vs. Dialect Conversion 的选择
 - Pass 的依赖管理和调度策略
 
-**Example Code — Conv+BN+ReLU 融合**:
+**示例代码 — Conv+BN+ReLU 融合**:
 
 ```cpp
 struct ConvBNReLUFusionPattern : public OpRewritePattern<achigh::ReLUOp> {
@@ -274,7 +387,7 @@ struct ConvBNReLUFusionPattern : public OpRewritePattern<achigh::ReLUOp> {
 };
 ```
 
-**Example Code — 形状推导**:
+**示例代码 — 形状推导**:
 
 ```cpp
 struct ShapeInferencePass
@@ -296,7 +409,7 @@ struct ShapeInferencePass
 };
 ```
 
-**Acceptance Criteria**:
+**验收标准**:
 - ✓ 实现至少 5 个优化 Pass
 - ✓ 每个 Pass 都有对应的 FileCheck 测试用例
 - ✓ 融合 Pass 能正确识别并优化 Conv+BN+ReLU 和 Conv+ReLU 模式
@@ -305,11 +418,11 @@ struct ShapeInferencePass
 
 ---
 
-#### 1.4 Frontend Support（Week 4）
+#### 1.4 前端支持（Week 4）
 
-| ID | Task | Description | Deliverable |
+| 编号 | 任务 | 说明 | 产出 |
 |------|------|------|------|
-| 1.4.1 | ONNX 导入器设计 | 设计 ONNX → ACHigh Dialect 的映射Framework | ONNXImporter 架构 |
+| 1.4.1 | ONNX 导入器设计 | 设计 ONNX → ACHigh Dialect 的映射框架 | ONNXImporter 架构 |
 | 1.4.2 | ONNX 算子映射 | 实现 20+ ONNX 算子到 ACHigh 算子的映射 | 算子映射实现 |
 | 1.4.3 | 权重/常量处理 | 实现 ONNX initializer 到 achigh.constant 的转换 | 常量加载逻辑 |
 | 1.4.4 | DSL 词法分析器 | 实现 ACC DSL 的 Lexer | Lexer 模块 |
@@ -319,15 +432,15 @@ struct ShapeInferencePass
 | 1.4.8 | AST → MLIR 生成 | 从 AST 生成 ACHigh Dialect MLIR | MLIRGen 模块 |
 | 1.4.9 | 前端测试 | 编写 ONNX 导入和 DSL 解析测试 | test/Frontend/ 下的测试 |
 
-**Key Concepts**:
-- ONNX Model Format（protobuf）和计算图结构
+**核心知识点**:
+- ONNX 模型格式（protobuf）和计算图结构
 - ONNX 算子规范与 MLIR 算子的语义映射
 - 编译器前端经典架构（Lexer → Parser → AST → Sema → CodeGen）
 - 递归下降解析算法
 - 符号表和作用域管理
 - AST 到 MLIR 的翻译策略（SSA 构建）
 
-**Example Code — ONNX 导入器**:
+**示例代码 — ONNX 导入器**:
 
 ```cpp
 class ONNXImporter {
@@ -349,7 +462,7 @@ class ONNXImporter {
 };
 ```
 
-**Example Code — ACC DSL**:
+**示例代码 — ACC DSL**:
 
 ```
 model SimpleNet {
@@ -367,7 +480,7 @@ compile SimpleNet -> target("cpu") {
 }
 ```
 
-**Acceptance Criteria**:
+**验收标准**:
 - ✓ ONNX 导入器支持至少 20 个常见算子
 - ✓ 能成功导入 ResNet-18 / MobileNet 模型
 - ✓ DSL 前端能解析基本模型定义并生成 MLIR
@@ -375,15 +488,15 @@ compile SimpleNet -> target("cpu") {
 
 ---
 
-### Phase 2: MLIR Lowering & LLVM IR Optimization（Week 5-8）
+### Phase 2: MLIR Lowering 与 LLVM IR 优化（Week 5-8）
 
-**Phase Goal**: 实现 ACHigh → ACMid → Linalg → LLVM Dialect 的完整降级链路，编写自定义 LLVM IR Optimization Passes，实现 SIMD 指令映射
+**阶段目标**: 实现 ACHigh → ACMid → Linalg → LLVM Dialect 的完整降级链路，编写自定义 LLVM IR 优化 Pass，实现 SIMD 指令映射
 
 ---
 
-#### 2.1 Multi-level Lowering — ACHigh to Linalg（Week 5）
+#### 2.1 MLIR 多层 Lowering — 从 ACHigh 到 Linalg（Week 5）
 
-| ID | Task | Description | Deliverable |
+| 编号 | 任务 | 说明 | 产出 |
 |------|------|------|------|
 | 2.1.1 | ACHigh → ACMid Lowering | 图层算子到 Tile/Loop 层的 Lowering | ACHighToACMidPass |
 | 2.1.2 | ACMid → Linalg Lowering | 将 ACMid 操作映射到 Linalg 通用操作 | ACMidToLinalgPass |
@@ -393,16 +506,16 @@ compile SimpleNet -> target("cpu") {
 | 2.1.6 | Tiling 策略实现 | 基于 Linalg Tiling 实现多层 Tile（L1/L2/Register 级） | TilingPass |
 | 2.1.7 | Lowering 测试 | 为每层 Lowering 编写 FileCheck 测试 | test/Conversion/ 下的测试 |
 
-**Key Concepts**:
+**核心知识点**:
 - MLIR 的多层 Lowering 架构设计
-- DialectConversion Framework — ConversionTarget / TypeConverter / ConversionPattern
+- DialectConversion 框架 — ConversionTarget / TypeConverter / ConversionPattern
 - Partial Lowering vs. Full Lowering
 - Linalg Dialect 核心概念（Generic Op、Named Op、Indexing Maps）
 - Linalg on Tensors vs. Linalg on Buffers
 - Linalg Tiling 和 Fusion API
 - MLIR 的 tensor → memref 类型映射
 
-**Example Code — Conv2D Lowering**:
+**示例代码 — Conv2D Lowering**:
 
 ```cpp
 struct ConvOpLowering : public OpConversionPattern<achigh::Conv2DOp> {
@@ -437,16 +550,16 @@ struct ConvOpLowering : public OpConversionPattern<achigh::Conv2DOp> {
 };
 ```
 
-**Lowered MLIR Example**:
+**降级后 MLIR 示意**:
 
-```mlir
+```text
 // ACHigh → Linalg Lowering 结果
 %result = linalg.conv_2d_nchw_fchw
   ins(%input, %weight : tensor<1x3x224x224xf32>, tensor<64x3x3x3xf32>)
   outs(%init : tensor<1x64x224x224xf32>) -> tensor<1x64x224x224xf32>
 ```
 
-**Acceptance Criteria**:
+**验收标准**:
 - ✓ ACHigh → ACMid → Linalg 的完整降级链路可运行
 - ✓ Conv2D、MatMul、激活函数等核心算子均已实现 Lowering
 - ✓ Tiling Pass 能对 Linalg 操作进行分块
@@ -454,9 +567,9 @@ struct ConvOpLowering : public OpConversionPattern<achigh::Conv2DOp> {
 
 ---
 
-#### 2.2 Lowering — Linalg to LLVM Dialect（Week 6）
+#### 2.2 MLIR Lowering — 从 Linalg 到 LLVM Dialect（Week 6）
 
-| ID | Task | Description | Deliverable |
+| 编号 | 任务 | 说明 | 产出 |
 |------|------|------|------|
 | 2.2.1 | Bufferization | 实现 Tensor → MemRef 的缓冲区化 | Bufferization 配置 |
 | 2.2.2 | Linalg → Loops | 将 Linalg 操作展开为嵌套循环（SCF/Affine） | LinalgToLoopsPass |
@@ -466,8 +579,8 @@ struct ConvOpLowering : public OpConversionPattern<achigh::Conv2DOp> {
 | 2.2.6 | CF → LLVM Dialect | 最终降级到 LLVM Dialect | ToLLVMDialectPass |
 | 2.2.7 | 端到端降级测试 | 从 ACHigh 到 LLVM Dialect 的完整链路测试 | E2E 降级测试 |
 
-**Key Concepts**:
-- MLIR Bufferization Framework（One-Shot Bufferization）
+**核心知识点**:
+- MLIR Bufferization 框架（One-Shot Bufferization）
 - Tensor 语义 vs. MemRef 语义的区别
 - Affine Dialect 的分析能力（Dependence Analysis、Affine Scheduling）
 - SCF（Structured Control Flow）和 CF（Control Flow）Dialect
@@ -475,7 +588,7 @@ struct ConvOpLowering : public OpConversionPattern<achigh::Conv2DOp> {
 - LLVM Dialect 的类型映射（memref → LLVM struct of pointers）
 - MemRef 到 LLVM Dialect 的 descriptor 转换
 
-**Full Lowering Pipeline**:
+**降级全链路示意**:
 
 ```
 achigh.conv2d
@@ -495,17 +608,17 @@ cf.br / cf.cond_br (基本块 + 控制流)
 llvm.br / llvm.load / llvm.store / llvm.fadd / llvm.fmul
 ```
 
-**Acceptance Criteria**:
+**验收标准**:
 - ✓ 完成从 ACHigh 到 LLVM Dialect 的完整降级链路
 - ✓ 生成的 LLVM Dialect IR 能通过 mlir-translate 转为 LLVM IR
-- ✓ 生成的 LLVM IR 能通过 `llc` 编译为Goal代码
+- ✓ 生成的 LLVM IR 能通过 `llc` 编译为目标代码
 - ✓ Bufferization 正确处理 Tensor → MemRef 转换
 
 ---
 
-#### 2.3 LLVM IR Optimization Passes（Week 7）
+#### 2.3 LLVM IR 优化 Pass（Week 7）
 
-| ID | Task | Description | Deliverable |
+| 编号 | 任务 | 说明 | 产出 |
 |------|------|------|------|
 | 2.3.1 | LLVM IR 基础学习 | 学习 LLVM IR 语法、SSA 形式、基本块结构 | 学习笔记及示例 |
 | 2.3.2 | MLIR → LLVM IR 导出 | 从 LLVM Dialect 导出标准 LLVM IR | IR 导出模块 |
@@ -516,7 +629,7 @@ llvm.br / llvm.load / llvm.store / llvm.fadd / llvm.fmul
 | 2.3.7 | Pass Manager 集成 | 将自定义 Pass 注册到 LLVM New Pass Manager | PassManager 集成代码 |
 | 2.3.8 | 优化效果分析 | 使用 opt-viewer / opt-remark 分析优化效果 | 优化分析报告 |
 
-**Key Concepts**:
+**核心知识点**:
 - LLVM IR 的 SSA（Static Single Assignment）形式
 - PHI 节点和基本块（Basic Block）结构
 - LLVM 新 Pass Manager (NPM) 架构 — PassInfoMixin / PreservedAnalyses
@@ -526,7 +639,7 @@ llvm.br / llvm.load / llvm.store / llvm.fadd / llvm.fmul
 - LLVM IR Linker 和 LTO（Link Time Optimization）
 - Optimization Remarks 机制
 
-**Example Code — 自定义 LLVM IR Pass**:
+**示例代码 — 自定义 LLVM IR Pass**:
 
 ```cpp
 struct CustomLoopOptPass : public PassInfoMixin<CustomLoopOptPass> {
@@ -557,7 +670,7 @@ for.body.vec:
   store <8 x float> %vec_result, <8 x float>* %ptr_vec
 ```
 
-**Acceptance Criteria**:
+**验收标准**:
 - ✓ 成功从 LLVM Dialect 导出标准 LLVM IR
 - ✓ 自定义 LLVM Pass 注册到 New Pass Manager 并可运行
 - ✓ 集成至少 10 个 LLVM 标准优化 Pass
@@ -566,9 +679,9 @@ for.body.vec:
 
 ---
 
-#### 2.4 Instruction Selection & SIMD Mapping（Week 8）
+#### 2.4 指令选择与 SIMD 映射（Week 8）
 
-| ID | Task | Description | Deliverable |
+| 编号 | 任务 | 说明 | 产出 |
 |------|------|------|------|
 | 2.4.1 | LLVM 后端架构学习 | 学习 SelectionDAG、指令选择、GlobalISel | 学习笔记 |
 | 2.4.2 | SIMD 指令映射 | 利用 Vector Dialect/LLVM Intrinsics 映射 AVX/NEON | SIMD 映射代码 |
@@ -576,15 +689,15 @@ for.body.vec:
 | 2.4.4 | FMA 指令利用 | 确保矩阵乘法使用 FMA（Fused Multiply-Add）指令 | FMA 优化 |
 | 2.4.5 | 汇编分析 | 验证生成的汇编包含预期 SIMD 指令 | 汇编测试 |
 
-**Key Concepts**:
-- LLVM SelectionDAG 和 GlobalISel 指令选择Framework
-- x86 SIMD 指令集Layer（SSE → AVX → AVX2 → AVX-512）
+**核心知识点**:
+- LLVM SelectionDAG 和 GlobalISel 指令选择框架
+- x86 SIMD 指令集层级（SSE → AVX → AVX2 → AVX-512）
 - AArch64 SIMD 指令集（NEON → SVE/SVE2）
-- Vector Dialect 到Goal SIMD 指令的映射
+- Vector Dialect 到目标 SIMD 指令的映射
 - FMA（Fused Multiply-Add）指令及其对数值精度的影响
 - 代价模型在编译决策中的作用
 
-**Example Code — SIMD 向量化**:
+**示例代码 — SIMD 向量化**:
 
 ```cpp
 void generateAVX2MatMul(OpBuilder &builder, Value A, Value B, Value C) {
@@ -598,38 +711,38 @@ void generateAVX2MatMul(OpBuilder &builder, Value A, Value B, Value C) {
 }
 ```
 
-**Acceptance Criteria**:
+**验收标准**:
 - ✓ 卷积和矩阵乘法的核心循环使用 SIMD 指令
 - ✓ 生成的汇编代码包含 AVX/AVX2 指令（x86）或 NEON 指令（AArch64）
 - ✓ SIMD 优化带来 2-4x 性能提升
 
 ---
 
-### Phase 3: Code Generation、Runtime 与端到端流水线（Week 9-12）
+### Phase 3: 代码生成、Runtime 与端到端流水线（Week 9-12）
 
-**Phase Goal**: 实现完整的 CPU 后端Code Generation，开发高性能 Runtime 库（im2col+GEMM），打通端到端编译-运行流程，建立性能基准
+**阶段目标**: 实现完整的 CPU 后端代码生成，开发高性能 Runtime 库（im2col+GEMM），打通端到端编译-运行流程，建立性能基准
 
 ---
 
-#### 3.1 CPU Backend CodeGen（Week 9）
+#### 3.1 CPU 后端 CodeGen（Week 9）
 
-| ID | Task | Description | Deliverable |
+| 编号 | 任务 | 说明 | 产出 |
 |------|------|------|------|
-| 3.1.1 | CodeGen 驱动实现 | 实现 LLVM IR → Goal代码的 CodeGen 驱动 | CodeGenDriver |
+| 3.1.1 | CodeGen 驱动实现 | 实现 LLVM IR → 目标代码的 CodeGen 驱动 | CodeGenDriver |
 | 3.1.2 | TargetMachine 配置 | 配置 x86-64 / AArch64 的 TargetMachine | CPU 后端配置 |
-| 3.1.3 | Object File 生成 | 生成 .o Goal文件 | emitObjectFile |
+| 3.1.3 | Object File 生成 | 生成 .o 目标文件 | emitObjectFile |
 | 3.1.4 | Assembly 生成 | 生成 .s 汇编文件（用于分析） | emitAssembly |
 | 3.1.5 | JIT 编译引擎 | 基于 LLVM ORC JIT 实现即时编译 | JITEngine |
 | 3.1.6 | 端到端编译驱动 | 串联 Frontend→MLIR Opt→Lowering→LLVM Opt→CodeGen | CompilerDriver |
 
-**Key Concepts**:
+**核心知识点**:
 - LLVM TargetMachine 和 DataLayout 配置
 - MC Layer（Machine Code Layer）架构
 - Object File 格式（ELF / Mach-O）
-- LLVM ORC JIT Framework（LLJIT、ThreadSafeModule）
+- LLVM ORC JIT 框架（LLJIT、ThreadSafeModule）
 - 编译器 Driver 设计模式
 
-**Example Code — 编译器驱动**:
+**示例代码 — 编译器驱动**:
 
 ```cpp
 class CompilerDriver {
@@ -650,16 +763,16 @@ public:
 };
 ```
 
-**Acceptance Criteria**:
+**验收标准**:
 - ✓ 能从 MLIR 生成可运行的 .o / .so 文件
 - ✓ JIT 引擎能直接执行 MLIR/LLVM IR
 - ✓ 编译驱动串联完整流水线
 
 ---
 
-#### 3.2 Runtime Library（Week 10）
+#### 3.2 Runtime 库实现（Week 10）
 
-| ID | Task | Description | Deliverable |
+| 编号 | 任务 | 说明 | 产出 |
 |------|------|------|------|
 | 3.2.1 | Runtime C API 设计 | 设计句柄式 C API（runtime/tensor/model） | ac_runtime.h |
 | 3.2.2 | 内存管理 | 实现 64 字节对齐的内存池 | MemoryPool |
@@ -668,9 +781,9 @@ public:
 | 3.2.5 | Tiled MatMul | 实现 cache 友好的分块矩阵乘法 | matmul_tiled 实现 |
 | 3.2.6 | 多线程支持 | 集成 OpenMP 实现并行计算 | 多线程 Runtime |
 | 3.2.7 | 模型加载/执行 | 实现编译产物的加载和推理执行 | ac_load_model / ac_execute |
-| 3.2.8 | Runtime 测试 | Kernel 正确性和 Runtime API 测试 | Unit Tests |
+| 3.2.8 | Runtime 测试 | Kernel 正确性和 Runtime API 测试 | 单元测试 |
 
-**Key Concepts**:
+**核心知识点**:
 - C API 设计原则（句柄模式、错误处理、ABI 稳定性）
 - 内存对齐策略（64 字节 = AVX-512 cache line 友好）
 - im2col 算法原理 — 将卷积转换为矩阵乘法
@@ -678,7 +791,7 @@ public:
 - OpenMP 并行编程模型
 - 内存池设计与 Buffer 复用
 
-**Example Code — im2col + GEMM 卷积**:
+**示例代码 — im2col + GEMM 卷积**:
 
 ```cpp
 void ac_cpu_conv2d_im2col_f32(
@@ -704,7 +817,7 @@ void ac_cpu_conv2d_im2col_f32(
 }
 ```
 
-**Example Code — Runtime C API**:
+**示例代码 — Runtime C API**:
 
 ```c
 typedef struct ACCRuntime *ac_runtime_t;
@@ -720,8 +833,8 @@ void         ac_execute(ac_model_t model,
                          ac_tensor_t *outputs, int num_outputs);
 ```
 
-**Acceptance Criteria**:
-- ✓ Runtime API 完整且Documentation齐全
+**验收标准**:
+- ✓ Runtime API 完整且文档齐全
 - ✓ 所有 CPU Kernel 通过正确性测试
 - ✓ im2col+GEMM 卷积性能优于 naive 实现 5x+
 - ✓ 内存池管理正常，无内存泄漏
@@ -729,63 +842,63 @@ void         ac_execute(ac_model_t model,
 
 ---
 
-#### 3.3 E2E Execution & Performance Optimization（Week 11-12）
+#### 3.3 端到端执行与性能优化（Week 11-12）
 
-| ID | Task | Description | Deliverable |
+| 编号 | 任务 | 说明 | 产出 |
 |------|------|------|------|
 | 3.3.1 | 端到端 MatMul 测试 | 从 DSL/MLIR 到执行的矩阵乘法完整流程 | E2E MatMul Demo |
 | 3.3.2 | 端到端 Conv 测试 | 从 MLIR 到执行的卷积完整流程 | E2E Conv Demo |
 | 3.3.3 | ResNet-18 推理 | ONNX 导入 → 编译 → 推理的完整流程 | ResNet-18 Demo |
-| 3.3.4 | 性能基准Framework | 搭建 Benchmark Framework（统计分析、GFLOPS 计算） | benchmark.h Framework |
-| 3.3.5 | 单算子 Benchmark | Conv2D、MatMul 的多尺寸Perf Tests | 算子性能数据 |
-| 3.3.6 | 模型 Benchmark | ResNet-18、MobileNet 的端到端Perf Tests | 模型性能数据 |
+| 3.3.4 | 性能基准框架 | 搭建 Benchmark 框架（统计分析、GFLOPS 计算） | benchmark.h 框架 |
+| 3.3.5 | 单算子 Benchmark | Conv2D、MatMul 的多尺寸性能测试 | 算子性能数据 |
+| 3.3.6 | 模型 Benchmark | ResNet-18、MobileNet 的端到端性能测试 | 模型性能数据 |
 | 3.3.7 | 性能 Profiling | 使用 perf/VTune 定位性能瓶颈 | 性能分析报告 |
 | 3.3.8 | 瓶颈优化 | 针对 Profiling 结果进行至少 3 轮优化 | 优化后的代码 |
 
-**Key Concepts**:
-- 端到端编译流水线的集成Testing Strategy
+**核心知识点**:
+- 端到端编译流水线的集成测试策略
 - 性能 Benchmark 方法论（warm-up、统计分析、GFLOPS 计算）
 - Linux perf / Intel VTune 性能分析工具
 - Cache 行为分析（cache miss rate、L1/L2/L3 命中率）
 - 性能优化的迭代方法（Profile → Analyze → Optimize → Verify）
 
-**Performance Targets**:
+**性能目标**:
 
-| 模型 / 算子 | Input Size | ACC Goal | ONNX Runtime 参考 | Relative |
+| 模型 / 算子 | 输入规模 | ACC 目标 | ONNX Runtime 参考 | 相对性能 |
 |-------------|---------|---------------|-------------------|---------|
 | Conv2D | 1x64x56x56, k=3x3 | ≤ 2.5 ms | ~1.5 ms | 60%+ |
 | MatMul | 1024x1024x1024 | ≤ 15 ms | ~10 ms | 65%+ |
 | ResNet-18 | 1x3x224x224 | ≤ 30 ms | ~20 ms | 65%+ |
 | MobileNetV2 | 1x3x224x224 | ≤ 20 ms | ~15 ms | 75%+ |
 
-**Acceptance Criteria**:
+**验收标准**:
 - ✓ ResNet-18 端到端推理成功，结果与 ONNX Runtime 数值一致（rtol=1e-3）
-- ✓ Conv2D 单算子性能达到Goal（60%+ ONNX Runtime）
+- ✓ Conv2D 单算子性能达到目标（60%+ ONNX Runtime）
 - ✓ 建立完整的性能基准数据
 - ✓ 识别并优化至少 3 个性能瓶颈
 - ✓ 完成性能分析报告
 
 ---
 
-### Phase 4: 高级Feature与多后端扩展（Week 13+）
+### Phase 4: 高级特性与多后端扩展（Week 13+）
 
-**Phase Goal**: 实现高级编译器Feature（量化、AutoTuning、并行化），为 GPU/NPU 后端搭建扩展Framework
+**阶段目标**: 实现高级编译器特性（量化、AutoTuning、并行化），为 GPU/NPU 后端搭建扩展框架
 
 ---
 
-#### 4.1 高级编译器Feature（Week 13-14）
+#### 4.1 高级编译器特性（Week 13-14）
 
-| ID | Task | Description | Deliverable |
+| 编号 | 任务 | 说明 | 产出 |
 |------|------|------|------|
 | 4.1.1 | 内存优化 Pass | 内存分配策略、Buffer 复用优化 | MemoryOptPass |
 | 4.1.2 | 并行化 Pass | 多线程并行执行 Pass（循环并行化） | ParallelizationPass |
 | 4.1.3 | 量化支持 | INT8/FP16 量化编译支持 | QuantizationPass |
-| 4.1.4 | AutoTuning Framework | 自动调优Framework（Tiling Size、Unroll Factor 等） | AutoTuner 模块 |
+| 4.1.4 | AutoTuning 框架 | 自动调优框架（Tiling Size、Unroll Factor 等） | AutoTuner 模块 |
 | 4.1.5 | 性能 Profiling 工具 | 编译器内置的性能分析和瓶颈定位 | Profiler 工具 |
 
-**Key Concepts**:
+**核心知识点**:
 - 编译器内存优化策略（Liveness Analysis、Buffer Reuse）
-- 量化Compilers（对称/非对称量化、Scale/ZeroPoint 传播）
+- 量化编译原理（对称/非对称量化、Scale/ZeroPoint 传播）
 - AutoTuning 搜索策略（Grid Search、Bayesian Optimization）
 - 多线程并行化（Loop Parallelization、Task Parallelism）
 
@@ -793,7 +906,7 @@ void         ac_execute(ac_model_t model,
 
 #### 4.2 [TODO] NVIDIA GPU CUDA 后端（Week 15+）
 
-| ID | Task | Description | Deliverable |
+| 编号 | 任务 | 说明 | 产出 |
 |------|------|------|------|
 | 4.2.1 | ACGPU Dialect 定义 | 定义 GPU 特有概念（Grid/Block/Thread/SharedMem） | ACGPU Dialect |
 | 4.2.2 | ACMid → ACGPU Lowering | 实现 Tile 层到 GPU Kernel 的降级 | ACMidToGPU Pass |
@@ -801,7 +914,7 @@ void         ac_execute(ac_model_t model,
 | 4.2.4 | Kernel 优化 | Shared Memory、Tensor Core、Bank Conflict 优化 | 优化后的 Kernel |
 | 4.2.5 | CUDA Runtime 集成 | 实现 CUDA Runtime 支持库 | runtime/cuda/ |
 
-**Key Concepts**:
+**核心知识点**:
 - GPU 编程模型（Grid → Block → Thread 层次）
 - Shared Memory 优化策略
 - Warp-level 原语（Shuffle、Reduce）
@@ -825,7 +938,7 @@ PTX Assembly → CUDA Binary
 
 #### 4.3 [TODO] 华为 Ascend NPU 后端（Week 15+）
 
-| ID | Task | Description | Deliverable |
+| 编号 | 任务 | 说明 | 产出 |
 |------|------|------|------|
 | 4.3.1 | ACAscend Dialect 定义 | 定义 NPU 特有概念（AI Core/Vector Core/Cube Unit） | ACAscend Dialect |
 | 4.3.2 | ACMid → ACAscend Lowering | 实现到 Ascend 方言的降级 | MidToAscend Pass |
@@ -833,7 +946,7 @@ PTX Assembly → CUDA Binary
 | 4.3.4 | CANN 工具链对接 | 对接华为 CANN 编译工具链 | CANN 集成 |
 | 4.3.5 | Ascend Runtime 集成 | 实现 ACL Runtime 支持库 | runtime/ascend/ |
 
-**Key Concepts**:
+**核心知识点**:
 - 昇腾 AI 处理器架构（AI Core、Vector Core、Cube Unit）
 - Ascend C 编程模型
 - TBE（Tensor Boost Engine）算子开发
@@ -854,58 +967,58 @@ NPU 执行
 
 ---
 
-## 三、Performance Evaluation Criteria
+## 四、性能评估标准
 
-### 3.1 Compile-time Performance
+### 4.1 编译时性能
 
-| Metric | Target | Measurement |
+| 指标 | 目标值 | 测量方法 |
 |-----|-------|---------|
-| 小模型编译Time | < 5s | ResNet-18 |
-| 大模型编译Time | < 30s | ResNet-50 |
-| 单 Pass 执行Time | < 1s | 任意单个 Pass |
+| 小模型编译时间 | < 5s | ResNet-18 |
+| 大模型编译时间 | < 30s | ResNet-50 |
+| 单 Pass 执行时间 | < 1s | 任意单个 Pass |
 | 编译内存峰值 | < 2GB | 编译过程监控 |
 
-### 3.2 Runtime Performance
+### 4.2 运行时性能
 
-| 模型 | Input Size | ACC | ONNX Runtime | Relative |
+| 模型 | 输入规模 | ACC | ONNX Runtime | 相对性能 |
 |------|---------|-----------|--------------|---------|
 | ResNet-18 | 1x3x224x224 | ≤ 30ms | ~20ms | 65% |
 | ResNet-50 | 1x3x224x224 | ≤ 95ms | ~60ms | 63% |
 | MobileNetV2 | 1x3x224x224 | ≤ 20ms | ~15ms | 75% |
 | BERT-Base | seq=128 | ≤ 150ms | ~100ms | 65% |
 
-### 3.3 Code Quality
+### 4.3 代码质量
 
-| Metric | Target |
+| 指标 | 目标值 |
 |-----|-------|
 | 测试覆盖率 | > 80% |
-| Documentation覆盖率 | 100%（所有公共 API） |
+| 文档覆盖率 | 100%（所有公共 API） |
 | 编译警告 | 0 |
 | Clang-tidy 警告 | < 10 |
 
 ---
 
-## 四、Key Technology Stack
+## 五、关键技术栈
 
-| Domain | 技术/工具 | Usage |
+| 技术领域 | 技术/工具 | 用途 |
 |----------|-----------|------|
-| Compiler Infra | LLVM 17+ | IR 优化、Code Generation |
-| 多Layer IR | MLIR | 自定义方言、图优化、多层 Lowering |
-| Build System | CMake + Ninja | 项目构建 |
-| Code Generation | TableGen | 方言定义、算子定义、Pass 注册 |
-| 测试Framework | lit + FileCheck | MLIR/LLVM IR 回归测试 |
-| Unit Tests | GoogleTest | C++ Unit Tests |
-| Perf Tests | 自研 Benchmark Framework | 算子和模型性能基准 |
-| Model Format | ONNX (protobuf) | AI 模型导入 |
-| Language | C++17 | 主要开发语言 |
-| Documentation | Doxygen + Markdown | 代码Documentation和学习笔记 |
-| Version Control | Git + GitHub | 代码Version Control和 CI/CD |
+| 编译基础设施 | LLVM 17+ | IR 优化、代码生成 |
+| 多层级 IR | MLIR | 自定义方言、图优化、多层 Lowering |
+| 构建系统 | CMake + Ninja | 项目构建 |
+| 代码生成 | TableGen | 方言定义、算子定义、Pass 注册 |
+| 测试框架 | lit + FileCheck | MLIR/LLVM IR 回归测试 |
+| 单元测试 | GoogleTest | C++ 单元测试 |
+| 性能测试 | 自研 Benchmark 框架 | 算子和模型性能基准 |
+| 模型格式 | ONNX (protobuf) | AI 模型导入 |
+| 编程语言 | C++17 | 主要开发语言 |
+| 文档 | Doxygen + Markdown | 代码文档和学习笔记 |
+| 版本管理 | Git + GitHub | 代码版本管理和 CI/CD |
 
 ---
 
-## 五、Milestone Definitions
+## 六、里程碑定义
 
-| Milestone | Time | Goal | Acceptance Criteria |
+| 里程碑 | 时间 | 目标 | 验收标准 |
 |--------|------|------|----------|
 | **M1** | Week 1 末 | 环境就绪 | LLVM/MLIR 编译成功，项目骨架搭建完成，CI 正常 |
 | **M2** | Week 2 末 | 方言完成 | ACHigh 20+ 算子定义完成，verify() 全部实现 |
@@ -918,50 +1031,50 @@ NPU 执行
 
 ---
 
-## 六、Testing Strategy
+## 七、测试策略
 
-### 6.1 Three-layer Test System
+### 7.1 三层测试体系
 
-| Layer | Framework | Usage | Location |
+| 层级 | 框架 | 用途 | 位置 |
 |------|------|------|------|
-| **Unit Tests** | GoogleTest | C++ 模块正确性 | unittests/ |
+| **单元测试** | GoogleTest | C++ 模块正确性 | unittests/ |
 | **集成测试** | lit + FileCheck | MLIR/LLVM IR 变换正确性 | test/ |
-| **Perf Tests** | 自研 Benchmark | 算子和模型性能 | test/Performance/ |
+| **性能测试** | 自研 Benchmark | 算子和模型性能 | test/Performance/ |
 | **端到端测试** | Python + ONNX Runtime | 数值精度对比 | test/E2E/ |
 
-### 6.2 Test Coverage Requirements
+### 7.2 测试覆盖要求
 
 - **Phase 1**: 测试覆盖率 > 70%
 - **Phase 2**: 测试覆盖率 > 75%
 - **Phase 3**: 测试覆盖率 > 80%
 - 每个新增 Pass 必须有对应 FileCheck 测试
-- 每个新增 Kernel 必须有正确性Unit Tests
+- 每个新增 Kernel 必须有正确性单元测试
 
 ---
 
-## 七、Learning Resources
+## 八、学习资源
 
-### Essential Papers
+### 必读论文
 
 1. **MLIR**: "MLIR: A Compiler Infrastructure for the End of Moore's Law" (CGO 2020)
 2. **Polyhedral**: "Polyhedral Compilation as a Design Pattern for Compilers" (PLDI 2018)
 3. **TVM**: "TVM: An Automated End-to-End Optimizing Compiler for Deep Learning" (OSDI 2018)
 4. **XLA**: "XLA - TensorFlow, Compiled" (TensorFlow Dev Summit 2017)
 
-### Recommended Books
+### 推荐书籍
 
-1. **Compilers**: "Engineering a Compiler" (2nd Edition) — Cooper & Torczon
+1. **编译原理**: "Engineering a Compiler" (2nd Edition) — Cooper & Torczon
 2. **LLVM**: "Getting Started with LLVM Core Libraries" — Bruno Cardoso Lopes
-3. **Optimization**: "Optimizing Compilers for Modern Architectures" — Allen & Kennedy
-4. **Architecture**: "Computer Architecture: A Quantitative Approach" — Hennessy & Patterson
+3. **优化技术**: "Optimizing Compilers for Modern Architectures" — Allen & Kennedy
+4. **体系结构**: "Computer Architecture: A Quantitative Approach" — Hennessy & Patterson
 
-### Online Resources
+### 在线资源
 
-1. [MLIR 官方Documentation](https://mlir.llvm.org/) / [MLIR Toy Tutorial](https://mlir.llvm.org/docs/Tutorials/Toy/)
+1. [MLIR 官方文档](https://mlir.llvm.org/) / [MLIR Toy Tutorial](https://mlir.llvm.org/docs/Tutorials/Toy/)
 2. [LLVM Language Reference](https://llvm.org/docs/LangRef.html) / [Writing an LLVM Pass](https://llvm.org/docs/WritingAnLLVMNewPMPass.html)
 3. Stanford CS143 / MIT 6.172 / Cornell CS6120
 
-### Open Source References
+### 开源项目参考
 
 1. [IREE](https://github.com/iree-org/iree) — Google 的 MLIR AI 编译器
 2. [Torch-MLIR](https://github.com/llvm/torch-mlir) — PyTorch → MLIR
@@ -970,28 +1083,26 @@ NPU 执行
 
 ---
 
----
+### Phase 5: AI 框架对接 — Triton / PyTorch 集成（Week 15+）
 
-### Phase 5: AI Framework对接 — Triton / PyTorch 集成（Week 15+）
-
-**Phase Goal**: 将 ACC 对接到主流 AI Framework生态，实现 PyTorch → Triton DSL → ACC → 硬件后端的端到端编译和验证流程
+**阶段目标**: 将 ACC 对接到主流 AI 框架生态，实现 PyTorch → Triton DSL → ACC → 硬件后端的端到端编译和验证流程
 
 ---
 
-#### 5.1 OpenAI Triton Frontend（Week 15-16）
+#### 5.1 OpenAI Triton 前端对接（Week 15-16）
 
-| ID | Task | Description | Deliverable |
+| 编号 | 任务 | 说明 | 产出 |
 |------|------|------|------|
-| 5.1.1 | Triton IR 分析 | 分析 Triton IR（TTIR / TTGIR）的结构和语义 | 分析Documentation |
+| 5.1.1 | Triton IR 分析 | 分析 Triton IR（TTIR / TTGIR）的结构和语义 | 分析文档 |
 | 5.1.2 | Triton Dialect 定义 | 在 ACC 中定义 Triton 兼容方言，表达 Triton 核心操作 | ACTriton Dialect (.td) |
 | 5.1.3 | Triton IR → ACC MLIR | 实现 Triton IR 到 ACC MLIR（ACHigh/ACMid）的导入转换 | TritonImporter |
 | 5.1.4 | Triton 算子映射 | 映射 tl.load/tl.store/tl.dot/tl.reduce 等到 ACHigh 算子 | 算子映射表 |
-| 5.1.5 | Triton 语义保持 | 确保 Block Program 语义、掩码（mask）等 Triton Feature正确转换 | 语义验证测试 |
+| 5.1.5 | Triton 语义保持 | 确保 Block Program 语义、掩码（mask）等 Triton 特性正确转换 | 语义验证测试 |
 | 5.1.6 | Triton → ACC → CPU | 端到端：Triton kernel → ACC 编译 → CPU 执行 | E2E Demo |
 
-**Key Concepts**:
+**核心知识点**:
 - OpenAI Triton 的编程模型（Block-level Programming）
-- Triton IR Layer结构：Triton Dialect (TTIR) → TritonGPU Dialect (TTGIR)
+- Triton IR 层级结构：Triton Dialect (TTIR) → TritonGPU Dialect (TTGIR)
 - Triton 的 tl.load / tl.store / tl.dot / tl.reduce 等核心原语
 - Triton 的 Block Pointer 和 Mask 机制
 - Triton IR 到 Linalg/SCF 的语义映射
@@ -1016,7 +1127,7 @@ LLVM IR → CodeGen
     └──→ Ascend NPU          [TODO Phase 4]
 ```
 
-**Example Code — Triton Kernel 定义**:
+**示例代码 — Triton Kernel 定义**:
 
 ```python
 import triton
@@ -1053,7 +1164,7 @@ def matmul_kernel(
     tl.store(c_ptrs, acc, mask=(offs_m[:, None] < M) & (offs_n[None, :] < N))
 ```
 
-**Example Code — Triton IR 到 ACC MLIR 映射**:
+**示例代码 — Triton IR 到 ACC MLIR 映射**:
 
 ```cpp
 // lib/Frontend/TritonImporter.cpp
@@ -1081,7 +1192,7 @@ class TritonImporter {
 };
 ```
 
-**Acceptance Criteria**:
+**验收标准**:
 - ✓ 成功解析 Triton matmul kernel 的 IR
 - ✓ 将 tl.load/tl.store/tl.dot 映射到 ACC MLIR 算子
 - ✓ Triton kernel → ACC → CPU 的端到端执行正确
@@ -1089,18 +1200,18 @@ class TritonImporter {
 
 ---
 
-#### 5.2 PyTorch Framework对接（Week 17-18）
+#### 5.2 PyTorch 框架对接（Week 17-18）
 
-| ID | Task | Description | Deliverable |
+| 编号 | 任务 | 说明 | 产出 |
 |------|------|------|------|
-| 5.2.1 | PyTorch 导出分析 | 分析 torch.export / torch.compile 的 IR 导出格式 | 分析Documentation |
+| 5.2.1 | PyTorch 导出分析 | 分析 torch.export / torch.compile 的 IR 导出格式 | 分析文档 |
 | 5.2.2 | Torch-MLIR 对接 | 通过 Torch-MLIR 将 PyTorch 模型转换到 ACC MLIR | TorchImporter |
 | 5.2.3 | ONNX 通路增强 | 增强 PyTorch → ONNX → ACC 的转换通路 | ONNX 导入增强 |
 | 5.2.4 | 自定义算子注册 | 支持 PyTorch 调用 ACC 编译的自定义算子 | torch.library 注册 |
 | 5.2.5 | Triton 算子集成 | PyTorch 中使用 Triton 编写算子，由 ACC 编译 | Triton 算子 ACC 编译 |
 | 5.2.6 | Python Binding | 提供 ACC 的 Python 绑定（pybind11） | acc Python 模块 |
 
-**Key Concepts**:
+**核心知识点**:
 - PyTorch 2.0 编译栈（torch.compile / TorchDynamo / TorchInductor）
 - torch.export 和 ExportedProgram 格式
 - Torch-MLIR 项目架构和使用方式
@@ -1126,7 +1237,7 @@ PyTorch Model (nn.Module)
          PyTorch custom op (torch.library)
 ```
 
-**Example Code — PyTorch + Triton + ACC 端到端**:
+**示例代码 — PyTorch + Triton + ACC 端到端**:
 
 ```python
 import torch
@@ -1221,7 +1332,7 @@ assert torch.allclose(y_ref, y_acc, rtol=1e-3, atol=1e-5)
 print("✓ End-to-end verification passed!")
 ```
 
-**Acceptance Criteria**:
+**验收标准**:
 - ✓ PyTorch 模型通过 ONNX 通路成功导入 ACC
 - ✓ Triton kernel 成功编译并在 PyTorch 中调用
 - ✓ 端到端数值精度验证通过
@@ -1229,17 +1340,17 @@ print("✓ End-to-end verification passed!")
 
 ---
 
-#### 5.3 E2E Verification Flow（Week 19-20）
+#### 5.3 端到端验证流程（Week 19-20）
 
-| ID | Task | Description | Deliverable |
+| 编号 | 任务 | 说明 | 产出 |
 |------|------|------|------|
-| 5.3.1 | E2E 测试Framework | 搭建 PyTorch↔ACC 的自动化端到端测试Framework | E2E 测试Framework |
+| 5.3.1 | E2E 测试框架 | 搭建 PyTorch↔ACC 的自动化端到端测试框架 | E2E 测试框架 |
 | 5.3.2 | Triton→ACC→CPU | Triton matmul/softmax kernel 的 ACC CPU 编译验证 | Triton E2E 测试 |
 | 5.3.3 | PyTorch→ACC | PyTorch 小模型（MLP/CNN）的完整编译验证 | PyTorch E2E 测试 |
 | 5.3.4 | 精度对比 | 与 PyTorch eager / Triton GPU 的数值精度对比 | 精度报告 |
 | 5.3.5 | 性能对比 | 与 PyTorch eager / TorchInductor 的性能对比 | 性能报告 |
 
-**E2E Verification Flow全景**:
+**端到端验证流程全景**:
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -1282,7 +1393,7 @@ print("✓ End-to-end verification passed!")
 └──────────┴────────────────┴──────────────┴────────────────────┘
 ```
 
-**Acceptance Criteria**:
+**验收标准**:
 - ✓ PyTorch MLP 模型端到端编译和推理成功
 - ✓ Triton matmul/softmax kernel 通过 ACC 编译并执行正确
 - ✓ 所有 E2E 测试精度验证通过
@@ -1290,15 +1401,15 @@ print("✓ End-to-end verification passed!")
 
 ---
 
-### Phase 6: 高阶Feature（Week 20+）
+### Phase 6: 高阶特性（Week 20+）
 
-**Phase Goal**: 实现面向生产环境的高阶编译器Feature，提升 ACC 作为 AI Compiler Core 的核心竞争力
+**阶段目标**: 实现面向生产环境的高阶编译器特性，提升 ACC 作为 AI Compiler Core 的核心竞争力
 
 ---
 
-#### 6.1 高阶Feature规划
+#### 6.1 高阶特性规划
 
-| ID | Feature | Description | Priority |
+| 编号 | 特性 | 说明 | 优先级 |
 |------|------|------|--------|
 | 6.1.1 | **Auto-Scheduling** | 基于代价模型的自动调度策略搜索（类似 TVM AutoScheduler） | 高 |
 | 6.1.2 | **Polyhedral 优化** | 基于多面体模型的循环变换（Affine Scheduling） | 高 |
@@ -1307,29 +1418,29 @@ print("✓ End-to-end verification passed!")
 | 6.1.5 | **图分割与子图编译** | 大模型图的智能分割和子图独立编译 | 中 |
 | 6.1.6 | **Kernel 融合引擎** | 跨算子边界的激进 Kernel 融合（类似 XLA/TorchInductor） | 中 |
 | 6.1.7 | **内存规划优化** | 编译期全局内存规划，最小化峰值内存占用 | 中 |
-| 6.1.8 | **异构调度** | CPU + GPU 异构计算的自动Task分配 | 低 |
+| 6.1.8 | **异构调度** | CPU + GPU 异构计算的自动任务分配 | 低 |
 | 6.1.9 | **分布式编译** | 多设备/多节点的分布式模型编译支持 | 低 |
 | 6.1.10 | **Debug/Profile 集成** | 编译器级别的调试和性能分析工具 | 中 |
 
-#### 6.2 Auto-Scheduling Framework
+#### 6.2 Auto-Scheduling 框架
 
 ```
-Search Space Definition → 代价模型评估 → 候选方案生成 → 编译+测量 → 最优方案
+搜索空间定义 → 代价模型评估 → 候选方案生成 → 编译+测量 → 最优方案
                     ↑                                      │
                     └──────────── 反馈学习 ─────────────────┘
 ```
 
-| ID | Task | Description | Deliverable |
+| 编号 | 任务 | 说明 | 产出 |
 |------|------|------|------|
-| 6.2.1 | Search Space Definition | 定义 Tiling/Unroll/Vectorize 等可调参数空间 | SearchSpace 模块 |
+| 6.2.1 | 搜索空间定义 | 定义 Tiling/Unroll/Vectorize 等可调参数空间 | SearchSpace 模块 |
 | 6.2.2 | 分析型代价模型 | 基于硬件参数的静态代价估算 | AnalyticalCostModel |
 | 6.2.3 | ML 代价模型 | 基于历史数据训练的机器学习代价模型 | MLCostModel |
 | 6.2.4 | 搜索算法 | Grid Search / Random Search / Bayesian Optimization | Searcher 模块 |
 | 6.2.5 | 自动调优集成 | 将搜索结果集成到 Pass Pipeline 中 | AutoTuner 集成 |
 
-#### 6.3 Dynamic Shape Compilation
+#### 6.3 动态形状编译
 
-| ID | Task | Description | Deliverable |
+| 编号 | 任务 | 说明 | 产出 |
 |------|------|------|------|
 | 6.3.1 | 符号形状表示 | 在 IR 中支持符号化的动态维度 | Symbolic Shape IR |
 | 6.3.2 | Shape Guard 生成 | 生成运行时形状检查代码 | ShapeGuard Pass |
@@ -1337,36 +1448,36 @@ Search Space Definition → 代价模型评估 → 候选方案生成 → 编译
 
 ---
 
-## 八、Contribution Guide
+## 九、贡献指南
 
 - 遵循 [LLVM Coding Standards](https://llvm.org/docs/CodingStandards.html)
 - 使用 `clang-format` 格式化代码
-- 所有公共 API 都需要Documentation注释
+- 所有公共 API 都需要文档注释
 - 每个 PR 都需要对应的测试
 - 运行 `ninja check-acc` 确保所有测试通过
 
 ---
 
-## 九、Changelog
+## 十、变更日志
 
 ### v0.4.0 (2026-02-16)
 
 - 项目重命名: ACompiler → ACC (AI Compiler Core)
-- 新增 Phase 5: Triton/PyTorch Framework对接，E2E Verification Flow
-- 新增 Phase 6: 高阶Feature规划（Auto-Scheduling、动态形状、混合精度等）
+- 新增 Phase 5: Triton/PyTorch 框架对接，端到端验证流程
+- 新增 Phase 6: 高阶特性规划（Auto-Scheduling、动态形状、混合精度等）
 - 新增 Triton 前端导入层（TritonImporter）
 - 新增 PyTorch 对接层（TorchImporter）
 - 新增 PyTorch + Triton + ACC 端到端验证示例
 
 ### v0.3.0 (2026-02-16)
 
-- 重构Project Plan: 以Task表格+Key Concepts+代码示例+Acceptance Criteria格式重写全部阶段
+- 重构项目规划: 以任务表格+核心知识点+代码示例+验收标准格式重写全部阶段
 - 项目定位升级: 从纯教育项目升级为 AI Compiler Core 项目
 
 ### v0.2.0 (2026-02-16)
 
 - 综合两版规划，采用 4 阶段结构
-- 增加代码示例和量化Acceptance Criteria
+- 增加代码示例和量化验收标准
 
 ### v0.1.0 (2026-02-16)
 
@@ -1374,6 +1485,6 @@ Search Space Definition → 代价模型评估 → 候选方案生成 → 编译
 
 ---
 
-**Last Updated**: 2026-02-16
-**Documentation版本**: 4.0
-**Maintainer**: ACC Team
+**最后更新**: 2026-02-16
+**文档版本**: 4.0
+**维护者**: ACC Team
