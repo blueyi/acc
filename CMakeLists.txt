@@ -54,6 +54,13 @@ add_subdirectory(tools)
 # ==============================================================================
 # Testing
 # ==============================================================================
+# Avoid "LLVM_EXTERNAL_LIT set to ... but the path does not exist" when the
+# LLVM install does not include llvm-lit; then lit from PATH (e.g. pip install lit) can be used.
+if(AC_ENABLE_TESTS AND DEFINED LLVM_EXTERNAL_LIT)
+  if(NOT EXISTS "${LLVM_EXTERNAL_LIT}")
+    unset(LLVM_EXTERNAL_LIT CACHE)
+  endif()
+endif()
 if(AC_ENABLE_TESTS)
   enable_testing()
   add_subdirectory(test)

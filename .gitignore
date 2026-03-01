@@ -1,3 +1,6 @@
+.cache/
+.python-version
+
 # Build directories
 build/
 cmake-build-*/
@@ -67,3 +70,7 @@ compile_commands.json
 
 # Python venv for ONNX model generation
 .venv-onnx/
+
+# Sphinx build and Doxygen output under docs/
+docs/_build/
+docs/doxygen/

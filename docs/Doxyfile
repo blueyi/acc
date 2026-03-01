@@ -1,0 +1,34 @@
+# Doxygen config for Sphinx + Breathe (run from repo root: doxygen docs/Doxyfile)
+# Output: docs/doxygen/ (xml for Breathe, optional html)
+
+PROJECT_NAME          = "ACC"
+PROJECT_NUMBER        = "0.1.0"
+PROJECT_BRIEF         = "An AI Compiler based on LLVM/MLIR for learning and practice"
+OUTPUT_DIRECTORY      = docs/doxygen
+INPUT                = include/ACC
+RECURSIVE             = YES
+FILE_PATTERNS         = *.h *.h.inc *.td
+EXTRACT_ALL           = NO
+EXTRACT_PRIVATE       = NO
+EXTRACT_STATIC        = NO
+GENERATE_HTML         = YES
+HTML_OUTPUT           = html
+GENERATE_XML          = YES
+XML_OUTPUT            = xml
+XML_PROGRAMLISTING    = YES
+GENERATE_LATEX        = NO
+SOURCE_BROWSER        = YES
+REFERENCED_BY_RELATION = YES
+REFERENCES_RELATION   = YES
+JAVADOC_AUTOBRIEF     = YES
+OPTIMIZE_OUTPUT_FOR_C = NO
+ENABLE_PREPROCESSING  = YES
+MACRO_EXPANSION       = NO
+EXPAND_ONLY_PREDEF    = NO
+PREDEFINED            =
+SKIP_FUNCTION_MACROS  = YES
+EXCLUDE_PATTERNS      = */CMakeLists.txt
+EXCLUDE               = include/ACC/Dialect/ACHigh/ACHighOps.h.inc \
+                        include/ACC/Dialect/ACHigh/ACHighDialect.h.inc \
+                        include/ACC/Dialect/ACMid/ACMidOps.h.inc \
+                        include/ACC/Dialect/ACMid/ACMidDialect.h.inc

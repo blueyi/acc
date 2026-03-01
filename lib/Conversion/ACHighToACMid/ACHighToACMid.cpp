@@ -15,6 +15,7 @@
 #include "ACC/Dialect/ACMid/ACMidDialect.h"
 #include "ACC/Dialect/ACMid/ACMidOps.h"
 #include "mlir/Pass/Pass.h"
+#include "mlir/Support/TypeID.h"
 #include "mlir/Transforms/DialectConversion.h"
 
 using namespace mlir;
@@ -23,6 +24,8 @@ namespace {
 
 struct ACHighToACMidPass
     : public PassWrapper<ACHighToACMidPass, OperationPass<ModuleOp>> {
+  MLIR_DEFINE_EXPLICIT_INTERNAL_INLINE_TYPE_ID(ACHighToACMidPass)
+
   StringRef getArgument() const final { return "ac-high-to-mid"; }
   StringRef getDescription() const final {
     return "Lower ACHigh dialect to ACMid dialect";

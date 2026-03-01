@@ -6,6 +6,7 @@
 
 #include "cpu_runtime.h"
 #include <chrono>
+#include <cinttypes>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -28,7 +29,7 @@ void ac_print_tensor_f32(float *data, int64_t *shape, int64_t rank) {
   for (int64_t i = 0; i < rank; ++i) {
     if (i > 0)
       printf("x");
-    printf("%ld", shape[i]);
+    printf("%" PRId64, shape[i]);
     total *= shape[i];
   }
   printf("xf32> = [");
