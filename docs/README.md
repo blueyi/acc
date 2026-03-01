@@ -96,7 +96,7 @@ Option 2 is recommended and closest to RtD. After `make -C docs html-all`, the E
 
 1. Go to [Read the Docs](https://readthedocs.org/), sign in, **Import a Project**, and select this repository (e.g. `acc` on GitHub).
 2. The repo root has **.readthedocs.yaml**; RtD will install doxygen/graphviz, run `doxygen docs/Doxyfile` in pre_build, then build with Sphinx.
-3. After a successful build, docs are published at **https://acc-docs.readthedocs.io/en/latest/** (or your configured URL). For Chinese, add a translation project and link it; see "i18n and language switcher" below.
+3. After a successful build, docs are published at **https://acc-docs.readthedocs.io/en/latest/** (or your configured URL). **If the 中文 link returns 404**, you must add a **Translation** project for Chinese and link it (see "i18n and language switcher" below); the switcher uses `/zh_CN/latest/`, which only exists after that translation project is built.
 
 ---
 
