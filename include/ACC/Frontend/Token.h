@@ -4,6 +4,9 @@
 //
 //===----------------------------------------------------------------------===//
 
+/** \file
+ * \brief Token and token kinds for the ACC DSL lexer. */
+
 #ifndef ACC_FRONTEND_TOKEN_H
 #define ACC_FRONTEND_TOKEN_H
 
@@ -11,6 +14,7 @@
 
 namespace acc {
 
+/// Token kind produced by the lexer.
 enum class TokenKind {
   // Literals
   Integer,
@@ -48,18 +52,25 @@ enum class TokenKind {
   Error
 };
 
+/// A single token: kind, text value, and source location.
 struct Token {
-  TokenKind kind;
-  std::string value;
-  size_t line;
-  size_t col;
+  TokenKind kind;     ///< Token kind.
+  std::string value;  ///< Lexeme text.
+  size_t line;        ///< 1-based line number.
+  size_t col;         ///< 1-based column number.
 
   Token() : kind(TokenKind::Eof), line(0), col(0) {}
+  /// \param k Token kind.
+  /// \param v Lexeme value.
+  /// \param l Line number.
+  /// \param c Column number.
   Token(TokenKind k, std::string v, size_t l, size_t c)
       : kind(k), value(std::move(v)), line(l), col(c) {}
 };
 
 /// Convert a TokenKind to its string representation (for debugging).
+/// \param kind The token kind.
+/// \return Human-readable string for \p kind.
 const char *tokenKindToString(TokenKind kind);
 
 } // namespace acc

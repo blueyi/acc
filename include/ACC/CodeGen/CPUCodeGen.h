@@ -9,6 +9,9 @@
 //
 //===----------------------------------------------------------------------===//
 
+/** \file
+ * \brief CPU backend code generation (host and target configs). */
+
 #ifndef ACC_CODEGEN_CPUCODEGEN_H
 #define ACC_CODEGEN_CPUCODEGEN_H
 
@@ -17,9 +20,14 @@
 namespace acc {
 
 /// Create a CodeGenConfig for the host CPU with auto-detected features.
+/// \return Configuration for the current host (triple, CPU, features).
 CodeGenConfig createHostCPUConfig();
 
 /// Create a CodeGenConfig for a specific CPU target.
+/// \param triple LLVM target triple (e.g. "x86_64-unknown-linux-gnu").
+/// \param cpu CPU name (e.g. "skylake", "generic").
+/// \param features Target feature string (e.g. "+avx2,+fma").
+/// \return Code generation configuration.
 CodeGenConfig createCPUConfig(const std::string &triple,
                                const std::string &cpu,
                                const std::string &features);

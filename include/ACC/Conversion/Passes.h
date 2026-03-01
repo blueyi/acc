@@ -9,6 +9,9 @@
 //
 //===----------------------------------------------------------------------===//
 
+/** \file
+ * \brief ACC conversion pass registration (ACHigh→ACMid→Linalg→LLVM). */
+
 #ifndef ACC_CONVERSION_PASSES_H
 #define ACC_CONVERSION_PASSES_H
 
@@ -18,7 +21,7 @@
 
 namespace acc {
 
-/// Register all conversion passes
+/// Register all ACC conversion passes with the global registry.
 void registerConversionPasses();
 
 } // namespace acc

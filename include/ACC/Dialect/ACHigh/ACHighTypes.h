@@ -4,6 +4,9 @@
 //
 //===----------------------------------------------------------------------===//
 
+/** \file
+ * \brief ACHigh dialect type definitions (TableGen). */
+
 #ifndef ACC_DIALECT_ACHIGH_ACHIGHTYPES_H
 #define ACC_DIALECT_ACHIGH_ACHIGHTYPES_H
 

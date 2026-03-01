@@ -4,6 +4,9 @@
 //
 //===----------------------------------------------------------------------===//
 
+/** \file
+ * \brief ACHigh dialect declaration (graph-level AI ops). */
+
 #ifndef ACC_DIALECT_ACHIGH_ACHIGHDIALECT_H
 #define ACC_DIALECT_ACHIGH_ACHIGHDIALECT_H
 

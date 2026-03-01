@@ -8,6 +8,9 @@
 //
 //===----------------------------------------------------------------------===//
 
+/** \file
+ * \brief Custom LLVM IR optimization passes and pipeline. */
+
 #ifndef ACC_IROPTIMIZER_PASSES_H
 #define ACC_IROPTIMIZER_PASSES_H
 
@@ -18,20 +21,29 @@ namespace acc {
 
 /// Custom loop optimization pass for LLVM IR.
 struct CustomLoopOptPass : public llvm::PassInfoMixin<CustomLoopOptPass> {
+  /// \param F Function to optimize.
+  /// \param AM Analysis manager.
+  /// \return Preserved analyses.
   llvm::PreservedAnalyses run(llvm::Function &F,
                                llvm::FunctionAnalysisManager &AM);
 };
 
 /// Custom vectorization pass for LLVM IR.
 struct CustomVectorizePass : public llvm::PassInfoMixin<CustomVectorizePass> {
+  /// \param F Function to vectorize.
+  /// \param AM Analysis manager.
+  /// \return Preserved analyses.
   llvm::PreservedAnalyses run(llvm::Function &F,
                                llvm::FunctionAnalysisManager &AM);
 };
 
-/// Register all custom LLVM IR passes.
+/// Register all custom LLVM IR passes with the pass builder.
+/// \param PB Pass builder to register with.
 void registerLLVMIRPasses(llvm::PassBuilder &PB);
 
 /// Build the default ACC LLVM IR optimization pipeline.
+/// \param MPM Module pass manager to populate.
+/// \param OptLevel Optimization level (e.g. O0–O3).
 void buildACOptimizationPipeline(llvm::ModulePassManager &MPM,
                                   llvm::OptimizationLevel OptLevel);
 

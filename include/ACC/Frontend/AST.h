@@ -8,6 +8,9 @@
 //
 //===----------------------------------------------------------------------===//
 
+/** \file
+ * \brief AST node types for the ACC DSL (Frontend). */
+
 #ifndef ACC_FRONTEND_AST_H
 #define ACC_FRONTEND_AST_H
 
@@ -25,45 +28,43 @@ public:
 
 /// Represents a tensor type specification (e.g., tensor<1, 3, 224, 224, f32>).
 struct TensorType {
-  std::vector<int64_t> shape;
-  std::string elementType; // "f32", "f16", "i8", etc.
+  std::vector<int64_t> shape;  ///< Shape dimensions.
+  std::string elementType;     ///< Element type string, e.g. "f32", "f16", "i8".
 };
 
 /// Represents a layer declaration (e.g., layer conv1 = Conv2D(...)).
 class LayerDeclAST : public ExprAST {
 public:
-  std::string name;
-  std::string opType;
-  std::vector<std::unique_ptr<ExprAST>> args;
-  // Named parameters (e.g., filters=64, kernel=3)
-  std::vector<std::pair<std::string, std::unique_ptr<ExprAST>>> namedArgs;
+  std::string name;       ///< Layer name.
+  std::string opType;    ///< Operator type, e.g. "Conv2D", "ReLU".
+  std::vector<std::unique_ptr<ExprAST>> args;  ///< Positional arguments.
+  std::vector<std::pair<std::string, std::unique_ptr<ExprAST>>> namedArgs;  ///< Named parameters (e.g. filters=64).
 };
 
 /// Represents a model declaration.
 class ModelDeclAST : public ExprAST {
 public:
-  std::string name;
-  std::vector<std::pair<std::string, TensorType>> inputs;
-  std::vector<std::unique_ptr<LayerDeclAST>> layers;
-  std::unique_ptr<ExprAST> output;
+  std::string name;  ///< Model name.
+  std::vector<std::pair<std::string, TensorType>> inputs;  ///< Input name and type.
+  std::vector<std::unique_ptr<LayerDeclAST>> layers;  ///< Layer list.
+  std::unique_ptr<ExprAST> output;  ///< Output expression.
 };
 
 /// Represents a compile declaration with target and optimization options.
 class CompileDeclAST : public ExprAST {
 public:
-  std::string modelName;
-  std::string target;
-  // Optimization options
-  bool fuseOps = false;
-  bool vectorize = false;
-  std::vector<int64_t> tilingSizes;
+  std::string modelName;   ///< Name of the model to compile.
+  std::string target;     ///< Target backend, e.g. "cpu", "cuda".
+  bool fuseOps = false;   ///< Whether to enable operator fusion.
+  bool vectorize = false; ///< Whether to enable vectorization.
+  std::vector<int64_t> tilingSizes;  ///< Tiling sizes for optimization.
 };
 
 /// Represents a complete source file / compilation unit.
 class ModuleAST {
 public:
-  std::vector<std::unique_ptr<ModelDeclAST>> models;
-  std::vector<std::unique_ptr<CompileDeclAST>> compileDecls;
+  std::vector<std::unique_ptr<ModelDeclAST>> models;       ///< Model declarations.
+  std::vector<std::unique_ptr<CompileDeclAST>> compileDecls;  ///< Compile directives.
 };
 
 } // namespace acc
