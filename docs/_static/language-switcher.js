@@ -19,7 +19,7 @@ function injectLanguageSwitcher() {
     }
   } else {
     enHref = "/index.html";
-    zhHref = "/zh_CN/index_zh.html";
+    zhHref = "/zh_CN/index.html";
   }
   var html =
     '<div class="language-switcher-local" style="padding:8px 12px;margin:0;font-size:85%;border-bottom:1px solid #404040;background:#2c2c2c;">' +
