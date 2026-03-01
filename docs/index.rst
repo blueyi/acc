@@ -13,11 +13,9 @@ ACC Documentation
    PROJECT_PLAN
    README
 
-.. toctree::
+.. i18n-api-toctree::
    :maxdepth: 2
    :caption: C++ API (from code comments)
-
-   api/index
 
 Indices and tables
 ==================
