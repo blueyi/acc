@@ -127,11 +127,11 @@ make -C docs html-all  # Both
 | **API docs** | English only, from Doxygen; `api/index.rst` is shared by both sites. |
 | **Read the Docs** | Parent (en) + translation (zh) project, same repo; link in Admin → Translations for the language switcher. |
 
-**Adding a new translatable document:**
+**Adding a new document:**
 
 1. Add the English file, e.g. `docs/NewDoc.md`, and add it to the toctree in `index.rst`.
-2. Add the Chinese file `docs/NewDoc_zh.md` and add it to the toctree in `index_zh.rst`.
-3. Append `"NewDoc.md"` to the `english_docs_with_zh` list in `conf.py`.
+2. In `conf.py`, append `"NewDoc"` to the `_main_doc_order` list (canonical order for both builds).
+3. Optional: add `docs/NewDoc_zh.md` for a Chinese version; the Chinese build will use it automatically. If there is no `_zh` file, the English `.md` is used as fallback.
 
 ---
 
@@ -139,9 +139,9 @@ make -C docs html-all  # Both
 
 | Path | Description |
 |------|-------------|
-| **conf.py** | Sphinx config, Breathe; selects index / index_zh and exclude via READTHEDOCS_LANGUAGE |
-| **index.rst** / **index_zh.rst** | English / Chinese home and toctree |
-| **\*.md** / **\*_zh.md** | English docs / Chinese docs (pairs) |
+| **conf.py** | Sphinx config, Breathe; i18n auto-scan for `*_zh.md`, fallback to `.md` in Chinese build |
+| **index.rst** / **index_zh.rst** | English / Chinese home; Chinese toctree is built by `.. i18n-toctree::` from `_main_doc_order` |
+| **\*.md** / **\*_zh.md** | English docs; `_zh` used in Chinese build when present, else English as fallback |
 | **api/index.rst** | C++ API (English only, shared) |
 | **Doxyfile** | Doxygen config, output under `docs/doxygen/` |
 | **requirements.txt** | sphinx, sphinx-rtd-theme, breathe, myst-parser |
