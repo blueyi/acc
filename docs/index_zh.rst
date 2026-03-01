@@ -9,11 +9,9 @@ ACC 文档（中文）
    :maxdepth: 2
    :caption: 用户与开发者
 
-.. toctree::
+.. i18n-api-toctree::
    :maxdepth: 2
    :caption: C++ API（来自代码注释，仅英文）
-
-   api/index
 
 索引与表格
 ==========
