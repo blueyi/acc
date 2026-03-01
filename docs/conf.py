@@ -1,5 +1,7 @@
 # ACC documentation - Sphinx + Breathe (C++ API from Doxygen XML)
-# Build: from repo root, run doxygen docs/Doxyfile then sphinx-build -b html docs docs/_build/html
+# i18n: English = default (.md); Chinese = *_zh.md. Two builds via READTHEDOCS_LANGUAGE.
+
+import os
 
 project = "ACC"
 copyright = "2026, ACC Project"
@@ -17,7 +19,7 @@ extensions = [
 ]
 
 templates_path = ["_templates"]
-exclude_patterns = [
+base_exclude = [
     "_build",
     "Thumbs.db",
     ".DS_Store",
@@ -26,6 +28,24 @@ exclude_patterns = [
     "TODO_en.md",
     "capability-radar-roadmap.md",
 ]
+
+# Dual-file i18n: English .md + Chinese _zh.md. RtD sets READTHEDOCS_LANGUAGE for zh project.
+build_lang = os.environ.get("READTHEDOCS_LANGUAGE", "en")
+if build_lang in ("zh_CN", "zh"):
+    language = "zh_CN"
+    master_doc = "index_zh"
+    # Exclude English-only .md that have a _zh counterpart (so only _zh.md + api are used)
+    english_docs_with_zh = [
+        "GETTING_STARTED.md",
+        "PROJECT_PLAN.md",
+        "README.md",
+    ]
+    exclude_patterns = base_exclude + ["index.rst"] + english_docs_with_zh
+else:
+    language = "en"
+    master_doc = "index"
+    exclude_patterns = base_exclude + ["*_zh.md", "index_zh.rst", "index_zh.md"]
+
 source_suffix = {
     ".rst": "restructuredtext",
     ".md": "markdown",
@@ -34,6 +54,8 @@ source_suffix = {
 html_theme = "sphinx_rtd_theme"
 html_static_path = ["_static"]
 html_show_sourcelink = True
+# Local preview: show "English | 中文" in sidebar (RtD shows its own switcher on readthedocs.io)
+html_js_files = ["language-switcher.js"]
 
 # Breathe: C++ API from Doxygen XML (generate XML first: doxygen docs/Doxyfile)
 breathe_projects = {"acc": "doxygen/xml"}
